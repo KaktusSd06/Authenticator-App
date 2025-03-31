@@ -9,20 +9,35 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  flutter_localizations:
+    sdk: flutter
 
+  flutter_bloc: ^9.1.0
+  intl: ^0.19.0
   cupertino_icons: ^1.0.8
 
+
+# DEV
 dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  flutter_bloc: ^9.1.0
   flutter_lints: ^5.0.0
 
+
 flutter:
+  generate: true
+
+  assets:
+    - lib/l10n/
+
   fonts:
     - family: Inter
       fonts:
         - asset: assets/fonts/Inter.ttf
 
   uses-material-design: true
+
+
+flutter_intl:
+  enabled: true
