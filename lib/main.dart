@@ -1,3 +1,4 @@
+import 'package:authenticator_app/presentation/screens/onboarding/onboarding_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'core/config/theme.dart';
@@ -20,6 +21,7 @@ class MyApp extends StatelessWidget {
     return BlocBuilder<LocaleCubit, Locale>(
       builder: (context, locale) {
         return MaterialApp(
+
           debugShowCheckedModeBanner: false,
           theme: lightTheme,
           darkTheme: darkTheme,
@@ -27,7 +29,7 @@ class MyApp extends StatelessWidget {
           locale: locale,
           supportedLocales: AppLocalizations.supportedLocales,
           localizationsDelegates: AppLocalizations.localizationsDelegates,
-          home: HomePage(),
+          home: OnBoardingScreen(),
         );
       },
     );

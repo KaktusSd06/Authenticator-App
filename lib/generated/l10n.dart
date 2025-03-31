@@ -54,13 +54,113 @@ class S {
   static S? maybeOf(BuildContext context) {
     return Localizations.of<S>(context, S);
   }
+
+  /// `Привіт`
+  String get hello {
+    return Intl.message('Привіт', name: 'hello', desc: '', args: []);
+  }
+
+  /// `Вітаю`
+  String get welcome {
+    return Intl.message('Вітаю', name: 'welcome', desc: '', args: []);
+  }
+
+  /// `Продовжити`
+  String get continue_btn {
+    return Intl.message('Продовжити', name: 'continue_btn', desc: '', args: []);
+  }
+
+  /// `Безпечний\nобліковий запис`
+  String get onBoarding_H1 {
+    return Intl.message(
+      'Безпечний\nобліковий запис',
+      name: 'onBoarding_H1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Просте налаштування\n сканування камерою`
+  String get onBoarding_H2 {
+    return Intl.message(
+      'Просте налаштування\n сканування камерою',
+      name: 'onBoarding_H2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Покращення\nконфеденційності`
+  String get onBoarding_H3 {
+    return Intl.message(
+      'Покращення\nконфеденційності',
+      name: 'onBoarding_H3',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Отримати доступ \nдо всіх функцій`
+  String get onBoarding_H4 {
+    return Intl.message(
+      'Отримати доступ \nдо всіх функцій',
+      name: 'onBoarding_H4',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Надійно захистіть свої данні від\nпроникнення або втрати`
+  String get onBoarding_T1 {
+    return Intl.message(
+      'Надійно захистіть свої данні від\nпроникнення або втрати',
+      name: 'onBoarding_T1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Просто зіскануйте QR код\nабо додайте самостійноy`
+  String get onBoarding_T2 {
+    return Intl.message(
+      'Просто зіскануйте QR код\nабо додайте самостійноy',
+      name: 'onBoarding_T2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Безпечно проводьте криптовалютні транзакції\nта безпечно додавайте гаманець`
+  String get onBoarding_T3 {
+    return Intl.message(
+      'Безпечно проводьте криптовалютні транзакції\nта безпечно додавайте гаманець',
+      name: 'onBoarding_T3',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `3 БЕЗКОШТОВНИХ дні\nдалі 6.99 USD на тиждень`
+  String get onBoarding_T4 {
+    return Intl.message(
+      '3 БЕЗКОШТОВНИХ дні\nдалі 6.99 USD на тиждень',
+      name: 'onBoarding_T4',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Повернутись`
+  String get restor_l {
+    return Intl.message('Повернутись', name: 'restor_l', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
   const AppLocalizationDelegate();
 
   List<Locale> get supportedLocales {
-    return const <Locale>[Locale.fromSubtags(languageCode: 'en')];
+    return const <Locale>[Locale.fromSubtags(languageCode: 'uk')];
   }
 
   @override

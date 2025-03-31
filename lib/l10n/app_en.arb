@@ -1,5 +1,16 @@
 {
   "@@local": "en",
   "hello": "Hello",
-  "welcome": "Welcome"
+  "welcome": "Welcome",
+  "continue_btn": "Continue",
+  "onBoarding_H1": "Safer\naccount",
+  "onBoarding_H2": "Simple camera code\n setting",
+  "onBoarding_H3": "Enhanced\nprivacy",
+  "onBoarding_H4": "Unlock Full Access \nto all the features",
+  "onBoarding_T1": "Securely protect your data from intrusion\nand data loss",
+  "onBoarding_T2": "Just scan the QR code\nor add it manually",
+  "onBoarding_T3": "Securely conduct crypto transactions\nand keep your wallet safe",
+  "onBoarding_T4": "3 day FREE trial\nthan 6.99 USD per week",
+  "restor_l": "Restore"
+
 }

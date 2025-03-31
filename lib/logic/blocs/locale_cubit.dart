@@ -5,7 +5,7 @@ class LocaleCubit extends Cubit<Locale> {
   LocaleCubit() : super(_getInitialLocale());
 
   static Locale _getInitialLocale() {
-    String systemLanguageCode = WidgetsBinding.instance!.window.locale.languageCode;
+    String systemLanguageCode = WidgetsBinding.instance.window.locale.languageCode;
 
     if (systemLanguageCode == 'uk') {
       return const Locale('uk');

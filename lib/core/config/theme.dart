@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 // Custom color palette
+const Color white = Color(0xFFFFFFFF);
 const Color gray1 = Color(0xFFF9F9F9);
 const Color gray2 = Color(0xFFE1E1E1);
 const Color gray3 = Color(0xFFC7C7C7);
@@ -19,6 +20,7 @@ final ThemeData lightTheme = ThemeData(
   scaffoldBackgroundColor: gray1,
   cardColor: gray2,
   fontFamily: 'Inter',
+
   textTheme: TextTheme(
     displayLarge: TextStyle(fontSize: 40, fontWeight: FontWeight.w400),
     displayMedium: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
