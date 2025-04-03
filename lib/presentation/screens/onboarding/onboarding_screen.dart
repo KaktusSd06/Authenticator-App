@@ -1,5 +1,6 @@
 import 'package:authenticator_app/core/config/theme.dart';
 import 'package:authenticator_app/presentation/screens/onboarding/onboarding_screen_1.dart';
+import 'package:authenticator_app/presentation/screens/onboarding/paywall_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -33,7 +34,10 @@ void initState() {
 
 void btnPress() {
   if (_controller.page == 3) {
-    // Остання сторінка, можливо, перехід до головного екрану
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => PaywallScreen())
+    );
   } else {
     _controller.nextPage(
       duration: Duration(milliseconds: 500),

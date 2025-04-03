@@ -23,6 +23,10 @@ class MessageLookup extends MessageLookupByLibrary {
   final messages = _notInlinedMessages(_notInlinedMessages);
   static Map<String, Function> _notInlinedMessages(_) => <String, Function>{
     "continue_btn": MessageLookupByLibrary.simpleMessage("Продовжити"),
+    "free_Trial_Enabled": MessageLookupByLibrary.simpleMessage(
+      "Пробний період",
+    ),
+    "free_day": MessageLookupByLibrary.simpleMessage("3 Дні пробного періодну"),
     "hello": MessageLookupByLibrary.simpleMessage("Привіт"),
     "onBoarding_H1": MessageLookupByLibrary.simpleMessage(
       "Безпечний\nобліковий запис",
@@ -48,7 +52,29 @@ class MessageLookup extends MessageLookupByLibrary {
     "onBoarding_T4": MessageLookupByLibrary.simpleMessage(
       "3 БЕЗКОШТОВНИХ дні\nдалі 6.99 USD на тиждень",
     ),
+    "paywell_H1": MessageLookupByLibrary.simpleMessage(
+      "Оберіть свій план\nта відчуйте переваги",
+    ),
+    "paywell_T1": MessageLookupByLibrary.simpleMessage(
+      "Subtitle text about benefits",
+    ),
+    "paywell_info": MessageLookupByLibrary.simpleMessage(
+      "Лише 0.83 на тиждень",
+    ),
     "restor_l": MessageLookupByLibrary.simpleMessage("Повернутись"),
+    "sign_in_with": MessageLookupByLibrary.simpleMessage("Увійти з"),
+    "signin": MessageLookupByLibrary.simpleMessage("Вхід"),
+    "terms_of_app": MessageLookupByLibrary.simpleMessage(
+      "Я приймаю Умови використання та Політику конфіденційності програми Authenticator",
+    ),
+    "than_6": MessageLookupByLibrary.simpleMessage("далі 6.99 usd на тиждень"),
+    "uSD_Only": MessageLookupByLibrary.simpleMessage(
+      "39,99 USD Лише 0.83 на тиждень",
+    ),
     "welcome": MessageLookupByLibrary.simpleMessage("Вітаю"),
+    "wellcome": MessageLookupByLibrary.simpleMessage(
+      "Вітаємо в\nAuthenticator",
+    ),
+    "year": MessageLookupByLibrary.simpleMessage("1 Рік"),
   };
 }

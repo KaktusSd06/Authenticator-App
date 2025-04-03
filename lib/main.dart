@@ -21,7 +21,6 @@ class MyApp extends StatelessWidget {
     return BlocBuilder<LocaleCubit, Locale>(
       builder: (context, locale) {
         return MaterialApp(
-
           debugShowCheckedModeBanner: false,
           theme: lightTheme,
           darkTheme: darkTheme,

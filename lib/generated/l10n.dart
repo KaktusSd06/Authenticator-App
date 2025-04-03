@@ -154,6 +154,111 @@ class S {
   String get restor_l {
     return Intl.message('Повернутись', name: 'restor_l', desc: '', args: []);
   }
+
+  /// `Лише 0.83 на тиждень`
+  String get paywell_info {
+    return Intl.message(
+      'Лише 0.83 на тиждень',
+      name: 'paywell_info',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Пробний період`
+  String get free_Trial_Enabled {
+    return Intl.message(
+      'Пробний період',
+      name: 'free_Trial_Enabled',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `1 Рік`
+  String get year {
+    return Intl.message('1 Рік', name: 'year', desc: '', args: []);
+  }
+
+  /// `39,99 USD Лише 0.83 на тиждень`
+  String get uSD_Only {
+    return Intl.message(
+      '39,99 USD Лише 0.83 на тиждень',
+      name: 'uSD_Only',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `3 Дні пробного періодну`
+  String get free_day {
+    return Intl.message(
+      '3 Дні пробного періодну',
+      name: 'free_day',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `далі 6.99 usd на тиждень`
+  String get than_6 {
+    return Intl.message(
+      'далі 6.99 usd на тиждень',
+      name: 'than_6',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Оберіть свій план\nта відчуйте переваги`
+  String get paywell_H1 {
+    return Intl.message(
+      'Оберіть свій план\nта відчуйте переваги',
+      name: 'paywell_H1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Subtitle text about benefits`
+  String get paywell_T1 {
+    return Intl.message(
+      'Subtitle text about benefits',
+      name: 'paywell_T1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Вхід`
+  String get signin {
+    return Intl.message('Вхід', name: 'signin', desc: '', args: []);
+  }
+
+  /// `Вітаємо в\nAuthenticator`
+  String get wellcome {
+    return Intl.message(
+      'Вітаємо в\nAuthenticator',
+      name: 'wellcome',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Увійти з`
+  String get sign_in_with {
+    return Intl.message('Увійти з', name: 'sign_in_with', desc: '', args: []);
+  }
+
+  /// `Я приймаю Умови використання та Політику конфіденційності програми Authenticator`
+  String get terms_of_app {
+    return Intl.message(
+      'Я приймаю Умови використання та Політику конфіденційності програми Authenticator',
+      name: 'terms_of_app',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

@@ -11,6 +11,17 @@
   "onBoarding_T2": "Just scan the QR code\nor add it manually",
   "onBoarding_T3": "Securely conduct crypto transactions\nand keep your wallet safe",
   "onBoarding_T4": "3 day FREE trial\nthan 6.99 USD per week",
-  "restor_l": "Restore"
-
+  "restor_l": "Restore",
+  "paywell_info": "Just 0.83 per week",
+  "free_Trial_Enabled": "Free Trial Enabled",
+  "year": "1 Year",
+  "uSD_Only": "39,99 USD Only 0.83 per week",
+  "free_day": "3 DAYS FREE TRIAL",
+  "than_6": "than 6.99 usd per week",
+  "paywell_H1": "Pick Your Plan and get\nbenefits",
+  "paywell_T1": "Subtitle text about benefits",
+  "signin": "Sign in",
+  "wellcome": "Wellcome to\nAuthenticator",
+  "sign_in_with": "Sign In with",
+  "terms_of_app": "I agree to Authenticator App Terms of Service and Privacy Policy"
 }
