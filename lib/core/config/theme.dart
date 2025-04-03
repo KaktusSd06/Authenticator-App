@@ -22,7 +22,7 @@ final ThemeData lightTheme = ThemeData(
   fontFamily: 'Inter',
 
   textTheme: TextTheme(
-    displayLarge: TextStyle(fontSize: 40, fontWeight: FontWeight.w400),
+    displayLarge: TextStyle(fontSize: 40, fontWeight: FontWeight.w700),
     displayMedium: TextStyle(fontSize: 24, fontWeight: FontWeight.w500),
     displaySmall: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
     headlineLarge: TextStyle(fontSize: 16, fontWeight: FontWeight.w500),
