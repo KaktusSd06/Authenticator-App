@@ -250,14 +250,304 @@ class S {
     return Intl.message('Увійти з', name: 'sign_in_with', desc: '', args: []);
   }
 
-  /// `Я приймаю Умови використання та Політику конфіденційності програми Authenticator`
+  /// `Я приймаю`
   String get terms_of_app {
+    return Intl.message('Я приймаю', name: 'terms_of_app', desc: '', args: []);
+  }
+
+  /// `Умови використання`
+  String get terms_of_service {
     return Intl.message(
-      'Я приймаю Умови використання та Політику конфіденційності програми Authenticator',
-      name: 'terms_of_app',
+      'Умови використання',
+      name: 'terms_of_service',
       desc: '',
       args: [],
     );
+  }
+
+  /// `Політику конфіденційності`
+  String get privacy_policy {
+    return Intl.message(
+      'Політику конфіденційності',
+      name: 'privacy_policy',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `та`
+  String get and {
+    return Intl.message('та', name: 'and', desc: '', args: []);
+  }
+
+  /// `Ви маєте погодитись з  Умовами використання та Політикою конфеденційності щоб продовжити вхід`
+  String get term_error {
+    return Intl.message(
+      'Ви маєте погодитись з  Умовами використання та Політикою конфеденційності щоб продовжити вхід',
+      name: 'term_error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Sign In Error`
+  String get error_with_signIn {
+    return Intl.message(
+      'Sign In Error',
+      name: 'error_with_signIn',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Error logging in, please try again later`
+  String get error_signIn_message {
+    return Intl.message(
+      'Error logging in, please try again later',
+      name: 'error_signIn_message',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Пошук`
+  String get search {
+    return Intl.message('Пошук', name: 'search', desc: '', args: []);
+  }
+
+  /// `Підтримка клієнтів`
+  String get customer_support {
+    return Intl.message(
+      'Підтримка клієнтів',
+      name: 'customer_support',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Зв'язатись з нами`
+  String get contact_us {
+    return Intl.message(
+      'Зв\'язатись з нами',
+      name: 'contact_us',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Умови використання`
+  String get terms_of_use {
+    return Intl.message(
+      'Умови використання',
+      name: 'terms_of_use',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Корисна інформація`
+  String get usefull_info {
+    return Intl.message(
+      'Корисна інформація',
+      name: 'usefull_info',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Про програму Authenticator`
+  String get about_app {
+    return Intl.message(
+      'Про програму Authenticator',
+      name: 'about_app',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Підписка`
+  String get subscription {
+    return Intl.message('Підписка', name: 'subscription', desc: '', args: []);
+  }
+
+  /// `Преміум переваги`
+  String get premium_features {
+    return Intl.message(
+      'Преміум переваги',
+      name: 'premium_features',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `це програма, яка генерує безпечні коди двофакторної автентифікації (2FA) для ваших облікових записів. Коли ви налаштовуєте свій обліковий запис із двофакторною автентифікацією (2FA), ви отримаєте секретний ключ, який потрібно ввести в Authenticator, зазвичай ключ у формі QR-коду.`
+  String get about_p1 {
+    return Intl.message(
+      'це програма, яка генерує безпечні коди двофакторної автентифікації (2FA) для ваших облікових записів. Коли ви налаштовуєте свій обліковий запис із двофакторною автентифікацією (2FA), ви отримаєте секретний ключ, який потрібно ввести в Authenticator, зазвичай ключ у формі QR-коду.',
+      name: 'about_p1',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Це встановлює безпечне з’єднання між`
+  String get about_p2 {
+    return Intl.message(
+      'Це встановлює безпечне з’єднання між',
+      name: 'about_p2',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `та вашим акаунтом.`
+  String get about_p3 {
+    return Intl.message(
+      'та вашим акаунтом.',
+      name: 'about_p3',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Після встановлення безпечного з’єднання Authenticator згенерує 6-8-значний код, необхідний для доступу до вашого облікового запису.\n\nНавіть якщо хтось знає ваш пароль, йому все одно потрібен код 2FA для доступу до вашого облікового запису.`
+  String get about_p4 {
+    return Intl.message(
+      'Після встановлення безпечного з’єднання Authenticator згенерує 6-8-значний код, необхідний для доступу до вашого облікового запису.\n\nНавіть якщо хтось знає ваш пароль, йому все одно потрібен код 2FA для доступу до вашого облікового запису.',
+      name: 'about_p4',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ваша активна підписка`
+  String get current_plan {
+    return Intl.message(
+      'Ваша активна підписка',
+      name: 'current_plan',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Наступна дата оплати`
+  String get billing_date {
+    return Intl.message(
+      'Наступна дата оплати',
+      name: 'billing_date',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Змінити план`
+  String get change_plan {
+    return Intl.message(
+      'Змінити план',
+      name: 'change_plan',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Відновити підписку`
+  String get restore_purchases {
+    return Intl.message(
+      'Відновити підписку',
+      name: 'restore_purchases',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Обрати план`
+  String get choose_a_plan {
+    return Intl.message(
+      'Обрати план',
+      name: 'choose_a_plan',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Пробна підписка`
+  String get free_trial {
+    return Intl.message(
+      'Пробна підписка',
+      name: 'free_trial',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Річна підписка`
+  String get year_subscription {
+    return Intl.message(
+      'Річна підписка',
+      name: 'year_subscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Місячна підписка`
+  String get weekly_subscription {
+    return Intl.message(
+      'Місячна підписка',
+      name: 'weekly_subscription',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Вийти з акаунту`
+  String get sign_out {
+    return Intl.message(
+      'Вийти з акаунту',
+      name: 'sign_out',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Синхронізувати`
+  String get synchronize {
+    return Intl.message(
+      'Синхронізувати',
+      name: 'synchronize',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Видалити профіль`
+  String get delete_account {
+    return Intl.message(
+      'Видалити профіль',
+      name: 'delete_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Цю дію не можна відмінити`
+  String get delete_account_confirm {
+    return Intl.message(
+      'Цю дію не можна відмінити',
+      name: 'delete_account_confirm',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Скасувати`
+  String get cancel {
+    return Intl.message('Скасувати', name: 'cancel', desc: '', args: []);
+  }
+
+  /// `Видалити`
+  String get delete {
+    return Intl.message('Видалити', name: 'delete', desc: '', args: []);
   }
 }
 

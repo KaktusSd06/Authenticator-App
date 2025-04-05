@@ -1,3 +1,4 @@
+import 'package:authenticator_app/presentation/screens/home_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter/material.dart';
@@ -8,8 +9,9 @@ import '../sign_in_screen.dart';
 
 class OnBoardingScreen4 extends StatelessWidget {
   final PageController controller;
+  final bool isFirst;
 
-  const OnBoardingScreen4({Key? key, required this.controller}) : super(key: key);
+  const OnBoardingScreen4({Key? key, required this.controller, required this.isFirst}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -23,7 +25,6 @@ class OnBoardingScreen4 extends StatelessWidget {
         ),
         child: Column(
           children: [
-            // Header with close button and restore text
             Padding(
               padding: const EdgeInsets.only(top: 60, left: 23, right: 16),
               child: Row(
@@ -32,13 +33,20 @@ class OnBoardingScreen4 extends StatelessWidget {
                   // Close button
                   GestureDetector(
                     onTap: () {
-                          Navigator.pushReplacement(context,
-                          MaterialPageRoute(builder: (context) => SignInScreen()));
+                      print(isFirst);
+                      if(isFirst) {
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) =>
+                                HomeScreen()));
+                      }
+                      else{
+                        Navigator.pop(context);
+                      }
                     },
                     child: SvgPicture.asset(
                       "assets/icons/x.svg",
-                      width: 10,
-                      height: 10,
+                      width: 24,
+                      height: 24,
                       colorFilter: ColorFilter.mode(Colors.mainBlue, BlendMode.srcIn),
                     ),
                   ),
@@ -71,7 +79,6 @@ class OnBoardingScreen4 extends StatelessWidget {
               padding: const EdgeInsets.only(bottom: 28, left: 16, right: 16),
               child: Column(
                 children: [
-                  // Heading Text
                   Text(
                     AppLocalizations.of(context)!.onBoarding_H4,
                     textAlign: TextAlign.center,
@@ -79,7 +86,6 @@ class OnBoardingScreen4 extends StatelessWidget {
                   ),
                   SizedBox(height: 24),
 
-                  // Subheading Text
                   Text(
                     AppLocalizations.of(context)!.onBoarding_T4,
                     textAlign: TextAlign.center,
@@ -89,10 +95,8 @@ class OnBoardingScreen4 extends StatelessWidget {
                     ),
                   ),
 
-                  // Spacer for better vertical spacing
                   SizedBox(height: 128),
 
-                  // Footer with links to Terms and Privacy Policy
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [

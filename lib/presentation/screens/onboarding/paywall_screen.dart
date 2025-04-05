@@ -1,27 +1,55 @@
+import 'package:authenticator_app/presentation/screens/home_screen.dart';
+import 'package:authenticator_app/presentation/screens/main_screen.dart';
 import 'package:authenticator_app/presentation/screens/onboarding/onboarding_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:intl/intl.dart';
 import '../../../core/config/theme.dart' as Colors;
 import '../../widgets/continue_btn.dart';
 import '../sign_in_screen.dart';
 
 class PaywallScreen extends StatefulWidget{
-  const PaywallScreen ({Key? key}) : super(key: key);
+  final bool isFirst;
+  const PaywallScreen ({Key? key, required this.isFirst}) : super(key: key);
 
   @override
   _PaywallScreenState createState() => _PaywallScreenState();
 }
 
 class _PaywallScreenState extends State<PaywallScreen> {
-
+  final FlutterSecureStorage storage = FlutterSecureStorage();
   bool isTrialEnabled = false;
   bool yearPlan = false;
-  bool threeDayPlan = false;
+  bool weeklyplan = false;
 
-  void btnPress() {
+  Future<void> btnPress() async {
+    DateTime currentDate = DateTime.now();
 
+    DateTime nextBillingDate;
+    String plan;
+
+    if (isTrialEnabled && !weeklyplan) {
+      plan = "trial";
+      nextBillingDate = currentDate.add(Duration(days: 3));
+    } else if (weeklyplan) {
+      plan = "week";
+      nextBillingDate = currentDate.add(Duration(days: 7));
+    } else if (yearPlan) {
+      plan = "year";
+      nextBillingDate = currentDate.add(Duration(days: 365));
+    } else {
+      return;
+    }
+
+    String formattedDate = DateFormat('dd.MM.yyyy').format(nextBillingDate);
+
+    await storage.write(key: 'subscription', value: plan);
+    await storage.write(key: 'nextBilling', value: formattedDate);
+
+    Navigator.pop(context);
   }
 
   @override
@@ -45,22 +73,24 @@ class _PaywallScreenState extends State<PaywallScreen> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushReplacement(context,
-                        MaterialPageRoute(builder: (context) => SignInScreen()));
+                        if(widget.isFirst){
+                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+                        }
+                        else {
+                          Navigator.pop(context);
+                        }
                       },
                       child: SvgPicture.asset(
                         "assets/icons/x.svg",
-                        width: 10,
-                        height: 10,
+                        width: 24,
+                        height: 24,
                         colorFilter: ColorFilter.mode(Colors.mainBlue, BlendMode.srcIn),
                       ),
                     ),
                     GestureDetector(
                       onTap: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => OnBoardingScreen()),
-                        );
+                        Navigator.pushReplacement(context,
+                            MaterialPageRoute(builder: (context) => OnBoardingScreen()));
                       },
                       child: Text(
                         AppLocalizations.of(context)!.restor_l,
@@ -124,7 +154,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
                           onChanged: (value) {
                             setState(() {
                               isTrialEnabled = value;
-                              threeDayPlan = false;
+                              weeklyplan = false;
                               yearPlan = false;
                             });
                           },
@@ -185,7 +215,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
                             setState(() {
                               yearPlan = !yearPlan;
                               isTrialEnabled = false;
-                              threeDayPlan = false;
+                              weeklyplan = false;
                             });
                           },
                           child: !yearPlan ?
@@ -233,7 +263,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(30)),
                       border: Border.all(
-                        color: !threeDayPlan ? Color(0xFF094086) : Colors.gray2,
+                        color: !weeklyplan ? Color(0xFF094086) : Colors.gray2,
                         width: 3,
                       ),
                       color: Colors.white,
@@ -265,12 +295,12 @@ class _PaywallScreenState extends State<PaywallScreen> {
                         GestureDetector(
                             onTap: (){
                               setState(() {
-                                threeDayPlan = !threeDayPlan;
+                                weeklyplan = !weeklyplan;
                                 isTrialEnabled = true;
                                 yearPlan = false;
                               });
                             },
-                            child: !threeDayPlan ?
+                            child: !weeklyplan ?
                             Container(
                               width: 24,
                               height: 24,

@@ -4,6 +4,7 @@ import 'package:authenticator_app/presentation/screens/onboarding/paywall_screen
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../widgets/config_button.dart';
 import '../../widgets/continue_btn.dart';
@@ -25,6 +26,10 @@ double _progress = 0.0;
 @override
 void initState() {
   super.initState();
+
+  final storage = FlutterSecureStorage();
+  storage.write(key: 'isFirst', value: 'false');
+
   _controller.addListener(() {
     setState(() {
       _progress = (_controller.page ?? 0) / 3;
@@ -32,11 +37,12 @@ void initState() {
   });
 }
 
+
 void btnPress() {
   if (_controller.page == 3) {
-    Navigator.push(
+    Navigator.pushReplacement(
       context,
-      MaterialPageRoute(builder: (context) => PaywallScreen())
+      MaterialPageRoute(builder: (context) => PaywallScreen(isFirst: true))
     );
   } else {
     _controller.nextPage(
@@ -57,7 +63,7 @@ Widget build(BuildContext context) {
             OnBoardingScreen1(),
             OnBoardingScreen2(),
             OnBoardingScreen3(),
-            OnBoardingScreen4(controller: _controller),
+            OnBoardingScreen4(controller: _controller, isFirst: true),
           ],
         ),
 
