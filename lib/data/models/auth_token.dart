@@ -27,6 +27,8 @@ class AuthToken {
     );
   }
 
+  updateCounter()=> counter = (counter! + 1)!;
+
   Map<String, dynamic> toJson() {
     return {
       'service': service,

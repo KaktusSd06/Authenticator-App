@@ -1,9 +1,11 @@
 import 'dart:async';
+import 'dart:convert';
+import 'dart:io';
 import 'package:authenticator_app/data/models/auth_token.dart';
-import 'package:authenticator_app/data/models/service.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:totp/totp.dart';
+import 'package:hotp/hotp.dart';
+import 'package:path_provider/path_provider.dart';
 import '../../../core/config/theme.dart' as AppColors;
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -11,99 +13,133 @@ import 'package:base32/base32.dart';
 import '../../data/sources/constants/service_categories.dart';
 import '../screens/edit_element_screen.dart';
 
-
-class TimeBasedWidget extends StatefulWidget {
-  final AuthToken timeBasedEl;
+class HotpWidget extends StatefulWidget {
+  final AuthToken hotpEl;
   final Function(AuthToken) onDelete;
   final Function()? onUpdated;
 
-  const TimeBasedWidget({
+  const HotpWidget({
     Key? key,
-    required this.timeBasedEl,
+    required this.hotpEl,
     required this.onDelete,
     this.onUpdated,
   }) : super(key: key);
 
   @override
-  _TimeBasedWidgetState createState() => _TimeBasedWidgetState();
+  _HotpWidgetState createState() => _HotpWidgetState();
 }
 
-class _TimeBasedWidgetState extends State<TimeBasedWidget> {
-  late Totp totp;
-  String totpCode = "";
-  int countdown = 0;
-  Timer? timer;
+class _HotpWidgetState extends State<HotpWidget> {
+  late Hotp hotp;
+  String hotpCode = "";
+  late int counter;
 
   String? iconPath;
 
   @override
   void initState() {
     super.initState();
-    final cleanedSecret = widget.timeBasedEl.secret.replaceAll(RegExp(r'\s+'), '').toUpperCase();
-    totp = Totp(
+    counter = widget.hotpEl.counter ?? 0;
+    _initializeHotp();
+    _updateCode();
+  }
+
+  void _initializeHotp() {
+    final cleanedSecret = widget.hotpEl.secret.replaceAll(RegExp(r'\s+'), '').toUpperCase();
+    hotp = Hotp(
       secret: base32.decode(cleanedSecret),
       digits: 6,
       algorithm: Algorithm.sha1,
     );
-
-    _updateCode();
-    timer = Timer.periodic(const Duration(seconds: 1), (_) => _updateCode());
   }
 
   void _updateCode() {
-    final now = DateTime.now();
-    final secondsElapsed = now.second % 30;
-    final remaining = 30 - secondsElapsed;
-    final newCode = totp.generate(now);
+    final newCode = hotp.generate(counter);
     setState(() {
-      totpCode = newCode;
-      countdown = remaining;
+      hotpCode = newCode;
+      counter++;
     });
+
+    widget.hotpEl.counter = counter;
+    _updateTokenInFile(widget.hotpEl);
   }
 
+  Future<File> _getUserInfoFile() async {
+    final dir = await getApplicationDocumentsDirectory();
+    return File('${dir.path}/user_info.json');
+  }
 
-  @override
-  void dispose() {
-    timer?.cancel();
-    super.dispose();
+  Future<void> _updateTokenInFile(AuthToken token) async {
+    try {
+      final file = await _getUserInfoFile();
+      final allTokens = await _loadTokensFromFile();
+
+      final index = allTokens.indexWhere((t) => t.service == token.service && t.account == token.account);
+      if (index != -1) {
+        allTokens[index] = token;
+        final jsonString = jsonEncode(allTokens.map((token) => token.toJson()).toList());
+        await file.writeAsString(jsonString);
+      }
+    } catch (e) {
+      debugPrint('Error updating token: ${e.toString()}');
+    }
+  }
+
+  Future<List<AuthToken>> _loadTokensFromFile() async {
+    try {
+      final file = await _getUserInfoFile();
+      if (await file.exists()) {
+        final content = await file.readAsString();
+        if (content.isNotEmpty) {
+          return AuthToken.listFromJson(content);
+        }
+      }
+    } catch (e) {
+      debugPrint('Error loading tokens: ${e.toString()}');
+    }
+    return [];
   }
 
   void _editService() async {
     final updated = await Navigator.push(
       context,
-      MaterialPageRoute(builder: (context) => EditTokenScreen(token: widget.timeBasedEl)),
+      MaterialPageRoute(builder: (context) => EditTokenScreen(token: widget.hotpEl)),
     );
 
-    widget.onUpdated!();
-
-    if (updated == true && context.mounted) {
+    if (updated == true && mounted) {
+      _initializeHotp();
       if (widget.onUpdated != null) {
         widget.onUpdated!();
       }
     }
   }
 
-
   Future<bool> _showDeleteConfirmationDialog() {
     return showDialog<bool>(
       context: context,
       builder: (BuildContext context) {
+        final localizations = AppLocalizations.of(context)!;
         return AlertDialog(
           backgroundColor: AppColors.white,
-          title: Text(AppLocalizations.of(context)!.confirming, style: Theme.of(context).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w700),),
-          content: Text(AppLocalizations.of(context)!.delete_conf),
+          title: Text(
+            localizations.confirming,
+            style: Theme.of(context).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w700),
+          ),
+          content: Text(localizations.delete_conf),
           actions: <Widget>[
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(false);
-              },
-              child: Text(AppLocalizations.of(context)!.cancel, style: TextStyle(color: AppColors.mainBlue)),
+              onPressed: () => Navigator.of(context).pop(false),
+              child: Text(
+                  localizations.cancel,
+                  style: TextStyle(color: AppColors.mainBlue)
+              ),
             ),
             TextButton(
-              onPressed: () {
-                Navigator.of(context).pop(true);
-              },
-              child:Text(AppLocalizations.of(context)!.delete, style: TextStyle(color: Colors.red)),
+              onPressed: () => Navigator.of(context).pop(true),
+              child: Text(
+                  localizations.delete,
+                  style: TextStyle(color: Colors.red)
+              ),
             ),
           ],
         );
@@ -154,6 +190,7 @@ class _TimeBasedWidgetState extends State<TimeBasedWidget> {
         borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
       ),
       builder: (BuildContext context) {
+        final localizations = AppLocalizations.of(context)!;
         return Container(
           decoration: BoxDecoration(
             color: Colors.white,
@@ -176,7 +213,7 @@ class _TimeBasedWidgetState extends State<TimeBasedWidget> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: _buildOptionButton(
                   icon: "assets/icons/edit.svg",
-                  label: AppLocalizations.of(context)!.edit,
+                  label: localizations.edit,
                   onTap: () {
                     Navigator.pop(context);
                     _editService();
@@ -188,15 +225,15 @@ class _TimeBasedWidgetState extends State<TimeBasedWidget> {
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: _buildOptionButton(
                   icon: "assets/icons/delete.svg",
-                  label: AppLocalizations.of(context)!.delete,
+                  label: localizations.delete,
                   onTap: () async {
                     Navigator.pop(context);
                     final delete = await _showDeleteConfirmationDialog();
                     if (delete) {
-                      widget.onDelete(widget.timeBasedEl);
-                      if (context.mounted) {
+                      widget.onDelete(widget.hotpEl);
+                      if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Токен видалено')),
+                          SnackBar(content: Text('Токен видалено')),
                         );
                       }
                     }
@@ -213,10 +250,11 @@ class _TimeBasedWidgetState extends State<TimeBasedWidget> {
 
   @override
   Widget build(BuildContext context) {
+    // Find icon for the service
     iconPath = null;
     for (var category in serviceCategories.values) {
       for (var service in category) {
-        if (service.name.toLowerCase() == widget.timeBasedEl.service.toLowerCase()) {
+        if (service.name.toLowerCase() == widget.hotpEl.service.toLowerCase()) {
           iconPath = service.iconPath;
           break;
         }
@@ -224,6 +262,8 @@ class _TimeBasedWidgetState extends State<TimeBasedWidget> {
       if (iconPath != null) break;
     }
     iconPath ??= 'assets/icons/website.svg';
+
+    final localizations = AppLocalizations.of(context)!;
 
     return GestureDetector(
       onLongPress: _showBottomSheet,
@@ -259,16 +299,16 @@ class _TimeBasedWidgetState extends State<TimeBasedWidget> {
                       children: [
                         Flexible(
                           child: Text(
-                            widget.timeBasedEl.service,
+                            widget.hotpEl.service,
                             style: Theme.of(context).textTheme.headlineLarge,
                             overflow: TextOverflow.ellipsis,
                           ),
                         ),
                         GestureDetector(
-                          onDoubleTap: () {
-                            Clipboard.setData(ClipboardData(text: totpCode)).then((_) {
+                          onTap: () {
+                            Clipboard.setData(ClipboardData(text: hotpCode)).then((_) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Код скопійовано в буфер обміну')),
+                                SnackBar(content: Text('Код скопійовано в буфер обміну')),
                               );
                             });
                           },
@@ -282,36 +322,37 @@ class _TimeBasedWidgetState extends State<TimeBasedWidget> {
                       ],
                     ),
                     Text(
-                      widget.timeBasedEl.account,
+                      widget.hotpEl.account,
                       style: Theme.of(context).textTheme.headlineSmall?.copyWith(color: const Color(0xFF898989)),
                     ),
                     const SizedBox(height: 4),
                     Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '${totpCode.substring(0, 3)} ${totpCode.substring(3)}',
+                          '${hotpCode.substring(0, 3)} ${hotpCode.substring(3)}',
                           style: Theme.of(context).textTheme.displayMedium,
                         ),
                         const SizedBox(width: 16),
-                        Stack(
-                          alignment: Alignment.center,
-                          children: [
-                            SizedBox(
-                              width: 30,
-                              height: 30,
-                              child: CircularProgressIndicator(
-                                value: countdown / 30,
-                                strokeWidth: 2.5,
-                                valueColor: AlwaysStoppedAnimation(AppColors.mainBlue),
-                                backgroundColor: AppColors.lightBlue,
+                        GestureDetector(
+                          onTap: _updateCode,
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              SvgPicture.asset(
+                                "assets/icons/update.svg",
+                                width: 16,
+                                height: 16,
+                                colorFilter: ColorFilter.mode(AppColors.blue, BlendMode.srcIn),
                               ),
-                            ),
-                            Text(
-                              '$countdown',
-                              style: Theme.of(context).textTheme.bodyMedium,
-                            ),
-                          ],
-                        ),
+                              SizedBox(width: 4),
+                              Text(
+                                localizations.update,
+                                style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: AppColors.mainBlue),
+                              )
+                            ],
+                          ),
+                        )
                       ],
                     ),
                   ],

@@ -12,6 +12,10 @@ import 'package:path_provider/path_provider.dart';
 
 
 class AddManuallyScreen extends StatefulWidget {
+  final Function()? onUpdated;
+
+  const AddManuallyScreen({super.key, this.onUpdated});
+
   @override
   _AddManuallyScreenSate createState() => _AddManuallyScreenSate();
 }
@@ -242,6 +246,7 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
       final jsonString = AuthToken.listToJson(tokens);
       await file.writeAsString(jsonString);
 
+      widget.onUpdated!();
       Navigator.pop(context);
     }
     catch(Ex){

@@ -26,6 +26,8 @@ dependencies:
   flutter_floating_bottom_bar: ^1.2.1+1
   path_provider: ^2.1.5
   totp: ^0.1.0
+  equatable: ^2.0.7
+  hotp: ^0.1.0
 
 # DEV
 dev_dependencies:

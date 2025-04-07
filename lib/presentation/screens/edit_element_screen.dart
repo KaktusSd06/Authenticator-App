@@ -111,7 +111,6 @@ class _EditTokenScreenState extends State<EditTokenScreen> {
         }
       }
 
-      // Оновлюємо токен
       int index = tokens.indexWhere((token) => token.account == widget.token.account);
       if (index != -1) {
         tokens[index] = updatedToken;

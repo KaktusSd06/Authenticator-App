@@ -13,6 +13,7 @@ import '../../../core/config/theme.dart' as AppColors;
 import '../../data/models/auth_token.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../widgets/counter_based_widget.dart';
 import '../widgets/time_based_widget.dart';
 
 
@@ -115,6 +116,26 @@ class _MainScreenState extends State<MainScreen> {
         ),
         style: Theme.of(context).textTheme.bodyLarge,
       ),
+    );
+  }
+
+  Widget _buildCountBasedPage() {
+    if (counter_tokens.isEmpty) {
+      return Center(child: Text(':('));
+    }
+
+    return ListView.builder(
+      itemCount: counter_tokens.length,
+      itemBuilder: (context, index) {
+        return Padding(
+          padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16),
+          child: HotpWidget(
+            hotpEl: counter_tokens[index],
+            onDelete: _deleteToken,
+            onUpdated: _loadTokens,
+          ),
+        );
+      },
     );
   }
 
@@ -314,7 +335,7 @@ class _MainScreenState extends State<MainScreen> {
                 child: TabBarView(
                   children: [
                     _buildTimeBasedPage(),
-                    Icon(Icons.exposure),
+                    _buildCountBasedPage(),
                   ],
                 ),
               ),
