@@ -124,7 +124,86 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> with WidgetsBin
   }
 
   Widget _buildContent() {
-    if (_isPremiumValue) {
+
+    if (!_isAuth) {
+      return Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24),
+              color: AppColors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 20,
+                  spreadRadius: 2,
+                  offset: Offset(0, 0),
+                ),
+              ],),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: SettingsTile(
+                iconPath: "assets/icons/sign_in.svg",
+                title: AppLocalizations.of(context)!.signin,
+                trailingIconPath: "assets/icons/ic_24.svg",
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => SignInScreen()));
+                },
+                isLast: true,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+    else if(_isAuth && !_isPremiumValue){
+      return Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24),
+              color: AppColors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 20,
+                  spreadRadius: 2,
+                  offset: Offset(0, 0),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: SettingsTile(
+                iconPath: "assets/icons/choose_a_plan.svg",
+                title: AppLocalizations.of(context)!.choose_a_plan,
+                trailingIconPath: "assets/icons/ic_24.svg",
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => PaywallScreen(isFirst: false))
+                  ).then((_) => _loadData()); // Refresh data when returning from PaywallScreen
+                },
+                isLast: true,
+              ),
+            ),
+          ),
+          SizedBox(height: 24),
+          SizedBox(
+            width: double.infinity,
+            child: BtnWithStoke(
+              onPressed: () {
+                _loadData();
+              },
+              text: AppLocalizations.of(context)!.restore_purchases,
+            ),
+          ),
+        ],
+      );
+    }
+    else {
       return Column(
           children: [
             Container(
@@ -208,84 +287,8 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> with WidgetsBin
             ),
           ]
       );
-    } else if(_isAuth && !_isPremiumValue){
-      return Column(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24),
-              color: AppColors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 20,
-                  spreadRadius: 2,
-                  offset: Offset(0, 0),
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: SettingsTile(
-                iconPath: "assets/icons/choose_a_plan.svg",
-                title: AppLocalizations.of(context)!.choose_a_plan,
-                trailingIconPath: "assets/icons/ic_24.svg",
-                onTap: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => PaywallScreen(isFirst: false))
-                  ).then((_) => _loadData()); // Refresh data when returning from PaywallScreen
-                },
-                isLast: true,
-              ),
-            ),
-          ),
-          SizedBox(height: 24),
-          SizedBox(
-            width: double.infinity,
-            child: BtnWithStoke(
-              onPressed: () {
-                _loadData();
-              },
-              text: AppLocalizations.of(context)!.restore_purchases,
-            ),
-          ),
-        ],
-      );
     }
-    else{
-     return Column(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24),
-              color: AppColors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 20,
-                  spreadRadius: 2,
-                  offset: Offset(0, 0),
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: SettingsTile(
-                iconPath: "assets/icons/sign_in.svg",
-                title: AppLocalizations.of(context)!.signin,
-                trailingIconPath: "assets/icons/ic_24.svg",
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => SignInScreen()));
-                },
-                isLast: true,
-              ),
-            ),
-          ),
-        ],
-      );
-    }
+
   }
 
   Future<bool> _isPremium() async {

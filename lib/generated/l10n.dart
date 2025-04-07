@@ -549,6 +549,211 @@ class S {
   String get delete {
     return Intl.message('Видалити', name: 'delete', desc: '', args: []);
   }
+
+  /// `На основі часу`
+  String get time_based {
+    return Intl.message(
+      'На основі часу',
+      name: 'time_based',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Одноразові`
+  String get counter_based {
+    return Intl.message(
+      'Одноразові',
+      name: 'counter_based',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Загальне`
+  String get general {
+    return Intl.message('Загальне', name: 'general', desc: '', args: []);
+  }
+
+  /// `Сервіси`
+  String get services {
+    return Intl.message('Сервіси', name: 'services', desc: '', args: []);
+  }
+
+  /// `Сервіс`
+  String get service {
+    return Intl.message('Сервіс', name: 'service', desc: '', args: []);
+  }
+
+  /// `Профіль`
+  String get account {
+    return Intl.message('Профіль', name: 'account', desc: '', args: []);
+  }
+
+  /// `Ключ`
+  String get key {
+    return Intl.message('Ключ', name: 'key', desc: '', args: []);
+  }
+
+  /// `Додати`
+  String get add {
+    return Intl.message('Додати', name: 'add', desc: '', args: []);
+  }
+
+  /// `Оновити`
+  String get update {
+    return Intl.message('Оновити', name: 'update', desc: '', args: []);
+  }
+
+  /// `Сканувати QR-код`
+  String get scan_qr {
+    return Intl.message(
+      'Сканувати QR-код',
+      name: 'scan_qr',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Додати код самостійно`
+  String get enter_code {
+    return Intl.message(
+      'Додати код самостійно',
+      name: 'enter_code',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Додати профіль`
+  String get add_account {
+    return Intl.message(
+      'Додати профіль',
+      name: 'add_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Додати 2FA коди`
+  String get add_2fa {
+    return Intl.message('Додати 2FA коди', name: 'add_2fa', desc: '', args: []);
+  }
+
+  /// `Захистіть свої облікові записи, додавши двофакторну автентифікацію.`
+  String get keep_account {
+    return Intl.message(
+      'Захистіть свої облікові записи, додавши двофакторну автентифікацію.',
+      name: 'keep_account',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Оновити код`
+  String get update_code {
+    return Intl.message('Оновити код', name: 'update_code', desc: '', args: []);
+  }
+
+  /// `Ви впевнені, що бажаєте оновити код?`
+  String get sure_update {
+    return Intl.message(
+      'Ви впевнені, що бажаєте оновити код?',
+      name: 'sure_update',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Помилка додавання`
+  String get add_error {
+    return Intl.message(
+      'Помилка додавання',
+      name: 'add_error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Помилка додавання елемента, спробуйте пізніше`
+  String get add_error_message {
+    return Intl.message(
+      'Помилка додавання елемента, спробуйте пізніше',
+      name: 'add_error_message',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Редагувати`
+  String get edit {
+    return Intl.message('Редагувати', name: 'edit', desc: '', args: []);
+  }
+
+  /// `Підтвердження`
+  String get confirming {
+    return Intl.message(
+      'Підтвердження',
+      name: 'confirming',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Видалити обраний елемент?`
+  String get delete_conf {
+    return Intl.message(
+      'Видалити обраний елемент?',
+      name: 'delete_conf',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Так`
+  String get yes {
+    return Intl.message('Так', name: 'yes', desc: '', args: []);
+  }
+
+  /// `Ні`
+  String get no {
+    return Intl.message('Ні', name: 'no', desc: '', args: []);
+  }
+
+  /// `Помилка редагування`
+  String get edit_error {
+    return Intl.message(
+      'Помилка редагування',
+      name: 'edit_error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Помилка під час редагування елемента`
+  String get edit_error_message {
+    return Intl.message(
+      'Помилка під час редагування елемента',
+      name: 'edit_error_message',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Зберегти`
+  String get save {
+    return Intl.message('Зберегти', name: 'save', desc: '', args: []);
+  }
+
+  /// `Редагувати профіль`
+  String get edit_account {
+    return Intl.message(
+      'Редагувати профіль',
+      name: 'edit_account',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

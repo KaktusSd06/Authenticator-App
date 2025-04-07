@@ -2,8 +2,6 @@ import 'package:authenticator_app/presentation/screens/onboarding/onboarding_scr
 import 'package:authenticator_app/presentation/screens/sign_in_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:authenticator_app/presentation/screens/info_screen.dart';
-import 'package:authenticator_app/presentation/screens/main_screen.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../../core/config/theme.dart' as AppColors;
@@ -153,11 +151,81 @@ class _PremiumFeaturesScreenState extends State<PremiumFeaturesScreen> with Sing
             padding: const EdgeInsets.only(top: 16, right: 16, left: 16),
             child: _buildContent(),
           ),
+
     );
   }
 
   Widget _buildContent() {
-    if (_isAuthValue && _isPremiumValue) {
+    if(!_isAuthValue){
+      return Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24),
+              color: AppColors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 20,
+                  spreadRadius: 2,
+                  offset: Offset(0, 0),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: SettingsTile(
+                iconPath: "assets/icons/sign_in.svg",
+                title: AppLocalizations.of(context)!.signin,
+                trailingIconPath: "assets/icons/ic_24.svg",
+                onTap: () {
+                  Navigator.pop(context);
+                  Navigator.push(context, MaterialPageRoute(builder: (context) => SignInScreen()));
+                },
+                isLast: true,
+              ),
+            ),
+          ),
+        ],
+      );
+    }
+    if (_isAuthValue && !_isPremiumValue) {
+      return Column(
+        children: [
+          Container(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(24),
+              color: AppColors.white,
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.black.withOpacity(0.1),
+                  blurRadius: 20,
+                  spreadRadius: 2,
+                  offset: Offset(0, 0),
+                ),
+              ],
+            ),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
+              child: SettingsTile(
+                iconPath: "assets/icons/choose_a_plan.svg",
+                title: AppLocalizations.of(context)!.choose_a_plan,
+                trailingIconPath: "assets/icons/ic_24.svg",
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(builder: (context) => PaywallScreen(isFirst: false))
+                  ).then((_) => _loadData()); // Refresh data when returning from PaywallScreen
+                },
+                isLast: true,
+              ),
+            ),
+          ),
+        ],
+      );
+
+    }
+    else{
       return Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -236,8 +304,8 @@ class _PremiumFeaturesScreenState extends State<PremiumFeaturesScreen> with Sing
                   ),
 
                   Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 12.0),
-                    child: GestureDetector(
+                      padding: const EdgeInsets.symmetric(vertical: 12.0),
+                      child: GestureDetector(
                         onTap: () {
                           showDialog(
                             context: context,
@@ -263,22 +331,22 @@ class _PremiumFeaturesScreenState extends State<PremiumFeaturesScreen> with Sing
                             ),
                           );
                         },
-                      child: Row(
-                        children: [
-                          SvgPicture.asset(
-                            "assets/icons/delete.svg",
-                            width: 24,
-                            height: 24,
-                            colorFilter: ColorFilter.mode(Color(0xFFE33C3C), BlendMode.srcIn),
-                          ),
-                          const SizedBox(width: 8),
-                          Text(
-                            AppLocalizations.of(context)!.delete_account,
-                            style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: Color(0xFFE33C3C)),
-                          ),
-                        ],
-                      ),
-                    )
+                        child: Row(
+                          children: [
+                            SvgPicture.asset(
+                              "assets/icons/delete.svg",
+                              width: 24,
+                              height: 24,
+                              colorFilter: ColorFilter.mode(Color(0xFFE33C3C), BlendMode.srcIn),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(
+                              AppLocalizations.of(context)!.delete_account,
+                              style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: Color(0xFFE33C3C)),
+                            ),
+                          ],
+                        ),
+                      )
 
                   ),
                 ],
@@ -320,73 +388,6 @@ class _PremiumFeaturesScreenState extends State<PremiumFeaturesScreen> with Sing
                 ),
               ),
             ),
-        ],
-      );
-    } else if(_isAuthValue) {
-      return Column(
-        children: [
-          Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(24),
-                color: AppColors.white,
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    blurRadius: 20,
-                    spreadRadius: 2,
-                    offset: Offset(0, 0),
-                  ),
-                ],
-              ),
-              child: Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-                child: SettingsTile(
-                  iconPath: "assets/icons/choose_a_plan.svg",
-                  title: AppLocalizations.of(context)!.choose_a_plan,
-                  trailingIconPath: "assets/icons/ic_24.svg",
-                  onTap: () {
-                    Navigator.push(
-                        context,
-                        MaterialPageRoute(builder: (context) => PaywallScreen(isFirst: false))
-                    ).then((_) => _loadData()); // Refresh data when returning from PaywallScreen
-                  },
-                  isLast: true,
-                ),
-              ),
-            ),
-        ],
-      );
-    }
-    else{
-      return Column(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(24),
-              color: AppColors.white,
-              boxShadow: [
-                BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
-                  blurRadius: 20,
-                  spreadRadius: 2,
-                  offset: Offset(0, 0),
-                ),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 8, horizontal: 16),
-              child: SettingsTile(
-                iconPath: "assets/icons/sign_in.svg",
-                title: AppLocalizations.of(context)!.signin,
-                trailingIconPath: "assets/icons/ic_24.svg",
-                onTap: () {
-                  Navigator.pop(context);
-                  Navigator.push(context, MaterialPageRoute(builder: (context) => SignInScreen()));
-                },
-                isLast: true,
-              ),
-            ),
-          ),
         ],
       );
     }

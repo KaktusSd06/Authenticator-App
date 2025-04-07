@@ -35,6 +35,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "about_p4": MessageLookupByLibrary.simpleMessage(
       "Після встановлення безпечного з’єднання Authenticator згенерує 6-8-значний код, необхідний для доступу до вашого облікового запису.\n\nНавіть якщо хтось знає ваш пароль, йому все одно потрібен код 2FA для доступу до вашого облікового запису.",
     ),
+    "account": MessageLookupByLibrary.simpleMessage("Профіль"),
+    "add": MessageLookupByLibrary.simpleMessage("Додати"),
+    "add_2fa": MessageLookupByLibrary.simpleMessage("Додати 2FA коди"),
+    "add_account": MessageLookupByLibrary.simpleMessage("Додати профіль"),
+    "add_error": MessageLookupByLibrary.simpleMessage("Помилка додавання"),
+    "add_error_message": MessageLookupByLibrary.simpleMessage(
+      "Помилка додавання елемента, спробуйте пізніше",
+    ),
     "and": MessageLookupByLibrary.simpleMessage("та"),
     "billing_date": MessageLookupByLibrary.simpleMessage(
       "Наступна дата оплати",
@@ -42,8 +50,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "cancel": MessageLookupByLibrary.simpleMessage("Скасувати"),
     "change_plan": MessageLookupByLibrary.simpleMessage("Змінити план"),
     "choose_a_plan": MessageLookupByLibrary.simpleMessage("Обрати план"),
+    "confirming": MessageLookupByLibrary.simpleMessage("Підтвердження"),
     "contact_us": MessageLookupByLibrary.simpleMessage("Зв\'язатись з нами"),
     "continue_btn": MessageLookupByLibrary.simpleMessage("Продовжити"),
+    "counter_based": MessageLookupByLibrary.simpleMessage("Одноразові"),
     "current_plan": MessageLookupByLibrary.simpleMessage(
       "Ваша активна підписка",
     ),
@@ -55,6 +65,16 @@ class MessageLookup extends MessageLookupByLibrary {
     "delete_account_confirm": MessageLookupByLibrary.simpleMessage(
       "Цю дію не можна відмінити",
     ),
+    "delete_conf": MessageLookupByLibrary.simpleMessage(
+      "Видалити обраний елемент?",
+    ),
+    "edit": MessageLookupByLibrary.simpleMessage("Редагувати"),
+    "edit_account": MessageLookupByLibrary.simpleMessage("Редагувати профіль"),
+    "edit_error": MessageLookupByLibrary.simpleMessage("Помилка редагування"),
+    "edit_error_message": MessageLookupByLibrary.simpleMessage(
+      "Помилка під час редагування елемента",
+    ),
+    "enter_code": MessageLookupByLibrary.simpleMessage("Додати код самостійно"),
     "error_signIn_message": MessageLookupByLibrary.simpleMessage(
       "Error logging in, please try again later",
     ),
@@ -64,7 +84,13 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "free_day": MessageLookupByLibrary.simpleMessage("3 Дні пробного періодну"),
     "free_trial": MessageLookupByLibrary.simpleMessage("Пробна підписка"),
+    "general": MessageLookupByLibrary.simpleMessage("Загальне"),
     "hello": MessageLookupByLibrary.simpleMessage("Привіт"),
+    "keep_account": MessageLookupByLibrary.simpleMessage(
+      "Захистіть свої облікові записи, додавши двофакторну автентифікацію.",
+    ),
+    "key": MessageLookupByLibrary.simpleMessage("Ключ"),
+    "no": MessageLookupByLibrary.simpleMessage("Ні"),
     "onBoarding_H1": MessageLookupByLibrary.simpleMessage(
       "Безпечний\nобліковий запис",
     ),
@@ -108,11 +134,18 @@ class MessageLookup extends MessageLookupByLibrary {
     "restore_purchases": MessageLookupByLibrary.simpleMessage(
       "Відновити підписку",
     ),
+    "save": MessageLookupByLibrary.simpleMessage("Зберегти"),
+    "scan_qr": MessageLookupByLibrary.simpleMessage("Сканувати QR-код"),
     "search": MessageLookupByLibrary.simpleMessage("Пошук"),
+    "service": MessageLookupByLibrary.simpleMessage("Сервіс"),
+    "services": MessageLookupByLibrary.simpleMessage("Сервіси"),
     "sign_in_with": MessageLookupByLibrary.simpleMessage("Увійти з"),
     "sign_out": MessageLookupByLibrary.simpleMessage("Вийти з акаунту"),
     "signin": MessageLookupByLibrary.simpleMessage("Вхід"),
     "subscription": MessageLookupByLibrary.simpleMessage("Підписка"),
+    "sure_update": MessageLookupByLibrary.simpleMessage(
+      "Ви впевнені, що бажаєте оновити код?",
+    ),
     "synchronize": MessageLookupByLibrary.simpleMessage("Синхронізувати"),
     "term_error": MessageLookupByLibrary.simpleMessage(
       "Ви маєте погодитись з  Умовами використання та Політикою конфеденційності щоб продовжити вхід",
@@ -123,9 +156,12 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "terms_of_use": MessageLookupByLibrary.simpleMessage("Умови використання"),
     "than_6": MessageLookupByLibrary.simpleMessage("далі 6.99 usd на тиждень"),
+    "time_based": MessageLookupByLibrary.simpleMessage("На основі часу"),
     "uSD_Only": MessageLookupByLibrary.simpleMessage(
       "39,99 USD Лише 0.83 на тиждень",
     ),
+    "update": MessageLookupByLibrary.simpleMessage("Оновити"),
+    "update_code": MessageLookupByLibrary.simpleMessage("Оновити код"),
     "usefull_info": MessageLookupByLibrary.simpleMessage("Корисна інформація"),
     "weekly_subscription": MessageLookupByLibrary.simpleMessage(
       "Місячна підписка",
@@ -136,5 +172,6 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "year": MessageLookupByLibrary.simpleMessage("1 Рік"),
     "year_subscription": MessageLookupByLibrary.simpleMessage("Річна підписка"),
+    "yes": MessageLookupByLibrary.simpleMessage("Так"),
   };
 }
