@@ -28,6 +28,8 @@ dependencies:
   totp: ^0.1.0
   equatable: ^2.0.7
   hotp: ^0.1.0
+  cloud_firestore: ^5.6.6
+  connectivity_plus: ^5.0.1
 
 # DEV
 dev_dependencies:

@@ -82,7 +82,14 @@
   "edit_error": "Помилка редагування",
   "edit_error_message": "Помилка під час редагування елемента",
   "save": "Зберегти",
-  "edit_account": "Редагувати профіль"
+  "edit_account": "Редагувати профіль",
+  "fill_all_fields": "Заповніть всі поля",
+  "invalid_key": "Неправильний ключ",
+  "invalid_key_description": "Лише великі літери від A да Z та числа 2–7",
+  "connection_error": "Помилка з'єднання",
+  "connection_error_message": "Відсутнє інтернет з'єднання, спробуйте пізніше",
+  "close": "Закрити",
+  "cancel_plan": "Скасувати підписку"
 }
 
 

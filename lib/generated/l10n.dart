@@ -754,6 +754,71 @@ class S {
       args: [],
     );
   }
+
+  /// `Заповніть всі поля`
+  String get fill_all_fields {
+    return Intl.message(
+      'Заповніть всі поля',
+      name: 'fill_all_fields',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Неправильний ключ`
+  String get invalid_key {
+    return Intl.message(
+      'Неправильний ключ',
+      name: 'invalid_key',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Лише великі літери від A да Z та числа 2–7`
+  String get invalid_key_description {
+    return Intl.message(
+      'Лише великі літери від A да Z та числа 2–7',
+      name: 'invalid_key_description',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Помилка з'єднання`
+  String get connection_error {
+    return Intl.message(
+      'Помилка з\'єднання',
+      name: 'connection_error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Відсутнє інтернет з'єднання, спробуйте пізніше`
+  String get connection_error_message {
+    return Intl.message(
+      'Відсутнє інтернет з\'єднання, спробуйте пізніше',
+      name: 'connection_error_message',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Закрити`
+  String get close {
+    return Intl.message('Закрити', name: 'close', desc: '', args: []);
+  }
+
+  /// `Скасувати підписку`
+  String get cancel_plan {
+    return Intl.message(
+      'Скасувати підписку',
+      name: 'cancel_plan',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

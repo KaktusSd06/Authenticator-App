@@ -17,15 +17,28 @@ class AuthToken {
     this.counter,
   });
 
+  static bool isValidBase32(String input) {
+    final cleaned = input.replaceAll(' ', '').toUpperCase();
+    final base32Regex = RegExp(r'^[A-Z2-7]+=*$');
+    return base32Regex.hasMatch(cleaned);
+  }
+
+
   factory AuthToken.fromJson(Map<String, dynamic> json) {
+    final secret = json['secret'];
+    if (!isValidBase32(secret)) {
+      throw FormatException("Invalid Base32 characters in token.secret: $secret");
+    }
+
     return AuthToken(
       service: json['service'],
       account: json['account'],
-      secret: json['secret'],
+      secret: secret,
       type: json['type'] == 'hotp' ? AuthTokenType.hotp : AuthTokenType.totp,
       counter: json['counter'],
     );
   }
+
 
   updateCounter()=> counter = (counter! + 1)!;
 

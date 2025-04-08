@@ -48,9 +48,17 @@ class MessageLookup extends MessageLookupByLibrary {
       "Наступна дата оплати",
     ),
     "cancel": MessageLookupByLibrary.simpleMessage("Скасувати"),
+    "cancel_plan": MessageLookupByLibrary.simpleMessage("Скасувати підписку"),
     "change_plan": MessageLookupByLibrary.simpleMessage("Змінити план"),
     "choose_a_plan": MessageLookupByLibrary.simpleMessage("Обрати план"),
+    "close": MessageLookupByLibrary.simpleMessage("Закрити"),
     "confirming": MessageLookupByLibrary.simpleMessage("Підтвердження"),
+    "connection_error": MessageLookupByLibrary.simpleMessage(
+      "Помилка з\'єднання",
+    ),
+    "connection_error_message": MessageLookupByLibrary.simpleMessage(
+      "Відсутнє інтернет з\'єднання, спробуйте пізніше",
+    ),
     "contact_us": MessageLookupByLibrary.simpleMessage("Зв\'язатись з нами"),
     "continue_btn": MessageLookupByLibrary.simpleMessage("Продовжити"),
     "counter_based": MessageLookupByLibrary.simpleMessage("Одноразові"),
@@ -79,6 +87,9 @@ class MessageLookup extends MessageLookupByLibrary {
       "Error logging in, please try again later",
     ),
     "error_with_signIn": MessageLookupByLibrary.simpleMessage("Sign In Error"),
+    "fill_all_fields": MessageLookupByLibrary.simpleMessage(
+      "Заповніть всі поля",
+    ),
     "free_Trial_Enabled": MessageLookupByLibrary.simpleMessage(
       "Пробний період",
     ),
@@ -86,6 +97,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "free_trial": MessageLookupByLibrary.simpleMessage("Пробна підписка"),
     "general": MessageLookupByLibrary.simpleMessage("Загальне"),
     "hello": MessageLookupByLibrary.simpleMessage("Привіт"),
+    "invalid_key": MessageLookupByLibrary.simpleMessage("Неправильний ключ"),
+    "invalid_key_description": MessageLookupByLibrary.simpleMessage(
+      "Лише великі літери від A да Z та числа 2–7",
+    ),
     "keep_account": MessageLookupByLibrary.simpleMessage(
       "Захистіть свої облікові записи, додавши двофакторну автентифікацію.",
     ),

@@ -5,8 +5,6 @@ import 'dart:convert';
 import 'package:authenticator_app/presentation/screens/scan_qr_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:authenticator_app/presentation/screens/info_screen.dart';
-import 'package:authenticator_app/presentation/screens/main_screen.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../../core/config/theme.dart' as AppColors;
@@ -51,7 +49,6 @@ class _MainScreenState extends State<MainScreen> {
       if (content.isNotEmpty) {
         allTokens = AuthToken.listFromJson(content);
         _filterTokens();
-
       }
     }
 

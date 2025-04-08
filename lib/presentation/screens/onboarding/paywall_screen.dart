@@ -1,6 +1,7 @@
 import 'package:authenticator_app/presentation/screens/home_screen.dart';
 import 'package:authenticator_app/presentation/screens/main_screen.dart';
 import 'package:authenticator_app/presentation/screens/onboarding/onboarding_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -8,6 +9,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
 import '../../../core/config/theme.dart' as Colors;
+import '../../../data/repositories/remote/subscription_repository.dart';
 import '../../widgets/continue_btn.dart';
 import '../sign_in_screen.dart';
 
@@ -48,6 +50,23 @@ class _PaywallScreenState extends State<PaywallScreen> {
 
     await storage.write(key: 'subscription', value: plan);
     await storage.write(key: 'nextBilling', value: formattedDate);
+    await storage.write(key: 'hasFreeTrial', value: isTrialEnabled ? true.toString() : false.toString());
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      String userEmail = user.email ?? '';
+
+      SubscriptionRepository().saveSubscriptionForUser(
+        uid: user.uid,
+        email: userEmail,
+        plan: plan,
+        nextBilling: formattedDate,
+        hasFreeTrial: isTrialEnabled ? true : false,
+      );
+    } else {
+      print('No user is currently signed in');
+    }
+
 
     Navigator.pop(context);
   }

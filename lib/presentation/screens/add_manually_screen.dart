@@ -219,21 +219,43 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
   }
 
   Future<void> addServiceBtn() async {
+    final key = _key.text.trim().replaceAll(' ', '').toUpperCase();
+    final account = _account.text.trim();
+    final service = _selectedServiceName.trim();
+    final otpType = _selectedOtpType;
+
+    final isValidBase32 = RegExp(r'^[A-Z2-7]+={0,6}$').hasMatch(key);
+
+    if (service.isEmpty || account.isEmpty || key.isEmpty) {
+      ErrorDialog().showErrorDialog(
+        context,
+        AppLocalizations.of(context)!.add_error,
+        AppLocalizations.of(context)!.fill_all_fields,
+      );
+      return;
+    }
+
+    if (!isValidBase32) {
+      ErrorDialog().showErrorDialog(
+        context,
+        AppLocalizations.of(context)!.invalid_key,
+        AppLocalizations.of(context)!.invalid_key_description,
+      );
+      return;
+    }
+
     try {
       final newToken = AuthToken(
-          service: _selectedServiceName,
-          account: _account.text,
-          secret: _key.text,
-          type: _selectedOtpType == "Time-based"
-              ? AuthTokenType.totp
-              : AuthTokenType.hotp,
-          counter: _selectedOtpType == "Time-based" ? null : 1
+        service: service,
+        account: account,
+        secret: key,
+        type: otpType == "Time-based" ? AuthTokenType.totp : AuthTokenType.hotp,
+        counter: otpType == "Time-based" ? null : 1,
       );
 
       final file = await _getUserInfoFile();
 
       List<AuthToken> tokens = [];
-
       if (await file.exists()) {
         final content = await file.readAsString();
         if (content.isNotEmpty) {
@@ -246,10 +268,8 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
       final jsonString = AuthToken.listToJson(tokens);
       await file.writeAsString(jsonString);
 
-      widget.onUpdated!();
       Navigator.pop(context);
-    }
-    catch(Ex){
+    } catch (e) {
       ErrorDialog().showErrorDialog(
         context,
         AppLocalizations.of(context)!.add_error,
@@ -257,6 +277,7 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
       );
     }
   }
+
 
   Future<File> _getUserInfoFile() async {
     final dir = await getApplicationDocumentsDirectory();

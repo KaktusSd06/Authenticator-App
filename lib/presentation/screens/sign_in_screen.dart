@@ -1,14 +1,17 @@
 import 'package:authenticator_app/generated/l10n.dart';
 import 'package:authenticator_app/presentation/screens/home_screen.dart';
 import 'package:authenticator_app/services/auth_service.dart';
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:sign_button/constants.dart';
 import 'package:sign_button/create_button.dart';
 import '../../../core/config/theme.dart' as Colors;
+import '../../data/repositories/remote/subscription_repository.dart';
 import '../dialogs/error_dialog.dart';
 
 
@@ -68,9 +71,47 @@ class _SignInScreenState extends State<SignInScreen> {
                 onPressed: () async {
 
                   if (isAgree) {
+                    ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+
+                    if (connectivityResult == ConnectivityResult.none) {
+                      ErrorDialog().showErrorDialog(
+                        context,
+                        AppLocalizations.of(context)!.connection_error,
+                        AppLocalizations.of(context)!.connection_error_message,
+                      );
+                      return;
+                    }
+
                     UserCredential? userCredential = await AuthService().signInWithGoogle();
 
+
                     if (userCredential != null) {
+                      final user = FirebaseAuth.instance.currentUser;
+
+                      if (user != null) {
+                        final info = await SubscriptionRepository().loadSubscriptionForUser(user.uid);
+
+                        if (info != null) {
+                          final FlutterSecureStorage storage = FlutterSecureStorage();
+
+                          var email = info['email'];
+                          var plan = info['plan'];
+                          var nextBilling = info['nextBilling'];
+                          var hasFreeTrial = info['hasFreeTrial'];
+
+                          await storage.write(key: 'hasFreeTrial', value: hasFreeTrial.toString());
+                          await storage.write(key: 'subscription', value: plan);
+                          await storage.write(key: 'nextBilling', value: nextBilling);
+
+                          print('Subscription info: $email, $plan, $nextBilling, Free Trial: $hasFreeTrial');
+                        } else {
+                          print('No subscription data found.');
+                        }
+                      } else {
+                        print('User is not logged in.');
+                      }
+
+
                       Navigator.pushReplacement(
                         context,
                         MaterialPageRoute(builder: (context) => HomeScreen()),

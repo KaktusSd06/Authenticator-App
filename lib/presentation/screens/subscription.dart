@@ -1,10 +1,12 @@
 import 'package:authenticator_app/presentation/screens/sign_in_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:intl/intl.dart';
 import '../../../core/config/theme.dart' as AppColors;
+import '../../data/repositories/remote/subscription_repository.dart';
 import '../widgets/btn_with_stoke.dart';
 import '../widgets/settings_tile.dart';
 import 'onboarding/paywall_screen.dart';
@@ -39,6 +41,22 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> with WidgetsBin
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _loadData();
+  }
+
+  final storage = FlutterSecureStorage();
+
+  Future<void> clearSubscriptionData() async {
+    await storage.delete(key: 'subscription');
+    await storage.delete(key: 'nextBilling');
+    await storage.delete(key: 'hasFreeTrial');
+
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      String userId = user.uid ?? '';
+      SubscriptionRepository().cancelSubscription(userId);
+      _loadData();
+    }
   }
 
   @override
@@ -283,6 +301,32 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> with WidgetsBin
                   ).then((_) => _loadData());
                 },
                 text: AppLocalizations.of(context)!.change_plan,
+              ),
+            ),
+            SizedBox(height: 12),
+            SizedBox(
+              width: double.infinity,
+              child: ElevatedButton(
+                onPressed: () {
+                  clearSubscriptionData();
+                },
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: Theme.of(context).scaffoldBackgroundColor,
+                  padding: EdgeInsets.symmetric(vertical: 15),
+                  shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(30),
+                      side: BorderSide(color: Colors.red, width: 2)
+                  ),
+                ),
+                child: Text(
+                  AppLocalizations.of(context)!.cancel_plan,
+                  style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                    color: Colors.red,
+                    fontWeight: FontWeight.w500,
+                  ),
+                  textAlign: TextAlign.center,
+                  overflow: TextOverflow.ellipsis,
+                ),
               ),
             ),
           ]

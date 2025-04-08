@@ -41,7 +41,12 @@ class _HotpWidgetState extends State<HotpWidget> {
     super.initState();
     counter = widget.hotpEl.counter ?? 0;
     _initializeHotp();
-    _updateCode();
+
+    final newCode = hotp.generate(counter++);
+    setState(() {
+      hotpCode = newCode;
+    });
+    //_updateCode();
   }
 
   void _initializeHotp() {
@@ -54,13 +59,6 @@ class _HotpWidgetState extends State<HotpWidget> {
   }
 
   void _updateCode() {
-    final newCode = hotp.generate(counter);
-    setState(() {
-      hotpCode = newCode;
-      counter++;
-    });
-
-    widget.hotpEl.counter = counter;
     _updateTokenInFile(widget.hotpEl);
   }
 
@@ -71,12 +69,21 @@ class _HotpWidgetState extends State<HotpWidget> {
 
   Future<void> _updateTokenInFile(AuthToken token) async {
     try {
+      counter = counter +1;
+      widget.hotpEl.counter = counter;
+
+      final newCode = hotp.generate(counter);
+      setState(() {
+        hotpCode = newCode;
+      });
+
       final file = await _getUserInfoFile();
       final allTokens = await _loadTokensFromFile();
 
       final index = allTokens.indexWhere((t) => t.service == token.service && t.account == token.account);
       if (index != -1) {
-        allTokens[index] = token;
+        allTokens[index].counter = counter;
+        //counter++;
         final jsonString = jsonEncode(allTokens.map((token) => token.toJson()).toList());
         await file.writeAsString(jsonString);
       }
@@ -151,6 +158,7 @@ class _HotpWidgetState extends State<HotpWidget> {
     required String icon,
     required String label,
     required VoidCallback onTap,
+    bool? isCenter,
   }) {
     return InkWell(
       onTap: onTap,
@@ -163,6 +171,7 @@ class _HotpWidgetState extends State<HotpWidget> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(
+            mainAxisAlignment: isCenter == true ? MainAxisAlignment.center : MainAxisAlignment.start,
             children: [
               SvgPicture.asset(
                 icon,
@@ -172,13 +181,67 @@ class _HotpWidgetState extends State<HotpWidget> {
               ),
               SizedBox(width: 12),
               Text(
-                  label,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: AppColors.mainBlue)
+                label,
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: AppColors.mainBlue),
               ),
             ],
           ),
         ),
       ),
+    );
+  }
+
+
+  void _showBottomSheetUpdate() {
+    showModalBottomSheet(
+      context: context,
+      backgroundColor: AppColors.white,
+      shape: const RoundedRectangleBorder(
+        borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
+      ),
+      builder: (BuildContext context) {
+        final localizations = AppLocalizations.of(context)!;
+        return Container(
+          decoration: BoxDecoration(
+            color: Colors.white,
+            borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
+          ),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              SizedBox(height: 12),
+              Container(
+                width: 36,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              SizedBox(height: 24),
+              Text(
+                AppLocalizations.of(context)!.sure_update,
+                style: Theme.of(context).textTheme.headlineLarge,
+                textAlign: TextAlign.center,
+              ),
+              SizedBox(height: 16),
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 16),
+                child: _buildOptionButton(
+                  icon: "assets/icons/update.svg",
+                  label: localizations.update_code,
+                  onTap: () {
+                    Navigator.pop(context);
+                    _updateCode();
+                  },
+                    isCenter: true,
+                ),
+              ),
+              SizedBox(height: 66),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -335,7 +398,7 @@ class _HotpWidgetState extends State<HotpWidget> {
                         ),
                         const SizedBox(width: 16),
                         GestureDetector(
-                          onTap: _updateCode,
+                          onTap: _showBottomSheetUpdate,
                           child: Row(
                             mainAxisSize: MainAxisSize.min,
                             children: [

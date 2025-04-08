@@ -73,7 +73,7 @@
   "add_2fa": "Add 2FA Codes",
   "keep_account": "Keep your accounts secure by adding\ntwo-factor authentication.",
   "update_code": "Update code",
-  "sure_update": "Are you sure you want to update the code?",
+  "sure_update": "Are you sure you want to update\nthe code?",
   "add_error": "Error adding element",
   "add_error_message": "Error adding item, please try again later",
   "edit": "Edit",
@@ -84,5 +84,12 @@
   "edit_error": "Editing error",
   "edit_error_message": "Element editing error",
   "save": "Save",
-  "edit_account": "Edit account"
+  "edit_account": "Edit account",
+  "fill_all_fields": "Fill all fields",
+  "invalid_key": "Invalid key",
+  "invalid_key_description": "only uppercase letters A to Z and numbers 2–7",
+  "connection_error": "Connection error",
+  "connection_error_message": "No internet connection, try later",
+  "close": "Close",
+  "cancel_plan": "Cancel Plan"
 }
