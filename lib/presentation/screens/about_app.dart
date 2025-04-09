@@ -31,7 +31,7 @@ class _AboutAppScreenState extends State<AboutAppScreen> with SingleTickerProvid
             width: 16,
             height: 16,
             colorFilter: ColorFilter.mode(
-              AppColors.mainBlue,
+              Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : Colors.blue,
               BlendMode.srcIn,
             ),
           ),
@@ -56,24 +56,24 @@ class _AboutAppScreenState extends State<AboutAppScreen> with SingleTickerProvid
               Text.rich(
                 TextSpan(
                   children: [
-                    TextSpan(text: AppLocalizations.of(context)!.authenticator, style: TextStyle(color: Color(0xFF3E3E3E))),
+                    TextSpan(text: AppLocalizations.of(context)!.authenticator, style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? Color(0xFF3E3E3E) : Colors.white)),
                     TextSpan(text: ' '),
                     TextSpan(
                       text: AppLocalizations.of(context)!.about_p1,
-                      style: TextStyle(color: AppColors.gray6),
+                      style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? AppColors.gray6 : AppColors.gray4),
                     ),
                     TextSpan(
                       text: '\n\n${AppLocalizations.of(context)!.about_p2}',
-                      style: TextStyle(color: AppColors.gray6),
+                      style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? AppColors.gray6 : AppColors.gray4),
                     ),
-                    TextSpan(text: ' ${AppLocalizations.of(context)!.authenticator} ', style: TextStyle(color: Color(0xFF3E3E3E))),
+                    TextSpan(text: ' ${AppLocalizations.of(context)!.authenticator} ', style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? Color(0xFF3E3E3E) : Colors.white)),
                     TextSpan(
                       text: AppLocalizations.of(context)!.about_p3,
-                      style: TextStyle(color: AppColors.gray6),
+                      style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? AppColors.gray6 : AppColors.gray4),
                     ),
                     TextSpan(
                       text: AppLocalizations.of(context)!.about_p4,
-                      style: TextStyle(color: AppColors.gray6),
+                      style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? AppColors.gray6 : AppColors.gray4),
                     ),
                   ],
                 ),

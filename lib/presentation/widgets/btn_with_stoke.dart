@@ -7,6 +7,7 @@ import '../../../core/config/theme.dart' as Colors;
 
 
 import '../../core/config/theme.dart';
+import '../../core/config/theme.dart' as AppColors;
 
 class BtnWithStoke extends StatelessWidget {
   final VoidCallback?  onPressed;
@@ -32,7 +33,7 @@ class BtnWithStoke extends StatelessWidget {
       child: Text(
         text,
         style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-          color: mainBlue,
+          color: Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : AppColors.blue,
           fontWeight: FontWeight.w500,
         ),
         textAlign: TextAlign.center,

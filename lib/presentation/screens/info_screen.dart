@@ -1,4 +1,5 @@
 import 'package:authenticator_app/presentation/screens/about_app.dart';
+import 'package:authenticator_app/presentation/screens/password_security_screen.dart';
 import 'package:authenticator_app/presentation/screens/premium_features.dart';
 import 'package:authenticator_app/presentation/screens/sign_in_screen.dart';
 import 'package:authenticator_app/presentation/screens/subscription.dart';
@@ -69,7 +70,7 @@ class _InfoScreenSate extends State<InfoScreen>{
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(24),
-                color: AppColors.white,
+                color: Theme.of(context).cardColor,
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.1),
@@ -128,7 +129,7 @@ class _InfoScreenSate extends State<InfoScreen>{
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(24),
-                color: AppColors.white,
+                color: Theme.of(context).cardColor,
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.1),
@@ -151,6 +152,26 @@ class _InfoScreenSate extends State<InfoScreen>{
                           context,
                           MaterialPageRoute(builder: (context) => AboutAppScreen()),
                         );
+                      },
+                      isLast: false,
+                    ),
+                    SettingsTile(
+                      iconPath: "assets/icons/key.svg",
+                      title: AppLocalizations.of(context)!.password_security,
+                      trailingIconPath: "assets/icons/ic_24.svg",
+                      onTap: () {
+                        if(_isAuthValue){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => PasswordSecurityScreen())
+                          );
+                        }
+                        else{
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(builder: (context) => SignInScreen())
+                          );
+                        }
                       },
                       isLast: false,
                     ),
@@ -185,7 +206,7 @@ class _InfoScreenSate extends State<InfoScreen>{
                         }
                       },
                       isLast: true,
-                    ),
+                    )
                   ],
                 ),
               ),

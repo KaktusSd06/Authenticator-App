@@ -819,6 +819,176 @@ class S {
       args: [],
     );
   }
+
+  /// `Паролі та безпеки`
+  String get password_security {
+    return Intl.message(
+      'Паролі та безпеки',
+      name: 'password_security',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Пароль`
+  String get password {
+    return Intl.message('Пароль', name: 'password', desc: '', args: []);
+  }
+
+  /// `Біометрія`
+  String get biometrics {
+    return Intl.message('Біометрія', name: 'biometrics', desc: '', args: []);
+  }
+
+  /// `Змінити пароль`
+  String get change_password {
+    return Intl.message(
+      'Змінити пароль',
+      name: 'change_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Редагувати password`
+  String get edit_password {
+    return Intl.message(
+      'Редагувати password',
+      name: 'edit_password',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Змінити`
+  String get change {
+    return Intl.message('Змінити', name: 'change', desc: '', args: []);
+  }
+
+  /// `Введіть PIN-код`
+  String get enter_pin {
+    return Intl.message(
+      'Введіть PIN-код',
+      name: 'enter_pin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Невірний PIN-код`
+  String get incorrect_pin {
+    return Intl.message(
+      'Невірний PIN-код',
+      name: 'incorrect_pin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `PIN коди не збігаються`
+  String get pins_do_not_match {
+    return Intl.message(
+      'PIN коди не збігаються',
+      name: 'pins_do_not_match',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Створіть PIN`
+  String get create_pin {
+    return Intl.message('Створіть PIN', name: 'create_pin', desc: '', args: []);
+  }
+
+  /// `Підтвердіть PIN`
+  String get confirm_pin {
+    return Intl.message(
+      'Підтвердіть PIN',
+      name: 'confirm_pin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Введіть поточний PIN`
+  String get enter_old_pin {
+    return Intl.message(
+      'Введіть поточний PIN',
+      name: 'enter_old_pin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Введіть новий PIN`
+  String get enter_new_pin {
+    return Intl.message(
+      'Введіть новий PIN',
+      name: 'enter_new_pin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Підтвердіть новий PIN`
+  String get confirm_new_pin {
+    return Intl.message(
+      'Підтвердіть новий PIN',
+      name: 'confirm_new_pin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Зміна PIN-коду`
+  String get change_pin {
+    return Intl.message(
+      'Зміна PIN-коду',
+      name: 'change_pin',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Авторизуйтесь для входу в додаток`
+  String get authenticate_with_biometrics {
+    return Intl.message(
+      'Авторизуйтесь для входу в додаток',
+      name: 'authenticate_with_biometrics',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Помилка біометричної автентифікації`
+  String get biometric_error {
+    return Intl.message(
+      'Помилка біометричної автентифікації',
+      name: 'biometric_error',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Біометрика недоступна на цьому пристрої`
+  String get biometric_not_available {
+    return Intl.message(
+      'Біометрика недоступна на цьому пристрої',
+      name: 'biometric_not_available',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Біометричну автентифікацію увімкнено`
+  String get biometric_enabled {
+    return Intl.message(
+      'Біометричну автентифікацію увімкнено',
+      name: 'biometric_enabled',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

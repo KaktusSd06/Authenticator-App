@@ -30,7 +30,7 @@ class _SignInScreenState extends State<SignInScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         iconTheme: IconThemeData(
-          color: Colors.mainBlue,
+          color: Theme.of(context).brightness == Brightness.light ? Colors.mainBlue : Colors.blue
         ),
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
@@ -38,14 +38,14 @@ class _SignInScreenState extends State<SignInScreen> {
             "assets/icons/arrow_back.svg",
             width: 6,
             height: 12,
-            colorFilter: ColorFilter.mode(Colors.mainBlue, BlendMode.srcIn),
+            colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? Colors.mainBlue : Colors.blue, BlendMode.srcIn),
           ),
         ),
-        backgroundColor: Colors.gray1,
+        backgroundColor: Theme.of(context).brightness == Brightness.light ? Colors.gray1 : Colors.black,
         title: Text(
           AppLocalizations.of(context)!.signin,
           style: Theme.of(context).textTheme.displaySmall!.copyWith(
-            color: Color(0xFF171818),
+            color: Theme.of(context).brightness == Brightness.light ? Color(0xFF171818) : Colors.white,
           ),
         ),
         centerTitle: true,
@@ -59,7 +59,7 @@ class _SignInScreenState extends State<SignInScreen> {
             Text(
               AppLocalizations.of(context)!.wellcome,
               style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                color: Colors.mainBlue,
+                color: Theme.of(context).brightness == Brightness.light ? Colors.mainBlue : Colors.blue,
               ),
             ),
             SizedBox(height: 60),
@@ -137,7 +137,7 @@ class _SignInScreenState extends State<SignInScreen> {
             SizedBox(
               height: 54,
               child: SignInButton(
-                buttonType: ButtonType.appleDark,
+                buttonType: Theme.of(context).brightness == Brightness.light ? ButtonType.appleDark : ButtonType.apple,
                 onPressed: () {
                   if (isAgree) {
                     //AuthService().signInWithGoogle();

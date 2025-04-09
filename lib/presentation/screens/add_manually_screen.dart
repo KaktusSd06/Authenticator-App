@@ -92,15 +92,16 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
             width: 12,
             height: 12,
             fit: BoxFit.contain,
-            colorFilter: ColorFilter.mode(AppColors.mainBlue, BlendMode.srcIn),
+            colorFilter: ColorFilter.mode(
+              Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : Colors.blue,
+              BlendMode.srcIn,
+            ),
           ),
         ),
-        backgroundColor: AppColors.gray1,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: Text(
           AppLocalizations.of(context)!.add_account,
-          style: Theme.of(context).textTheme.displaySmall!.copyWith(
-            color: Color(0xFF171818),
-          ),
+          style: Theme.of(context).textTheme.displaySmall,
         ),
         centerTitle: true,
       ),
@@ -112,7 +113,7 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
               width: double.infinity,
               height: 48,
               decoration: BoxDecoration(
-                color: AppColors.white,
+                color: Theme.of(context).brightness == Brightness.light ? AppColors.white : AppColors.gray6,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: InkWell(
@@ -128,7 +129,7 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
                               ? AppLocalizations.of(context)!.service
                               : _selectedServiceName,
                           style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                            color: _selectedServiceName.isEmpty ? AppColors.gray5 : Colors.black,
+                            color: _selectedServiceName.isEmpty ? AppColors.gray4 : Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white,
                           )
                       ),
                       SvgPicture.asset(
@@ -136,7 +137,7 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
                         width: 24,
                         height: 24,
                         fit: BoxFit.scaleDown,
-                        colorFilter: ColorFilter.mode(AppColors.mainBlue, BlendMode.srcIn),
+                        colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : AppColors.blue, BlendMode.srcIn),
                       ),
                     ],
                   ),
@@ -152,7 +153,7 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
               width: double.infinity,
               height: 48,
               decoration: BoxDecoration(
-                color: AppColors.white,
+                color: Theme.of(context).brightness == Brightness.light ? AppColors.white : AppColors.gray6,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: InkWell(
@@ -166,7 +167,7 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
                       Text(
                         _selectedOtpType,
                         style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                          color: Colors.black,
+                          color: Theme.of(context).brightness == Brightness.light ? AppColors.black : AppColors.white,
                         ),
                       ),
                       SvgPicture.asset(
@@ -174,7 +175,7 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
                         width: 24,
                         height: 24,
                         fit: BoxFit.scaleDown,
-                        colorFilter: ColorFilter.mode(AppColors.mainBlue, BlendMode.srcIn),
+                        colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : AppColors.blue, BlendMode.srcIn),
                       ),
                     ],
                   ),
@@ -288,7 +289,7 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
     return Container(
       height: 48,
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: Theme.of(context).brightness == Brightness.light ? AppColors.white : AppColors.gray6,
         borderRadius: BorderRadius.circular(20),
       ),
       child: TextField(
@@ -297,7 +298,7 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
           hintText: hintText,
           hintStyle: Theme.of(context).textTheme.headlineLarge?.copyWith(
             fontWeight: FontWeight.w400,
-            color: const Color(0xFF707877),
+            color: Theme.of(context).brightness == Brightness.light ? AppColors.gray4 : AppColors.gray2,
           ),
           prefixIconConstraints: BoxConstraints(minWidth: 48, minHeight: 24),
           prefixIcon: Padding(
@@ -307,7 +308,7 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
               width: 24,
               height: 24,
               fit: BoxFit.scaleDown,
-              colorFilter: ColorFilter.mode(AppColors.mainBlue, BlendMode.srcIn),
+              colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : AppColors.blue, BlendMode.srcIn),
             ),
           ),
           border: InputBorder.none,
@@ -320,7 +321,7 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
             borderSide: BorderSide.none,
           ),
           filled: true,
-          fillColor: AppColors.white,
+          fillColor: Theme.of(context).brightness == Brightness.light ? AppColors.white : AppColors.gray6,
           contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
         ),
       ),
@@ -399,7 +400,7 @@ class ServiceSelectionModal extends StatelessWidget {
           .size
           .height * 0.7,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).scaffoldBackgroundColor,
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
@@ -414,7 +415,7 @@ class ServiceSelectionModal extends StatelessWidget {
               width: 40,
               height: 4,
               decoration: BoxDecoration(
-                color: Colors.grey.shade300,
+                //color: Colors.grey.shade300,
                 borderRadius: BorderRadius.circular(2),
               ),
             ),
@@ -439,7 +440,6 @@ class ServiceSelectionModal extends StatelessWidget {
                         style: TextStyle(
                           fontSize: 16,
                           fontWeight: FontWeight.bold,
-                          color: Colors.black87,
                         ),
                       ),
                     ),

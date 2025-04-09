@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../core/config/theme.dart' as AppColors;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'dart:convert';
 import 'dart:io';
 import '../../data/models/service.dart';
 import '../dialogs/error_dialog.dart';
@@ -48,7 +47,6 @@ class _EditTokenScreenState extends State<EditTokenScreen> {
   @override
   void initState() {
     super.initState();
-    // Ініціалізуємо контролери для редагування
     _account = TextEditingController(text: widget.token.account);
     _key = TextEditingController(text: widget.token.secret);
     _selectedServiceName = widget.token.service;
@@ -138,7 +136,7 @@ class _EditTokenScreenState extends State<EditTokenScreen> {
     return Container(
       height: 48,
       decoration: BoxDecoration(
-        color: AppColors.white,
+        color: Theme.of(context).brightness == Brightness.light ? AppColors.white : AppColors.gray6,
         borderRadius: BorderRadius.circular(20),
       ),
       child: TextField(
@@ -147,7 +145,7 @@ class _EditTokenScreenState extends State<EditTokenScreen> {
           hintText: hintText,
           hintStyle: Theme.of(context).textTheme.headlineLarge?.copyWith(
             fontWeight: FontWeight.w400,
-            color: const Color(0xFF707877),
+            color: Theme.of(context).brightness == Brightness.light ? AppColors.gray4 : AppColors.gray2,
           ),
           prefixIconConstraints: BoxConstraints(minWidth: 48, minHeight: 24),
           prefixIcon: Padding(
@@ -157,7 +155,7 @@ class _EditTokenScreenState extends State<EditTokenScreen> {
               width: 24,
               height: 24,
               fit: BoxFit.scaleDown,
-              colorFilter: ColorFilter.mode(AppColors.mainBlue, BlendMode.srcIn),
+              colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : AppColors.blue, BlendMode.srcIn),
             ),
           ),
           border: InputBorder.none,
@@ -170,7 +168,7 @@ class _EditTokenScreenState extends State<EditTokenScreen> {
             borderSide: BorderSide.none,
           ),
           filled: true,
-          fillColor: AppColors.white,
+          fillColor: Theme.of(context).brightness == Brightness.light ? AppColors.white : AppColors.gray6,
           contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
         ),
       ),
@@ -192,15 +190,16 @@ class _EditTokenScreenState extends State<EditTokenScreen> {
             width: 12,
             height: 12,
             fit: BoxFit.contain,
-            colorFilter: ColorFilter.mode(AppColors.mainBlue, BlendMode.srcIn),
+            colorFilter: ColorFilter.mode(
+              Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : Colors.blue,
+              BlendMode.srcIn,
+            ),
           ),
         ),
-        backgroundColor: AppColors.gray1,
+        backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         title: Text(
           AppLocalizations.of(context)!.edit_account,
-          style: Theme.of(context).textTheme.displaySmall!.copyWith(
-            color: Color(0xFF171818),
-          ),
+          style: Theme.of(context).textTheme.displaySmall,
         ),
         centerTitle: true,
       ),
@@ -212,7 +211,7 @@ class _EditTokenScreenState extends State<EditTokenScreen> {
               width: double.infinity,
               height: 48,
               decoration: BoxDecoration(
-                color: AppColors.white,
+                color: Theme.of(context).brightness == Brightness.light ? AppColors.white : AppColors.gray6,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: InkWell(
@@ -228,7 +227,7 @@ class _EditTokenScreenState extends State<EditTokenScreen> {
                               ? AppLocalizations.of(context)!.service
                               : _selectedServiceName,
                           style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                            color: _selectedServiceName.isEmpty ? AppColors.gray5 : Colors.black,
+                            color: _selectedServiceName.isEmpty ? AppColors.gray4 : Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white,
                           )
                       ),
                       SvgPicture.asset(
@@ -252,7 +251,7 @@ class _EditTokenScreenState extends State<EditTokenScreen> {
               width: double.infinity,
               height: 48,
               decoration: BoxDecoration(
-                color: AppColors.white,
+                color: Theme.of(context).brightness == Brightness.light ? AppColors.white : AppColors.gray6,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: InkWell(
@@ -266,7 +265,7 @@ class _EditTokenScreenState extends State<EditTokenScreen> {
                       Text(
                         _selectedOtpType,
                         style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                          color: Colors.black,
+                          color: Theme.of(context).brightness == Brightness.light ? AppColors.black : AppColors.white,
                         ),
                       ),
                       SvgPicture.asset(

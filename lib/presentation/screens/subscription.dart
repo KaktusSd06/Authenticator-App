@@ -126,7 +126,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> with WidgetsBin
             width: 16,
             height: 16,
             colorFilter: ColorFilter.mode(
-              AppColors.mainBlue,
+              Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : Colors.blue,
               BlendMode.srcIn,
             ),
           ),
@@ -149,7 +149,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> with WidgetsBin
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
-              color: AppColors.white,
+              color: Theme.of(context).cardColor,
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1),
@@ -182,7 +182,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> with WidgetsBin
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
-              color: AppColors.white,
+              color: Theme.of(context).cardColor,
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1),
@@ -227,7 +227,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> with WidgetsBin
             Container(
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(24),
-                color: AppColors.white,
+                color: Theme.of(context).cardColor,
                 boxShadow: [
                   BoxShadow(
                     color: Colors.black.withOpacity(0.1),
@@ -248,12 +248,12 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> with WidgetsBin
                           children: [
                             TextSpan(
                               text: AppLocalizations.of(context)!.current_plan,
-                              style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Color(0xFF272E3B)),
+                              style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Theme.of(context).brightness == Brightness.light ? Color(0xFF272E3B) : AppColors.white  ),
                             ),
                             TextSpan(text: ' '),
                             TextSpan(
                               text: _subscriptionType,
-                              style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Color(0xFF272E3B)),
+                              style: Theme.of(context).textTheme.displaySmall?.copyWith(color: Theme.of(context).brightness == Brightness.light ? Color(0xFF272E3B) : AppColors.white  ),
                             ),
                           ],
                         ),
@@ -269,7 +269,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> with WidgetsBin
                             TextSpan(
                                 text: AppLocalizations.of(context)!.billing_date,
                                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                                    color: AppColors.gray6,
+                                    color: Theme.of(context).brightness == Brightness.light ? AppColors.gray6 : AppColors.gray4,
                                     fontWeight: FontWeight.w400
                                 )
                             ),
@@ -277,7 +277,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> with WidgetsBin
                             TextSpan(
                                 text: _billingDate,
                                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                                    color: AppColors.gray6,
+                                    color: Theme.of(context).brightness == Brightness.light ? AppColors.gray6 : AppColors.gray4,
                                     fontWeight: FontWeight.w400
                                 )
                             ),

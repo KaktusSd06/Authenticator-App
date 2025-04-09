@@ -72,16 +72,17 @@ class _PremiumFeaturesScreenState extends State<PremiumFeaturesScreen> with Sing
     final shouldSignOut = await showDialog<bool>(
       context: context,
       builder: (context) => AlertDialog(
-        title: Text("Sign out"),
+        backgroundColor: Theme.of(context).cardColor,
+        title: Text(AppLocalizations.of(context)!.sign_out, style: Theme.of(context).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w700),),
         content: Text('Are you sure?'),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(false),
-            child: Text('Cancel'),
+            child: Text(AppLocalizations.of(context)!.cancel, style: TextStyle(color: AppColors.blue),),
           ),
           TextButton(
             onPressed: () => Navigator.of(context).pop(true),
-            child: Text('Sign out'),
+            child: Text(AppLocalizations.of(context)!.sign_out, style: TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -138,7 +139,7 @@ class _PremiumFeaturesScreenState extends State<PremiumFeaturesScreen> with Sing
             width: 16,
             height: 16,
             colorFilter: ColorFilter.mode(
-              AppColors.mainBlue,
+              Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : Colors.blue,
               BlendMode.srcIn,
             ),
           ),
@@ -162,7 +163,7 @@ class _PremiumFeaturesScreenState extends State<PremiumFeaturesScreen> with Sing
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
-              color: AppColors.white,
+              color: Theme.of(context).cardColor,
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1),
@@ -195,7 +196,7 @@ class _PremiumFeaturesScreenState extends State<PremiumFeaturesScreen> with Sing
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
-              color: AppColors.white,
+              color: Theme.of(context).cardColor,
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1),
@@ -232,7 +233,7 @@ class _PremiumFeaturesScreenState extends State<PremiumFeaturesScreen> with Sing
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
-              color: AppColors.white,
+              color: Theme.of(context).cardColor,
               boxShadow: [
                 BoxShadow(
                   color: Colors.black.withOpacity(0.1),
@@ -268,7 +269,7 @@ class _PremiumFeaturesScreenState extends State<PremiumFeaturesScreen> with Sing
                                   "assets/icons/sync.svg",
                                   width: 24,
                                   height: 24,
-                                  colorFilter: ColorFilter.mode(AppColors.mainBlue, BlendMode.srcIn),
+                                  colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? Colors.blue : Colors.lightBlue, BlendMode.srcIn),
                                 ),
                                 const SizedBox(width: 8),
                                 Text(
@@ -299,7 +300,7 @@ class _PremiumFeaturesScreenState extends State<PremiumFeaturesScreen> with Sing
                           ],
                         ),
                       ),
-                      Divider(height: 1, thickness: 1, color: AppColors.gray2),
+                      Divider(height: 1, thickness: 1, color: Theme.of(context).brightness == Brightness.light ? AppColors.gray2 : AppColors.gray6),
                     ],
                   ),
 
@@ -310,12 +311,13 @@ class _PremiumFeaturesScreenState extends State<PremiumFeaturesScreen> with Sing
                           showDialog(
                             context: context,
                             builder: (context) => AlertDialog(
-                              title: Text(AppLocalizations.of(context)!.delete_account),
+                              title: Text(AppLocalizations.of(context)!.delete_account, style: Theme.of(context).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w700),),
                               content: Text(AppLocalizations.of(context)!.delete_account_confirm),
+                              backgroundColor: Theme.of(context).cardColor,
                               actions: [
                                 TextButton(
                                   onPressed: () => Navigator.of(context).pop(),
-                                  child: Text(AppLocalizations.of(context)!.cancel),
+                                  child: Text(AppLocalizations.of(context)!.cancel, style: TextStyle(color: AppColors.blue),),
                                 ),
                                 TextButton(
                                   onPressed: () {
@@ -354,7 +356,6 @@ class _PremiumFeaturesScreenState extends State<PremiumFeaturesScreen> with Sing
             ),
           ),
 
-          // Show premium plan option if not premium
           if (!_isPremiumValue)
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -381,7 +382,7 @@ class _PremiumFeaturesScreenState extends State<PremiumFeaturesScreen> with Sing
                       Navigator.push(
                           context,
                           MaterialPageRoute(builder: (context) => PaywallScreen(isFirst: false))
-                      ).then((_) => _loadData()); // Refresh data when returning from PaywallScreen
+                      ).then((_) => _loadData());
                     },
                     isLast: true,
                   ),

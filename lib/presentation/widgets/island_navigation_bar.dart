@@ -118,11 +118,11 @@ class IslandNavigationBar extends StatelessWidget {
   void _showAddOptionsModal(BuildContext context) {
     showModalBottomSheet(
       context: context,
-      backgroundColor: Colors.transparent,
+      //backgroundColor: Colors.transparent,
       builder: (context) {
         return Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).brightness == Brightness.light ? AppColors.white : AppColors.black,
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Column(

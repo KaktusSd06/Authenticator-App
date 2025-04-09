@@ -44,14 +44,34 @@ class MessageLookup extends MessageLookupByLibrary {
       "Помилка додавання елемента, спробуйте пізніше",
     ),
     "and": MessageLookupByLibrary.simpleMessage("та"),
+    "authenticate_with_biometrics": MessageLookupByLibrary.simpleMessage(
+      "Авторизуйтесь для входу в додаток",
+    ),
     "billing_date": MessageLookupByLibrary.simpleMessage(
       "Наступна дата оплати",
     ),
+    "biometric_enabled": MessageLookupByLibrary.simpleMessage(
+      "Біометричну автентифікацію увімкнено",
+    ),
+    "biometric_error": MessageLookupByLibrary.simpleMessage(
+      "Помилка біометричної автентифікації",
+    ),
+    "biometric_not_available": MessageLookupByLibrary.simpleMessage(
+      "Біометрика недоступна на цьому пристрої",
+    ),
+    "biometrics": MessageLookupByLibrary.simpleMessage("Біометрія"),
     "cancel": MessageLookupByLibrary.simpleMessage("Скасувати"),
     "cancel_plan": MessageLookupByLibrary.simpleMessage("Скасувати підписку"),
+    "change": MessageLookupByLibrary.simpleMessage("Змінити"),
+    "change_password": MessageLookupByLibrary.simpleMessage("Змінити пароль"),
+    "change_pin": MessageLookupByLibrary.simpleMessage("Зміна PIN-коду"),
     "change_plan": MessageLookupByLibrary.simpleMessage("Змінити план"),
     "choose_a_plan": MessageLookupByLibrary.simpleMessage("Обрати план"),
     "close": MessageLookupByLibrary.simpleMessage("Закрити"),
+    "confirm_new_pin": MessageLookupByLibrary.simpleMessage(
+      "Підтвердіть новий PIN",
+    ),
+    "confirm_pin": MessageLookupByLibrary.simpleMessage("Підтвердіть PIN"),
     "confirming": MessageLookupByLibrary.simpleMessage("Підтвердження"),
     "connection_error": MessageLookupByLibrary.simpleMessage(
       "Помилка з\'єднання",
@@ -62,6 +82,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "contact_us": MessageLookupByLibrary.simpleMessage("Зв\'язатись з нами"),
     "continue_btn": MessageLookupByLibrary.simpleMessage("Продовжити"),
     "counter_based": MessageLookupByLibrary.simpleMessage("Одноразові"),
+    "create_pin": MessageLookupByLibrary.simpleMessage("Створіть PIN"),
     "current_plan": MessageLookupByLibrary.simpleMessage(
       "Ваша активна підписка",
     ),
@@ -82,7 +103,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "edit_error_message": MessageLookupByLibrary.simpleMessage(
       "Помилка під час редагування елемента",
     ),
+    "edit_password": MessageLookupByLibrary.simpleMessage(
+      "Редагувати password",
+    ),
     "enter_code": MessageLookupByLibrary.simpleMessage("Додати код самостійно"),
+    "enter_new_pin": MessageLookupByLibrary.simpleMessage("Введіть новий PIN"),
+    "enter_old_pin": MessageLookupByLibrary.simpleMessage(
+      "Введіть поточний PIN",
+    ),
+    "enter_pin": MessageLookupByLibrary.simpleMessage("Введіть PIN-код"),
     "error_signIn_message": MessageLookupByLibrary.simpleMessage(
       "Error logging in, please try again later",
     ),
@@ -97,6 +126,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "free_trial": MessageLookupByLibrary.simpleMessage("Пробна підписка"),
     "general": MessageLookupByLibrary.simpleMessage("Загальне"),
     "hello": MessageLookupByLibrary.simpleMessage("Привіт"),
+    "incorrect_pin": MessageLookupByLibrary.simpleMessage("Невірний PIN-код"),
     "invalid_key": MessageLookupByLibrary.simpleMessage("Неправильний ключ"),
     "invalid_key_description": MessageLookupByLibrary.simpleMessage(
       "Лише великі літери від A да Z та числа 2–7",
@@ -130,6 +160,10 @@ class MessageLookup extends MessageLookupByLibrary {
     "onBoarding_T4": MessageLookupByLibrary.simpleMessage(
       "3 БЕЗКОШТОВНИХ дні\nдалі 6.99 USD на тиждень",
     ),
+    "password": MessageLookupByLibrary.simpleMessage("Пароль"),
+    "password_security": MessageLookupByLibrary.simpleMessage(
+      "Паролі та безпеки",
+    ),
     "paywell_H1": MessageLookupByLibrary.simpleMessage(
       "Оберіть свій план\nта відчуйте переваги",
     ),
@@ -138,6 +172,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "paywell_info": MessageLookupByLibrary.simpleMessage(
       "Лише 0.83 на тиждень",
+    ),
+    "pins_do_not_match": MessageLookupByLibrary.simpleMessage(
+      "PIN коди не збігаються",
     ),
     "premium_features": MessageLookupByLibrary.simpleMessage(
       "Преміум переваги",

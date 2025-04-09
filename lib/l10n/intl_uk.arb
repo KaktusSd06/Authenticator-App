@@ -89,7 +89,24 @@
   "connection_error": "Помилка з'єднання",
   "connection_error_message": "Відсутнє інтернет з'єднання, спробуйте пізніше",
   "close": "Закрити",
-  "cancel_plan": "Скасувати підписку"
+  "cancel_plan": "Скасувати підписку",
+  "password_security": "Паролі та безпеки",
+  "password": "Пароль",
+  "biometrics": "Біометрія",
+  "change_password": "Змінити пароль",
+  "edit_password": "Редагувати password",
+  "change": "Змінити",
+  "enter_pin": "Введіть PIN-код",
+  "incorrect_pin": "Невірний PIN-код",
+  "pins_do_not_match": "PIN коди не збігаються",
+  "create_pin": "Створіть PIN",
+  "confirm_pin": "Підтвердіть PIN",
+  "enter_old_pin": "Введіть поточний PIN",
+  "enter_new_pin": "Введіть новий PIN",
+  "confirm_new_pin": "Підтвердіть новий PIN",
+  "change_pin": "Зміна PIN-коду",
+  "authenticate_with_biometrics": "Авторизуйтесь для входу в додаток",
+  "biometric_error": "Помилка біометричної автентифікації",
+  "biometric_not_available": "Біометрика недоступна на цьому пристрої",
+  "biometric_enabled": "Біометричну автентифікацію увімкнено"
 }
-
-

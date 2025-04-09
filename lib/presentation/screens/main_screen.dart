@@ -95,9 +95,9 @@ class _MainScreenState extends State<MainScreen> {
           hintText: AppLocalizations.of(context)!.search,
           hintStyle: Theme.of(context).textTheme.headlineLarge?.copyWith(
             fontWeight: FontWeight.w400,
-            color: const Color(0xFF707877),
+            color: Theme.of(context).brightness == Brightness.light ? Color(0xFF707877) : AppColors.gray2,
           ),
-          prefixIcon: Icon(Icons.search, color: AppColors.mainBlue),
+          prefixIcon: Icon(Icons.search, color: Theme.of(context).brightness == Brightness.light ? Color(0xFF1B539A) : AppColors.blue),
           border: InputBorder.none,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
@@ -108,7 +108,7 @@ class _MainScreenState extends State<MainScreen> {
             borderSide: BorderSide.none,
           ),
           filled: true,
-          fillColor: AppColors.white,
+          fillColor: Theme.of(context).brightness == Brightness.light ? AppColors.white : AppColors.gray6,
           contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
         ),
         style: Theme.of(context).textTheme.bodyLarge,
@@ -314,11 +314,11 @@ class _MainScreenState extends State<MainScreen> {
                 child: TabBar(
                   indicatorColor: AppColors.mainBlue,
                   labelStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: AppColors.mainBlue,
+                    color:  Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : AppColors.blue,
                     fontWeight: FontWeight.w500,
                   ),
                   unselectedLabelStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: AppColors.gray6,
+                    color: Theme.of(context).brightness == Brightness.light ? AppColors.gray6 : AppColors.gray2,
                     fontWeight: FontWeight.w500,
                   ),
                   tabs: [

@@ -30,6 +30,7 @@ dependencies:
   hotp: ^0.1.0
   cloud_firestore: ^5.6.6
   connectivity_plus: ^5.0.1
+  local_auth: ^2.3.0
 
 # DEV
 dev_dependencies:

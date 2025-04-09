@@ -11,6 +11,7 @@ const Color gray6 = Color(0xFF5F5F5F);
 const Color mainBlue = Color(0xFF1B539A);
 const Color blue = Color(0xFF5B88C0);
 const Color lightBlue = Color(0xFFC6DFFF);
+const Color black = Color(0xFF000000);
 
 // Light Theme
 final ThemeData lightTheme = ThemeData(
@@ -18,7 +19,7 @@ final ThemeData lightTheme = ThemeData(
   primaryColor: mainBlue,
   hintColor: gray6,
   scaffoldBackgroundColor: gray1,
-  cardColor: gray2,
+  cardColor: white,
   fontFamily: 'Inter',
 
   textTheme: TextTheme(
@@ -49,8 +50,8 @@ final ThemeData darkTheme = ThemeData(
   brightness: Brightness.dark,
   primaryColor: mainBlue,
   hintColor: gray1,
-  scaffoldBackgroundColor: gray6,
-  cardColor: gray5,
+  scaffoldBackgroundColor: black,
+  cardColor: Color(0xFF424242),
   fontFamily: 'Inter',
   textTheme: TextTheme(
     displayLarge: TextStyle(fontSize: 40, fontWeight: FontWeight.w400),

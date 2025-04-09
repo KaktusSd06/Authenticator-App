@@ -105,6 +105,7 @@ class _TimeBasedWidgetState extends State<TimeBasedWidget> {
               },
               child:Text(AppLocalizations.of(context)!.delete, style: TextStyle(color: Colors.red)),
             ),
+            SizedBox(height: 40,),
           ],
         );
       },
@@ -121,7 +122,7 @@ class _TimeBasedWidgetState extends State<TimeBasedWidget> {
       child: Container(
         height: 56,
         decoration: BoxDecoration(
-          border: Border.all(color: Color(0xFF1B539A)),
+          border: Border.all(color: Theme.of(context).brightness == Brightness.light ? Color(0xFF1B539A) : AppColors.blue),
           borderRadius: BorderRadius.circular(30),
         ),
         child: Padding(
@@ -132,12 +133,12 @@ class _TimeBasedWidgetState extends State<TimeBasedWidget> {
                 icon,
                 width: 18,
                 height: 18,
-                colorFilter: ColorFilter.mode(AppColors.mainBlue, BlendMode.srcIn),
+                colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? Color(0xFF1B539A) : AppColors.blue, BlendMode.srcIn),
               ),
               SizedBox(width: 12),
               Text(
                   label,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: AppColors.mainBlue)
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Theme.of(context).brightness == Brightness.light ? Color(0xFF1B539A) : AppColors.blue)
               ),
             ],
           ),
@@ -149,14 +150,14 @@ class _TimeBasedWidgetState extends State<TimeBasedWidget> {
   void _showBottomSheet() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.white,
+      //backgroundColor: Theme.of(context).brightness == Brightness.light ? AppColors.white : AppColors.black,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
       ),
       builder: (BuildContext context) {
         return Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).brightness == Brightness.light ? AppColors.white : AppColors.black,
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Column(
@@ -229,7 +230,7 @@ class _TimeBasedWidgetState extends State<TimeBasedWidget> {
       onLongPress: _showBottomSheet,
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: Theme.of(context).cardColor,
           borderRadius: const BorderRadius.all(Radius.circular(24)),
           boxShadow: [
             BoxShadow(
@@ -265,18 +266,18 @@ class _TimeBasedWidgetState extends State<TimeBasedWidget> {
                           ),
                         ),
                         GestureDetector(
-                          onDoubleTap: () {
+                          onTap: () {
                             Clipboard.setData(ClipboardData(text: totpCode)).then((_) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(content: Text('Код скопійовано в буфер обміну')),
-                              );
+                              // ScaffoldMessenger.of(context).showSnackBar(
+                              //   const SnackBar(content: Text('Код скопійовано в буфер обміну')),
+                              // );
                             });
                           },
                           child: SvgPicture.asset(
                             "assets/icons/copy.svg",
                             width: 24,
                             height: 24,
-                            colorFilter: ColorFilter.mode(AppColors.blue, BlendMode.srcIn),
+                            colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? AppColors.blue : AppColors.lightBlue, BlendMode.srcIn),
                           ),
                         ),
                       ],
@@ -302,7 +303,7 @@ class _TimeBasedWidgetState extends State<TimeBasedWidget> {
                               child: CircularProgressIndicator(
                                 value: countdown / 30,
                                 strokeWidth: 2.5,
-                                valueColor: AlwaysStoppedAnimation(AppColors.mainBlue),
+                                valueColor: AlwaysStoppedAnimation(Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : AppColors.blue),
                                 backgroundColor: AppColors.lightBlue,
                               ),
                             ),

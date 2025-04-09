@@ -32,16 +32,21 @@ class SettingsTile extends StatelessWidget {
               children: [
                 Row(
                   children: [
-                    SvgPicture.asset(
-                      iconPath,
+                    SizedBox(
                       width: 24,
                       height: 24,
-                      colorFilter: ColorFilter.mode(AppColors.mainBlue, BlendMode.srcIn),
+                      child:
+                      SvgPicture.asset(
+                        iconPath,
+                        width: 24,
+                        height: 24,
+                        colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? Colors.blue : Colors.lightBlue, BlendMode.srcIn),
+                      ),
                     ),
                     const SizedBox(width: 8),
                     Text(
                       title,
-                      style: Theme.of(context).textTheme.headlineLarge,
+                      style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: Theme.of(context).brightness == Brightness.light ? Colors.black : AppColors.gray2),
                     ),
                   ],
                 ),
@@ -50,12 +55,12 @@ class SettingsTile extends StatelessWidget {
                     trailingIconPath!,
                     width: 24,
                     height: 24,
-                    colorFilter: ColorFilter.mode(AppColors.mainBlue, BlendMode.srcIn),
+                    colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? Colors.blue : Colors.lightBlue, BlendMode.srcIn),
                   ),
               ],
             ),
           ),
-          if(!isLast) const Divider(height: 1, thickness: 1, color: AppColors.gray2),
+          if(!isLast) Divider(height: 1, thickness: 1, color: Theme.of(context).brightness == Brightness.light ? AppColors.gray2 : AppColors.gray6),
         ],
       ),
     );

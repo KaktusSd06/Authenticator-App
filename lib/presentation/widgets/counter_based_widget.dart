@@ -165,7 +165,7 @@ class _HotpWidgetState extends State<HotpWidget> {
       child: Container(
         height: 56,
         decoration: BoxDecoration(
-          border: Border.all(color: Color(0xFF1B539A)),
+          border: Border.all(color: Theme.of(context).brightness == Brightness.light ? Color(0xFF1B539A) : AppColors.blue),
           borderRadius: BorderRadius.circular(30),
         ),
         child: Padding(
@@ -177,12 +177,12 @@ class _HotpWidgetState extends State<HotpWidget> {
                 icon,
                 width: 18,
                 height: 18,
-                colorFilter: ColorFilter.mode(AppColors.mainBlue, BlendMode.srcIn),
+                colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? Color(0xFF1B539A) : AppColors.blue, BlendMode.srcIn),
               ),
               SizedBox(width: 12),
               Text(
                 label,
-                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: AppColors.mainBlue),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Theme.of(context).brightness == Brightness.light ? Color(0xFF1B539A) : AppColors.blue)
               ),
             ],
           ),
@@ -195,7 +195,7 @@ class _HotpWidgetState extends State<HotpWidget> {
   void _showBottomSheetUpdate() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.white,
+      //backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
       ),
@@ -203,7 +203,7 @@ class _HotpWidgetState extends State<HotpWidget> {
         final localizations = AppLocalizations.of(context)!;
         return Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).brightness == Brightness.light ? AppColors.white : AppColors.black,
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Column(
@@ -248,7 +248,7 @@ class _HotpWidgetState extends State<HotpWidget> {
   void _showBottomSheet() {
     showModalBottomSheet(
       context: context,
-      backgroundColor: AppColors.white,
+      //backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
       ),
@@ -256,7 +256,7 @@ class _HotpWidgetState extends State<HotpWidget> {
         final localizations = AppLocalizations.of(context)!;
         return Container(
           decoration: BoxDecoration(
-            color: Colors.white,
+            color: Theme.of(context).brightness == Brightness.light ? AppColors.white : AppColors.black,
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Column(
@@ -332,7 +332,7 @@ class _HotpWidgetState extends State<HotpWidget> {
       onLongPress: _showBottomSheet,
       child: Container(
         decoration: BoxDecoration(
-          color: AppColors.white,
+          color: Theme.of(context).cardColor,
           borderRadius: const BorderRadius.all(Radius.circular(24)),
           boxShadow: [
             BoxShadow(
@@ -370,16 +370,16 @@ class _HotpWidgetState extends State<HotpWidget> {
                         GestureDetector(
                           onTap: () {
                             Clipboard.setData(ClipboardData(text: hotpCode)).then((_) {
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text('Код скопійовано в буфер обміну')),
-                              );
+                              // ScaffoldMessenger.of(context).showSnackBar(
+                              //   SnackBar(content: Text('copy')),
+                              // );
                             });
                           },
                           child: SvgPicture.asset(
                             "assets/icons/copy.svg",
                             width: 24,
                             height: 24,
-                            colorFilter: ColorFilter.mode(AppColors.blue, BlendMode.srcIn),
+                            colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? AppColors.blue : AppColors.lightBlue, BlendMode.srcIn),
                           ),
                         ),
                       ],
@@ -411,7 +411,7 @@ class _HotpWidgetState extends State<HotpWidget> {
                               SizedBox(width: 4),
                               Text(
                                 localizations.update,
-                                style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: AppColors.mainBlue),
+                                style: Theme.of(context).textTheme.headlineMedium?.copyWith(color: AppColors.blue),
                               )
                             ],
                           ),

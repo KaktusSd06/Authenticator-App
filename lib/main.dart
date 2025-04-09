@@ -1,13 +1,15 @@
 import 'package:authenticator_app/presentation/screens/home_screen.dart';
+import 'package:authenticator_app/presentation/screens/lock_screen.dart';
 import 'package:authenticator_app/presentation/screens/onboarding/onboarding_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:local_auth/local_auth.dart';
 import 'core/config/theme.dart';
 import 'logic/blocs/locale_cubit.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
+import 'package:local_auth/local_auth.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -57,9 +59,14 @@ class MyApp extends StatelessWidget {
   Future<Widget> _getInitialScreen() async {
     final storage = FlutterSecureStorage();
     final isFirst = await storage.read(key: 'isFirst');
-
+    final isPin = await storage.read(key: 'app_pin');
     if (isFirst != null) {
-      return HomeScreen();
+      if (isPin != null){
+        return LockScreen();
+      }
+      else {
+        return HomeScreen();
+      }
     } else {
       return OnBoardingScreen();
     }
