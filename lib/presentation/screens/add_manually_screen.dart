@@ -1,12 +1,16 @@
 import 'package:authenticator_app/data/models/auth_token.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../../core/config/theme.dart' as AppColors;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'dart:convert';
 import 'dart:io';
 import '../../data/models/service.dart';
+import '../../data/repositories/remote/synchronize_repository.dart';
+import '../../data/repositories/remote/token_repository.dart';
 import '../dialogs/error_dialog.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -268,6 +272,18 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
 
       final jsonString = AuthToken.listToJson(tokens);
       await file.writeAsString(jsonString);
+
+      User? user = FirebaseAuth.instance.currentUser;
+
+
+      final storage = FlutterSecureStorage();
+      String? idToken = await storage.read(key: 'idToken');
+
+      if (user != null && idToken != null) {
+        if(await SynchronizeRepository().isSynchronizing(user.uid)) {
+          await TokenService().saveTokensForUser(user.uid, tokens);
+        }
+      }
 
       Navigator.pop(context);
     } catch (e) {

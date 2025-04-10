@@ -1,3 +1,6 @@
+import 'dart:io';
+
+import 'package:authenticator_app/data/repositories/remote/synchronize_repository.dart';
 import 'package:authenticator_app/generated/l10n.dart';
 import 'package:authenticator_app/presentation/screens/home_screen.dart';
 import 'package:authenticator_app/services/auth_service.dart';
@@ -8,10 +11,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:sign_button/constants.dart';
 import 'package:sign_button/create_button.dart';
 import '../../../core/config/theme.dart' as Colors;
+import '../../data/models/auth_token.dart';
 import '../../data/repositories/remote/subscription_repository.dart';
+import '../../data/repositories/remote/token_repository.dart';
 import '../dialogs/error_dialog.dart';
 
 
@@ -23,6 +29,13 @@ class SignInScreen extends StatefulWidget{
 class _SignInScreenState extends State<SignInScreen> {
   bool isAgree = false;
   bool showErrorMessage = false;
+
+
+  Future<File> _getUserInfoFile() async {
+    final dir = await getApplicationDocumentsDirectory();
+    return File('${dir.path}/user_info.json');
+  }
+
 
   @override
   Widget build(BuildContext context) {
@@ -109,6 +122,21 @@ class _SignInScreenState extends State<SignInScreen> {
                         }
                       } else {
                         print('User is not logged in.');
+                      }
+
+
+                      try {
+                        final user = FirebaseAuth.instance.currentUser;
+
+                        if (user != null) {
+                          if(await SynchronizeRepository().isSynchronizing(user.uid)) {
+                            final tokens = await TokenService().loadTokensForUser(user.uid);
+                            final jsonString = AuthToken.listToJson(tokens);
+                            final file = await _getUserInfoFile();
+                            await file.writeAsString(jsonString);
+                          }
+                        }
+                      } catch (e) {
                       }
 
 

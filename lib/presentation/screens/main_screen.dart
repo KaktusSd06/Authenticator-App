@@ -3,14 +3,18 @@ import 'dart:ui';
 import 'dart:convert';
 
 import 'package:authenticator_app/presentation/screens/scan_qr_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../../core/config/theme.dart' as AppColors;
 import '../../data/models/auth_token.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../data/repositories/remote/synchronize_repository.dart';
+import '../../data/repositories/remote/token_repository.dart';
 import '../widgets/counter_based_widget.dart';
 import '../widgets/time_based_widget.dart';
 
@@ -84,6 +88,17 @@ class _MainScreenState extends State<MainScreen> {
     final file = await _getUserInfoFile();
     final jsonString = jsonEncode(allTokens.map((token) => token.toJson()).toList());
     await file.writeAsString(jsonString);
+
+    User? user = FirebaseAuth.instance.currentUser;
+
+    final storage = FlutterSecureStorage();
+    String? idToken = await storage.read(key: 'idToken');
+
+    if (user != null && idToken != null) {
+      if(await SynchronizeRepository().isSynchronizing(user.uid)) {
+        await TokenService().saveTokensForUser(user.uid, allTokens);
+      }
+    }
   }
 
   Widget _searchBox() {

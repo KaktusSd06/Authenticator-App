@@ -110,5 +110,6 @@
   "authenticate_with_biometrics": "Authenticate to access the app",
   "biometric_error": "Biometric authentication error",
   "biometric_not_available": "Biometrics not available on this device",
-  "biometric_enabled": "Biometric authentication enabled"
+  "biometric_enabled": "Biometric authentication enabled",
+  "save_88": "Save 88%"
 }

@@ -200,77 +200,104 @@ class _PaywallScreenState extends State<PaywallScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(30)),
                       border: Border.all(
-                        color: !yearPlan ? Color(0xFF094086) : Colors.gray2,
+                        color: yearPlan ? Color(0xFF094086) : Colors.gray2,
                         width: 3,
                       ),
                       color: Colors.white,
                     ),
                     padding: const EdgeInsets.only(right: 10, left: 24, top: 8, bottom: 8),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    child: Stack(
+                      clipBehavior: Clip.none,
                       children: [
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
+                        // Main content
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
-                              AppLocalizations.of(context)?.year ?? '',
-                              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                                color: Color(0xFF5B88C0),
-                                fontWeight: FontWeight.w700,
-                              ),
+                            Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  AppLocalizations.of(context)?.year ?? '',
+                                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                    color: Color(0xFF5B88C0),
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                                Text(
+                                  AppLocalizations.of(context)?.uSD_Only ?? '',
+                                  style: Theme.of(context).textTheme.headlineMedium?.copyWith(
+                                    color: Color(0xFF2A313E),
+                                    fontWeight: FontWeight.w400,
+                                  ),
+                                ),
+                              ],
                             ),
-                            Text(
-                              AppLocalizations.of(context)?.uSD_Only ?? '',
-                              style: Theme.of(context).textTheme.headlineMedium?.copyWith(
-                                color: Color(0xFF2A313E),
-                                fontWeight: FontWeight.w400,
-                              ),
+
+                            GestureDetector(
+                                onTap: (){
+                                  setState(() {
+                                    yearPlan = !yearPlan;
+                                    isTrialEnabled = false;
+                                    weeklyplan = false;
+                                  });
+                                },
+                                child: !yearPlan ?
+                                Container(
+                                  width: 24,
+                                  height: 24,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          width: 1.5,
+                                          color: Color(0xFF094086)
+                                      ),
+                                      borderRadius: BorderRadius.all(Radius.circular(12))
+                                  ),
+                                ) :
+                                Container(
+                                  width: 24,
+                                  height: 24,
+                                  decoration: BoxDecoration(
+                                    border: Border.all(
+                                      color: Color(0xFF094086),
+                                    ),
+                                    borderRadius: BorderRadius.all(Radius.circular(12)),
+                                  ),
+                                  child: Center(
+                                    child: Container(
+                                      width: 14,
+                                      height: 14,
+                                      decoration: BoxDecoration(
+                                        color: Color(0xFF094086),
+                                        shape: BoxShape.circle,
+                                      ),
+                                    ),
+                                  ),
+                                )
                             ),
                           ],
                         ),
 
-                        GestureDetector(
-                          onTap: (){
-                            setState(() {
-                              yearPlan = !yearPlan;
-                              isTrialEnabled = false;
-                              weeklyplan = false;
-                            });
-                          },
-                          child: !yearPlan ?
-                              Container(
-                                width: 24,
-                                height: 24,
-                                decoration: BoxDecoration(
-                                  border: Border.all(
-                                    width: 1.5,
-                                    color: Color(0xFF094086)
-                                  ),
-
-                                  borderRadius: BorderRadius.all(Radius.circular(12))
-                                ),
-                              ) :
-                          Container(
-                            width: 24,
-                            height: 24,
-                            decoration: BoxDecoration(
-                              border: Border.all(
+                        // Save label - positioned at the top-center
+                        if (yearPlan)
+                          Positioned(
+                            top: -20,
+                            right: 40,
+                            child: Container(
+                              padding: EdgeInsets.symmetric(horizontal: 16, vertical: 6),
+                              decoration: BoxDecoration(
                                 color: Color(0xFF094086),
+                                borderRadius: BorderRadius.circular(15),
                               ),
-                              borderRadius: BorderRadius.all(Radius.circular(12)),
-                            ),
-                            child: Center(
-                              child: Container(
-                                width: 14,
-                                height: 14,
-                                decoration: BoxDecoration(
-                                  color: Color(0xFF094086),
-                                  shape: BoxShape.circle,
+                              child: Text(
+                                AppLocalizations.of(context)!.save_88,
+                                style: TextStyle(
+                                  color: Colors.white,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 11,
                                 ),
                               ),
                             ),
-                          )
-                        ),
+                          ),
                       ],
                     ),
                   ),
@@ -282,7 +309,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
                     decoration: BoxDecoration(
                       borderRadius: BorderRadius.all(Radius.circular(30)),
                       border: Border.all(
-                        color: !weeklyplan ? Color(0xFF094086) : Colors.gray2,
+                        color: weeklyplan ? Color(0xFF094086) : Colors.gray2,
                         width: 3,
                       ),
                       color: Colors.white,

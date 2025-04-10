@@ -989,6 +989,11 @@ class S {
       args: [],
     );
   }
+
+  /// `Збереже 88%`
+  String get save_88 {
+    return Intl.message('Збереже 88%', name: 'save_88', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

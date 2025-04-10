@@ -1,10 +1,18 @@
+import 'dart:io';
+
 import 'package:authenticator_app/presentation/screens/onboarding/onboarding_screen.dart';
 import 'package:authenticator_app/presentation/screens/sign_in_screen.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:path_provider/path_provider.dart';
 import '../../../core/config/theme.dart' as AppColors;
+import '../../data/models/auth_token.dart';
+import '../../data/repositories/remote/synchronize_repository.dart';
+import '../../data/repositories/remote/token_repository.dart';
 import '../widgets/settings_tile.dart';
 import 'onboarding/paywall_screen.dart';
 
@@ -15,7 +23,7 @@ class PremiumFeaturesScreen extends StatefulWidget {
 }
 
 class _PremiumFeaturesScreenState extends State<PremiumFeaturesScreen> with SingleTickerProviderStateMixin {
-  late bool isSync;
+  late bool isSync = false;
   bool _isLoading = true;
   bool _isAuthValue = false;
   bool _isPremiumValue = false;
@@ -54,13 +62,49 @@ class _PremiumFeaturesScreenState extends State<PremiumFeaturesScreen> with Sing
     }
   }
 
+  Future<File> _getUserInfoFile() async {
+    final dir = await getApplicationDocumentsDirectory();
+    return File('${dir.path}/user_info.json');
+  }
+
   void _toggleSync(bool value) async {
     final storage = FlutterSecureStorage();
 
     if (value) {
       await storage.write(key: 'usSync', value: 'true');
-    } else {
+      final user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        await SynchronizeRepository().startSynchronize(user.uid);
+
+        final file = await _getUserInfoFile();
+
+        List<AuthToken> tokens = [];
+        if (await file.exists()) {
+          final content = await file.readAsString();
+          if (content.isNotEmpty) {
+            tokens = AuthToken.listFromJson(content);
+          }
+        }
+
+        final storage = FlutterSecureStorage();
+        String? idToken = await storage.read(key: 'idToken');
+
+        if (idToken != null) {
+          if(await SynchronizeRepository().isSynchronizing(user.uid)) {
+            await TokenService().saveTokensForUser(user.uid, tokens);
+          }
+        }
+      }
+    }
+else {
       await storage.delete(key: 'usSync');
+
+      final user = FirebaseAuth.instance.currentUser;
+
+      if (user != null) {
+        await SynchronizeRepository().cancelSynchronize(user.uid);
+      }
     }
 
     setState(() {

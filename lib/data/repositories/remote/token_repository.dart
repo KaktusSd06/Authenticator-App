@@ -15,7 +15,7 @@ class TokenService {
         .doc(uid)
         .collection('userInfo')
         .doc('Info')
-        .set(data, SetOptions(merge: true)); // merge: true щоб не затерти інше
+        .set(data, SetOptions(merge: true));
   }
 
   Future<List<AuthToken>> loadTokensForUser(String uid) async {

@@ -187,6 +187,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Відновити підписку",
     ),
     "save": MessageLookupByLibrary.simpleMessage("Зберегти"),
+    "save_88": MessageLookupByLibrary.simpleMessage("Збереже 88%"),
     "scan_qr": MessageLookupByLibrary.simpleMessage("Сканувати QR-код"),
     "search": MessageLookupByLibrary.simpleMessage("Пошук"),
     "service": MessageLookupByLibrary.simpleMessage("Сервіс"),
