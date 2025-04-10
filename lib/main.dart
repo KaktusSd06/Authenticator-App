@@ -9,6 +9,8 @@ import 'core/config/theme.dart';
 import 'logic/blocs/locale_cubit.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import 'logic/blocs/tokens/tokens_bloc.dart';
+
 class AppStateService {
   static final AppStateService _instance = AppStateService._internal();
   factory AppStateService() => _instance;
@@ -37,8 +39,11 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   runApp(
-    BlocProvider(
-      create: (_) => LocaleCubit(),
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => LocaleCubit()),
+        BlocProvider(create: (_) => TokensBloc()),
+      ],
       child: MyApp(),
     ),
   );

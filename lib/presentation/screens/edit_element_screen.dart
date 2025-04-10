@@ -1,7 +1,9 @@
 import 'package:authenticator_app/data/models/auth_token.dart';
+import 'package:authenticator_app/logic/blocs/tokens/tokens_event.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import '../../../core/config/theme.dart' as AppColors;
@@ -10,6 +12,9 @@ import 'dart:io';
 import '../../data/models/service.dart';
 import '../../data/repositories/remote/synchronize_repository.dart';
 import '../../data/repositories/remote/token_repository.dart';
+import '../../data/sources/constants/service_categories.dart';
+import '../../logic/blocs/tokens/tokens_bloc.dart';
+import '../../logic/blocs/tokens/tokens_state.dart';
 import '../dialogs/error_dialog.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -30,24 +35,6 @@ class _EditTokenScreenState extends State<EditTokenScreen> {
   String _selectedServiceName = "";
   String _selectedOtpType = "Time-based";
 
-  final Map<String, List<Service>> _serviceCategories = {
-    "General": [
-      Service(name: "Banking and finance", iconPath: "assets/icons/banking.svg"),
-      Service(name: "Website", iconPath: "assets/icons/website.svg"),
-      Service(name: "Mail", iconPath: "assets/icons/mail.svg"),
-      Service(name: "Social", iconPath: "assets/icons/social.svg"),
-    ],
-    "Services": [
-      Service(name: "Google", iconPath: "assets/icons/google.svg"),
-      Service(name: "Instagram", iconPath: "assets/icons/instagram.svg"),
-      Service(name: "Facebook", iconPath: "assets/icons/facebook.svg"),
-      Service(name: "LinkedIn", iconPath: "assets/icons/linkedin.svg"),
-      Service(name: "Microsoft", iconPath: "assets/icons/microsoft.svg"),
-      Service(name: "Discord", iconPath: "assets/icons/discord.svg"),
-      Service(name: "Netflix", iconPath: "assets/icons/netflix.svg"),
-    ],
-  };
-
   @override
   void initState() {
     super.initState();
@@ -63,7 +50,7 @@ class _EditTokenScreenState extends State<EditTokenScreen> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => ServiceSelectionModal(
-        serviceCategories: _serviceCategories,
+        serviceCategories: serviceCategories,
         onServiceSelected: (serviceName) {
           setState(() {
             _selectedServiceName = serviceName;
@@ -92,47 +79,58 @@ class _EditTokenScreenState extends State<EditTokenScreen> {
 
   Future<void> saveChanges() async {
     try {
-      final updatedToken = AuthToken(
-        service: _selectedServiceName,
-        account: _account.text,
-        secret: _key.text,
-        type: _selectedOtpType == "Time-based"
-            ? AuthTokenType.totp
-            : AuthTokenType.hotp,
-        counter: _selectedOtpType == "Time-based" ? null : 1,
+
+      final key = _key.text.trim().replaceAll(' ', '').toUpperCase();
+      final account = _account.text.trim();
+      final service = _selectedServiceName.trim();
+      final otpType = _selectedOtpType;
+
+      final isValidBase32 = RegExp(r'^[A-Z2-7]+={0,6}$').hasMatch(key);
+
+      if (service.isEmpty || account.isEmpty || key.isEmpty) {
+        ErrorDialog().showErrorDialog(
+          context,
+          AppLocalizations.of(context)!.add_error,
+          AppLocalizations.of(context)!.fill_all_fields,
+        );
+        return;
+      }
+
+      if (!isValidBase32) {
+        ErrorDialog().showErrorDialog(
+          context,
+          AppLocalizations.of(context)!.invalid_key,
+          AppLocalizations.of(context)!.invalid_key_description,
+        );
+        return;
+      }
+
+      final tokenToUpdate = AuthToken(
+        service: service,
+        account: account,
+        secret: key,
+        type: otpType == "Time-based" ? AuthTokenType.totp : AuthTokenType.hotp,
+        counter: otpType == "Time-based" ? null : 1,
       );
 
-      final file = await _getUserInfoFile();
+      BlocProvider.of<TokensBloc>(context).add(UpdateToken(tokenToUpdate));
+      final currentState = BlocProvider.of<TokensBloc>(context).state;
 
-      List<AuthToken> tokens = [];
+      if (currentState is TokensLoaded) {
+        final allTokens = currentState.allTokens;
 
-      if (await file.exists()) {
-        final content = await file.readAsString();
-        if (content.isNotEmpty) {
-          tokens = AuthToken.listFromJson(content);
+        User? user = FirebaseAuth.instance.currentUser;
+        final storage = FlutterSecureStorage();
+        String? idToken = await storage.read(key: 'idToken');
+
+        if (user != null && idToken != null) {
+          if (await SynchronizeRepository().isSynchronizing(user.uid)) {
+            await TokenService().saveTokensForUser(user.uid, allTokens);
+          }
         }
+        Navigator.pop(context);
       }
 
-      int index = tokens.indexWhere((token) => token.account == widget.token.account);
-      if (index != -1) {
-        tokens[index] = updatedToken;
-      }
-
-      final jsonString = AuthToken.listToJson(tokens);
-      await file.writeAsString(jsonString);
-
-      User? user = FirebaseAuth.instance.currentUser;
-
-      final storage = FlutterSecureStorage();
-      String? idToken = await storage.read(key: 'idToken');
-
-      if (user != null && idToken != null) {
-        if(await SynchronizeRepository().isSynchronizing(user.uid)) {
-          await TokenService().saveTokensForUser(user.uid, tokens);
-        }
-      }
-
-      Navigator.pop(context);
     } catch (e) {
       ErrorDialog().showErrorDialog(
         context,

@@ -2,29 +2,32 @@ import '../../../data/models/auth_token.dart';
 import 'package:equatable/equatable.dart';
 
 abstract class TokensState extends Equatable {
-  @override
-  List<Object?> get props => [];
-}
-
-class TokensInitial extends TokensState {}
-
-class TokensLoading extends TokensState {}
-
-class TokensLoaded extends TokensState {
   final List<AuthToken> allTokens;
   final List<AuthToken> filteredTokens;
   final List<AuthToken> timeBasedTokens;
   final List<AuthToken> counterTokens;
 
-  TokensLoaded({
-    required this.allTokens,
-    required this.filteredTokens,
-    required this.timeBasedTokens,
-    required this.counterTokens,
-  });
+  TokensState(this.allTokens, this.filteredTokens, this.timeBasedTokens, this.counterTokens);
 
   @override
-  List<Object?> get props => [allTokens, filteredTokens, timeBasedTokens, counterTokens];
+  List<Object> get props => [allTokens, filteredTokens, timeBasedTokens, counterTokens];
+}
+
+class TokensInitial extends TokensState {
+  TokensInitial() : super([], [], [], []);
+}
+
+class TokensLoading extends TokensState {
+  TokensLoading() : super([], [], [], []);
+}
+
+class TokensLoaded extends TokensState {
+  TokensLoaded({
+    required List<AuthToken> allTokens,
+    required List<AuthToken> filteredTokens,
+    required List<AuthToken> timeBasedTokens,
+    required List<AuthToken> counterTokens,
+  }) : super(allTokens, filteredTokens, timeBasedTokens, counterTokens);
 
   TokensLoaded copyWith({
     List<AuthToken>? allTokens,
@@ -43,8 +46,6 @@ class TokensLoaded extends TokensState {
 
 class TokensError extends TokensState {
   final String message;
-  TokensError(this.message);
 
-  @override
-  List<Object?> get props => [message];
+  TokensError(this.message) : super([], [], [], []);
 }

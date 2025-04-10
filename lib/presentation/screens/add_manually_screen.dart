@@ -2,6 +2,7 @@ import 'package:authenticator_app/data/models/auth_token.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import '../../../core/config/theme.dart' as AppColors;
@@ -11,14 +12,18 @@ import 'dart:io';
 import '../../data/models/service.dart';
 import '../../data/repositories/remote/synchronize_repository.dart';
 import '../../data/repositories/remote/token_repository.dart';
+import '../../data/sources/constants/service_categories.dart';
 import '../dialogs/error_dialog.dart';
 import 'package:path_provider/path_provider.dart';
+import '../../logic/blocs/tokens/tokens_bloc.dart';
+import '../../logic/blocs/tokens/tokens_event.dart';
+import '../../logic/blocs/tokens/tokens_state.dart';
+
 
 
 class AddManuallyScreen extends StatefulWidget {
-  final Function()? onUpdated;
 
-  const AddManuallyScreen({super.key, this.onUpdated});
+  const AddManuallyScreen({super.key});
 
   @override
   _AddManuallyScreenSate createState() => _AddManuallyScreenSate();
@@ -30,31 +35,13 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
   String _selectedServiceName = "";
   String _selectedOtpType = "Time-based";
 
-  final Map<String, List<Service>> _serviceCategories = {
-    "General": [
-      Service(name: "Banking and finance", iconPath: "assets/icons/banking.svg"),
-      Service(name: "Website", iconPath: "assets/icons/website.svg"),
-      Service(name: "Mail", iconPath: "assets/icons/mail.svg"),
-      Service(name: "Social", iconPath: "assets/icons/social.svg"),
-    ],
-    "Services": [
-      Service(name: "Google", iconPath: "assets/icons/google.svg"),
-      Service(name: "Instagram", iconPath: "assets/icons/instagram.svg"),
-      Service(name: "Facebook", iconPath: "assets/icons/facebook.svg"),
-      Service(name: "LinkedIn", iconPath: "assets/icons/linkedin.svg"),
-      Service(name: "Microsoft", iconPath: "assets/icons/microsoft.svg"),
-      Service(name: "Discord", iconPath: "assets/icons/discord.svg"),
-      Service(name: "Netflix", iconPath: "assets/icons/netflix.svg"),
-    ],
-  };
-
   void _showServiceSelectionModal() {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (context) => ServiceSelectionModal(
-        serviceCategories: _serviceCategories,
+        serviceCategories: serviceCategories,
         onServiceSelected: (serviceName) {
           setState(() {
             _selectedServiceName = serviceName;
@@ -258,34 +245,25 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
         counter: otpType == "Time-based" ? null : 1,
       );
 
-      final file = await _getUserInfoFile();
+      BlocProvider.of<TokensBloc>(context).add(AddToken(newToken));
 
-      List<AuthToken> tokens = [];
-      if (await file.exists()) {
-        final content = await file.readAsString();
-        if (content.isNotEmpty) {
-          tokens = AuthToken.listFromJson(content);
+      final currentState = BlocProvider.of<TokensBloc>(context).state;
+
+      if (currentState is TokensLoaded) {
+        final allTokens = currentState.allTokens;
+
+        User? user = FirebaseAuth.instance.currentUser;
+        final storage = FlutterSecureStorage();
+        String? idToken = await storage.read(key: 'idToken');
+
+        if (user != null && idToken != null) {
+          if (await SynchronizeRepository().isSynchronizing(user.uid)) {
+            await TokenService().saveTokensForUser(user.uid, allTokens);
+          }
         }
+
+        Navigator.pop(context);
       }
-
-      tokens.add(newToken);
-
-      final jsonString = AuthToken.listToJson(tokens);
-      await file.writeAsString(jsonString);
-
-      User? user = FirebaseAuth.instance.currentUser;
-
-
-      final storage = FlutterSecureStorage();
-      String? idToken = await storage.read(key: 'idToken');
-
-      if (user != null && idToken != null) {
-        if(await SynchronizeRepository().isSynchronizing(user.uid)) {
-          await TokenService().saveTokensForUser(user.uid, tokens);
-        }
-      }
-
-      Navigator.pop(context);
     } catch (e) {
       ErrorDialog().showErrorDialog(
         context,
@@ -294,6 +272,8 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
       );
     }
   }
+
+
 
 
   Future<File> _getUserInfoFile() async {

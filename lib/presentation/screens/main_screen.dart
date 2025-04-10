@@ -5,6 +5,7 @@ import 'dart:convert';
 import 'package:authenticator_app/presentation/screens/scan_qr_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
@@ -15,6 +16,9 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../data/repositories/remote/synchronize_repository.dart';
 import '../../data/repositories/remote/token_repository.dart';
+import '../../logic/blocs/tokens/tokens_bloc.dart';
+import '../../logic/blocs/tokens/tokens_event.dart';
+import '../../logic/blocs/tokens/tokens_state.dart';
 import '../widgets/counter_based_widget.dart';
 import '../widgets/time_based_widget.dart';
 
@@ -27,17 +31,15 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   final TextEditingController _searchController = TextEditingController();
-  late List<AuthToken> allTokens  = [];
-  late List<AuthToken> filteredTokens = [];
-  late List<AuthToken> time_based_tokens = [];
-  late List<AuthToken> counter_tokens = [];
   bool isLoading = true;
 
   @override
   void initState() {
     super.initState();
-    _loadTokens();
     _searchController.addListener(_filterTokens);
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      BlocProvider.of<TokensBloc>(context).add(LoadTokens());
+    });
   }
 
   Future<File> _getUserInfoFile() async {
@@ -45,60 +47,9 @@ class _MainScreenState extends State<MainScreen> {
     return File('${dir.path}/user_info.json');
   }
 
-  void _loadTokens() async {
-    final file = await _getUserInfoFile();
-
-    if (await file.exists()) {
-      final content = await file.readAsString();
-      if (content.isNotEmpty) {
-        allTokens = AuthToken.listFromJson(content);
-        _filterTokens();
-      }
-    }
-
-    if (mounted) {
-      setState(() {
-        isLoading = false;
-        time_based_tokens = filteredTokens.where((token) => token.type == AuthTokenType.totp).toList();
-        counter_tokens = filteredTokens.where((token) => token.type == AuthTokenType.hotp).toList();
-      });
-    }
-  }
-
   void _filterTokens() {
     final query = _searchController.text.toLowerCase();
-    setState(() {
-      filteredTokens = allTokens.where((token) {
-        return token.service.toLowerCase().contains(query) ||
-            token.account.toLowerCase().contains(query);
-      }).toList();
-      time_based_tokens = filteredTokens.where((token) => token.type == AuthTokenType.totp).toList();
-      counter_tokens = filteredTokens.where((token) => token.type == AuthTokenType.hotp).toList();
-    });
-  }
-
-  Future<void> _deleteToken(AuthToken token) async {
-    setState(() {
-      allTokens.removeWhere((t) =>
-      t.service == token.service && t.account == token.account && t.secret == token.secret);
-    });
-
-    _filterTokens();
-
-    final file = await _getUserInfoFile();
-    final jsonString = jsonEncode(allTokens.map((token) => token.toJson()).toList());
-    await file.writeAsString(jsonString);
-
-    User? user = FirebaseAuth.instance.currentUser;
-
-    final storage = FlutterSecureStorage();
-    String? idToken = await storage.read(key: 'idToken');
-
-    if (user != null && idToken != null) {
-      if(await SynchronizeRepository().isSynchronizing(user.uid)) {
-        await TokenService().saveTokensForUser(user.uid, allTokens);
-      }
-    }
+    context.read<TokensBloc>().add(FilterTokens(query));
   }
 
   Widget _searchBox() {
@@ -132,41 +83,79 @@ class _MainScreenState extends State<MainScreen> {
   }
 
   Widget _buildCountBasedPage() {
-    if (counter_tokens.isEmpty) {
-      return Center(child: Text(':('));
-    }
+    return BlocBuilder<TokensBloc, TokensState>(
+      builder: (context, state) {
+        if (state is TokensLoading) {
+          return Center(child: CircularProgressIndicator());
+        }
 
-    return ListView.builder(
-      itemCount: counter_tokens.length,
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16),
-          child: HotpWidget(
-            hotpEl: counter_tokens[index],
-            onDelete: _deleteToken,
-            onUpdated: _loadTokens,
-          ),
-        );
+        if (state is TokensError) {
+          return Center(child: Text(state.message));
+        }
+
+        if (state is TokensLoaded) {
+          final counterTokens = state.counterTokens;
+
+          if (counterTokens.isEmpty) {
+            return Center(child: Text(':('));
+          }
+
+          return ListView.builder(
+            itemCount: counterTokens.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16),
+                child: HotpWidget(
+                  hotpEl: counterTokens[index],
+                  onDelete: (token) {
+                    BlocProvider.of<TokensBloc>(context).add(DeleteToken(token));
+                  },
+                ),
+              );
+            },
+          );
+        }
+
+        return Center(child: Text('...'));
       },
     );
   }
 
   Widget _buildTimeBasedPage() {
-    if (time_based_tokens.isEmpty) {
-      return Center(child: Text(':('));
-    }
+    return BlocBuilder<TokensBloc, TokensState>(
+      builder: (context, state) {
+        if (state is TokensLoading) {
+          return Center(child: CircularProgressIndicator());
+        }
 
-    return ListView.builder(
-      itemCount: time_based_tokens.length,
-      itemBuilder: (context, index) {
-        return Padding(
-          padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16),
-          child: TimeBasedWidget(
-            timeBasedEl: time_based_tokens[index],
-            onDelete: _deleteToken,
-            onUpdated: _loadTokens,
-          ),
-        );
+        if (state is TokensError) {
+          return Center(child: Text(state.message));
+        }
+
+        if (state is TokensLoaded) {
+          final timeBasedTokens = state.timeBasedTokens;
+
+          if (timeBasedTokens.isEmpty) {
+            return Center(child: Text(':('));
+          }
+
+          return ListView.builder(
+            itemCount: timeBasedTokens.length,
+            itemBuilder: (context, index) {
+              return Padding(
+                padding: const EdgeInsets.symmetric(vertical: 6.0, horizontal: 16),
+                child: TimeBasedWidget(
+                  timeBasedEl: timeBasedTokens[index],
+                  onDelete: (token) {
+                    BlocProvider.of<TokensBloc>(context).add(DeleteToken(token));
+                  },
+                ),
+              );
+            },
+          );
+        }
+
+        return Center(child: Text('...'));
       },
     );
   }
@@ -302,59 +291,85 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    if (isLoading) {
-      return Scaffold(
-        body: Center(
-          child: CircularProgressIndicator(),
-        ),
-      );
-    }
+    // Using BlocBuilder to listen to the state of TokensBloc
+    return BlocBuilder<TokensBloc, TokensState>(
+      builder: (context, state) {
+        // Check if the state is loading
+        if (state is TokensLoading) {
+          return Scaffold(
+            body: Center(
+              child: CircularProgressIndicator(),
+            ),
+          );
+        }
 
-    return allTokens.isEmpty
-        ? _buildAdd2FACodes()
-        : DefaultTabController(
-      length: 2,
-      child: Scaffold(
-        body: Padding(
-          padding: const EdgeInsets.only(top: 15),
-          child: Column(
-            children: [
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: _searchBox(),
-              ),
-              SizedBox(height: 6),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 16),
-                child: TabBar(
-                  indicatorColor: AppColors.mainBlue,
-                  labelStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color:  Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : AppColors.blue,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  unselectedLabelStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                    color: Theme.of(context).brightness == Brightness.light ? AppColors.gray6 : AppColors.gray2,
-                    fontWeight: FontWeight.w500,
-                  ),
-                  tabs: [
-                    Tab(child: Text(AppLocalizations.of(context)!.time_based)),
-                    Tab(child: Text(AppLocalizations.of(context)!.counter_based)),
-                  ],
-                ),
-              ),
+        // Check if the tokens are loaded
+        if (state is TokensLoaded) {
+          // If tokens are empty, show a different UI
+          if (state.allTokens.isEmpty) {
+            return _buildAdd2FACodes();
+          }
 
-              Expanded(
-                child: TabBarView(
+          // If tokens are available, show them in a tab-based view
+          return DefaultTabController(
+            length: 2,
+            child: Scaffold(
+              body: Padding(
+                padding: const EdgeInsets.only(top: 15),
+                child: Column(
                   children: [
-                    _buildTimeBasedPage(),
-                    _buildCountBasedPage(),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: _searchBox(),
+                    ),
+                    SizedBox(height: 6),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      child: TabBar(
+                        indicatorColor: AppColors.mainBlue,
+                        labelStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          color:  Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : AppColors.blue,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        unselectedLabelStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                          color: Theme.of(context).brightness == Brightness.light ? AppColors.gray6 : AppColors.gray2,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        tabs: [
+                          Tab(child: Text(AppLocalizations.of(context)!.time_based)),
+                          Tab(child: Text(AppLocalizations.of(context)!.counter_based)),
+                        ],
+                      ),
+                    ),
+
+                    Expanded(
+                      child: TabBarView(
+                        children: [
+                          _buildTimeBasedPage(),
+                          _buildCountBasedPage(),
+                        ],
+                      ),
+                    ),
                   ],
                 ),
               ),
-            ],
+            ),
+          );
+        }
+        if (state is TokensError) {
+          return Scaffold(
+            body: Center(
+              child: Text(state.message),
+            ),
+          );
+        }
+        return Scaffold(
+          body: Center(
+            child: Text('Unknown state'),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
+
 }

@@ -36,7 +36,6 @@ class _SignInScreenState extends State<SignInScreen> {
     return File('${dir.path}/user_info.json');
   }
 
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(

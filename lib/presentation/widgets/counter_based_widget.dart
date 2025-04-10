@@ -16,7 +16,7 @@ import '../screens/edit_element_screen.dart';
 class HotpWidget extends StatefulWidget {
   final AuthToken hotpEl;
   final Function(AuthToken) onDelete;
-  final Function()? onUpdated;
+  final Future<void>? onUpdated;
 
   const HotpWidget({
     Key? key,
@@ -113,12 +113,12 @@ class _HotpWidgetState extends State<HotpWidget> {
       MaterialPageRoute(builder: (context) => EditTokenScreen(token: widget.hotpEl)),
     );
 
-    if (updated == true && mounted) {
-      _initializeHotp();
-      if (widget.onUpdated != null) {
-        widget.onUpdated!();
-      }
-    }
+    // if (updated == true && mounted) {
+    //   _initializeHotp();
+    //   if (widget.onUpdated != null) {
+    //     widget.onUpdated!();
+    //   }
+    // }
   }
 
   Future<bool> _showDeleteConfirmationDialog() {

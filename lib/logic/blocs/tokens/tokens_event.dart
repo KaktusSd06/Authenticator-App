@@ -13,3 +13,13 @@ class DeleteToken extends TokensEvent {
   final AuthToken token;
   DeleteToken(this.token);
 }
+
+class AddToken extends TokensEvent {
+  final AuthToken token;
+  AddToken(this.token);
+}
+
+class UpdateToken extends TokensEvent {
+  final AuthToken token;
+  UpdateToken(this.token);
+}
