@@ -5,11 +5,33 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:local_auth/local_auth.dart';
 import 'core/config/theme.dart';
 import 'logic/blocs/locale_cubit.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:local_auth/local_auth.dart';
+
+class AppStateService {
+  static final AppStateService _instance = AppStateService._internal();
+  factory AppStateService() => _instance;
+  AppStateService._internal();
+
+  bool isLocked = false;
+  bool isAuthenticated = false;
+
+  void setAuthenticated() {
+    isAuthenticated = true;
+    isLocked = false;
+  }
+
+  void setLocked() {
+    isLocked = true;
+    isAuthenticated = false;
+  }
+
+  void reset() {
+    isLocked = false;
+    isAuthenticated = false;
+  }
+}
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -22,11 +44,53 @@ Future<void> main() async {
   );
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget {
+  @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
+  late Future<Widget> _initialScreen;
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+  final AppStateService _appState = AppStateService();
+
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    _initialScreen = _getInitialScreen();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
+    if (state == AppLifecycleState.resumed) {
+      final storage = FlutterSecureStorage();
+      final isPin = await storage.read(key: 'app_pin');
+
+      if (isPin != null && !_appState.isAuthenticated) {
+        _appState.setLocked();
+
+        if (_navigatorKey.currentState != null) {
+          _navigatorKey.currentState!.pushReplacement(
+            MaterialPageRoute(builder: (_) => LockScreenWrapper()),
+          );
+        }
+      }
+    } else if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
+      _appState.reset();
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     return FutureBuilder<Widget>(
-      future: _getInitialScreen(),
+      future: _initialScreen,
       builder: (context, snapshot) {
         if (snapshot.connectionState == ConnectionState.waiting) {
           return MaterialApp(
@@ -34,13 +98,14 @@ class MyApp extends StatelessWidget {
             theme: lightTheme,
             darkTheme: darkTheme,
             themeMode: ThemeMode.system,
-            home: Center(child: CircularProgressIndicator()),
+            home: const Center(child: CircularProgressIndicator()),
           );
         }
 
         return BlocBuilder<LocaleCubit, Locale>(
           builder: (context, locale) {
             return MaterialApp(
+              navigatorKey: _navigatorKey,
               debugShowCheckedModeBanner: false,
               theme: lightTheme,
               darkTheme: darkTheme,
@@ -60,15 +125,33 @@ class MyApp extends StatelessWidget {
     final storage = FlutterSecureStorage();
     final isFirst = await storage.read(key: 'isFirst');
     final isPin = await storage.read(key: 'app_pin');
+
     if (isFirst != null) {
-      if (isPin != null){
-        return LockScreen();
-      }
-      else {
+      if (isPin != null) {
+        return LockScreenWrapper();
+      } else {
         return HomeScreen();
       }
     } else {
       return OnBoardingScreen();
     }
+  }
+}
+
+// This wrapper will handle the lock screen state properly
+class LockScreenWrapper extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return LockScreen(
+      onAuthenticated: () {
+        // Mark as authenticated
+        AppStateService().setAuthenticated();
+
+        // Navigate to home screen
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (_) => HomeScreen()),
+        );
+      },
+    );
   }
 }

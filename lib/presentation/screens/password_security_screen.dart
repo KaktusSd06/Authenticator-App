@@ -6,6 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:local_auth/local_auth.dart';
 import '../../../core/config/theme.dart' as AppColors;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
@@ -24,6 +25,9 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
   late bool _isPassword = false;
   bool _isLoading = false;
   bool _isBiometrics = false;
+  bool _isAvailableBiometrics = false;
+  final LocalAuthentication _localAuth = LocalAuthentication();
+
 
   @override
   void initState() {
@@ -38,6 +42,7 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
     });
 
     try {
+      await _checkBiometricAvailability();
       final storage = FlutterSecureStorage();
       String? isPassword = await storage.read(key: 'app_pin');
       String? isBiometrics = await storage.read(key: "biometric_enabled");
@@ -193,6 +198,7 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
 
           SizedBox(height: 20,),
 
+          _isAvailableBiometrics ?
           Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
@@ -239,6 +245,9 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
                               if(value){
                                 setBiometrics();
                               }
+                              else{
+                                deleteBiometrics();
+                              }
                             });
                           },
                           activeColor: Colors.white,
@@ -259,7 +268,7 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
                 ],
               ),
             ),
-          ),
+          ) : SizedBox(height: 0,)
         ],
       ),
     );
@@ -355,9 +364,24 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
     Navigator.push(context, MaterialPageRoute(builder: (context) => ChangePinScreen()));
   }
 
+  Future<void> _checkBiometricAvailability() async {
+    bool canCheckBiometrics = await _localAuth.canCheckBiometrics;
+    List<BiometricType> availableBiometrics = [];
+
+    if (canCheckBiometrics) {
+      availableBiometrics = await _localAuth.getAvailableBiometrics();
+    }
+
+    //String? biometricEnabled = await _secureStorage.read(key: 'biometric_enabled');
+
+    if (availableBiometrics.isNotEmpty) {
+      _isAvailableBiometrics = true;
+    }
+  }
+
   Future<void> setBiometrics() async {
     final _secureStorage = FlutterSecureStorage();
-    await _secureStorage.write(key: 'biometric_enabled', value: 'false');
+    await _secureStorage.write(key: 'biometric_enabled', value: 'true');
 
     // ScaffoldMessenger.of(context).showSnackBar(
     //   SnackBar(
@@ -371,5 +395,10 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
   Future<void> deletePassword() async {
     final storage = FlutterSecureStorage();
     await storage.delete(key: 'app_pin');
+  }
+
+  Future<void> deleteBiometrics() async {
+    final storage = FlutterSecureStorage();
+    await storage.delete(key: 'biometric_enabled');
   }
 }

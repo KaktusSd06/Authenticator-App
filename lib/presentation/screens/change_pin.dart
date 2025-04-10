@@ -334,7 +334,7 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
         height: 80,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Theme.of(context).brightness == Brightness.light ? AppColors.white.withOpacity(0.5) : AppColors.gray6.withOpacity(0.5),
+          color: Theme.of(context).brightness == Brightness.light ? AppColors.white.withOpacity(0.3) : AppColors.gray6.withOpacity(0.3),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
@@ -365,7 +365,7 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
         height: 80,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Theme.of(context).brightness == Brightness.light ? AppColors.white.withOpacity(0.5) : AppColors.gray6.withOpacity(0.5),
+          color: Theme.of(context).brightness == Brightness.light ? AppColors.white.withOpacity(0.1) : AppColors.gray6.withOpacity(0.1),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.05),

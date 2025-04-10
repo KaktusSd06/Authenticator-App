@@ -10,8 +10,9 @@ import '../../../core/config/theme.dart' as AppColors;
 
 class LockScreen extends StatefulWidget {
   final Function(bool)? onUnlocked;
+  final VoidCallback? onAuthenticated;
 
-  const LockScreen({Key? key, this.onUnlocked}) : super(key: key);
+  const LockScreen({Key? key, this.onUnlocked, this.onAuthenticated}) : super(key: key);
 
   @override
   State<LockScreen> createState() => _LockScreenState();
@@ -25,6 +26,8 @@ class _LockScreenState extends State<LockScreen> {
   bool _isAuthenticating = false;
   String _errorMessage = '';
   Timer? _errorTimer;
+  bool _isBiometrics = false;
+  bool _biometricEnabled = false;
 
   @override
   void initState() {
@@ -39,9 +42,38 @@ class _LockScreenState extends State<LockScreen> {
   }
 
   Future<void> _checkBiometricAvailability() async {
+    bool canCheckBiometrics = await _localAuth.canCheckBiometrics;
+    List<BiometricType> availableBiometrics = [];
+
+    if (canCheckBiometrics) {
+      availableBiometrics = await _localAuth.getAvailableBiometrics();
+    }
+
     String? biometricEnabled = await _secureStorage.read(key: 'biometric_enabled');
-    if (biometricEnabled == 'true') {
-      _authenticateWithBiometrics();
+
+    if (mounted) {
+      setState(() {
+        _biometricEnabled = biometricEnabled == 'true';
+        _isBiometrics = biometricEnabled == 'true' && availableBiometrics.isNotEmpty;
+      });
+    }
+
+    if (_isBiometrics) {
+      Future.delayed(const Duration(milliseconds: 300), () {
+        if (mounted) {
+          //_authenticateWithBiometrics();
+        }
+      });
+    }
+  }
+
+  void _onSuccessfulAuthentication() {
+    if (widget.onAuthenticated != null) {
+      widget.onAuthenticated!();
+    } else {
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (_) => HomeScreen()),
+      );
     }
   }
 
@@ -53,8 +85,11 @@ class _LockScreenState extends State<LockScreen> {
     });
 
     try {
+      String biometricPrompt = AppLocalizations.of(context)?.authenticate_with_biometrics ??
+          'Авторизуйтесь для входу в додаток';
+
       bool authenticated = await _localAuth.authenticate(
-        localizedReason: 'Авторизуйтесь для входу в додаток',
+        localizedReason: biometricPrompt,
         options: const AuthenticationOptions(
           stickyAuth: true,
           biometricOnly: false,
@@ -65,15 +100,81 @@ class _LockScreenState extends State<LockScreen> {
         if (widget.onUnlocked != null) {
           widget.onUnlocked!(true);
         }
+        _onSuccessfulAuthentication();
       }
+
     } catch (e) {
-      print(e);
+      // Only show error for actual errors, not for cancellations
+      if (e.toString().contains('canceled') || e.toString().contains('cancelled')) {
+        // User cancelled the biometric authentication, no need to show error
+      } else {
+        print('Помилка біометричної автентифікації: $e');
+        if (mounted) {
+          setState(() {
+            _errorMessage = AppLocalizations.of(context)?.biometric_error ?? 'Помилка біометричної автентифікації';
+          });
+
+          _errorTimer?.cancel();
+          _errorTimer = Timer(const Duration(seconds: 2), () {
+            if (mounted) {
+              setState(() {
+                _errorMessage = '';
+              });
+            }
+          });
+        }
+      }
     } finally {
       if (mounted) {
         setState(() {
           _isAuthenticating = false;
         });
       }
+    }
+  }
+
+  Future<void> _enableBiometrics() async {
+    bool canCheckBiometrics = await _localAuth.canCheckBiometrics;
+    List<BiometricType> availableBiometrics = [];
+
+    if (canCheckBiometrics) {
+      availableBiometrics = await _localAuth.getAvailableBiometrics();
+    }
+
+    if (availableBiometrics.isEmpty) {
+      setState(() {
+        _errorMessage = AppLocalizations.of(context)?.biometric_not_available ??
+            'Біометрика недоступна на цьому пристрої';
+      });
+
+      _errorTimer?.cancel();
+      _errorTimer = Timer(const Duration(seconds: 2), () {
+        if (mounted) {
+          setState(() {
+            _errorMessage = '';
+          });
+        }
+      });
+
+      return;
+    }
+
+    await _secureStorage.write(key: 'biometric_enabled', value: 'true');
+    if (mounted) {
+      setState(() {
+        _biometricEnabled = true;
+        _isBiometrics = true;
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(AppLocalizations.of(context)?.biometric_enabled ??
+              'Біометричну автентифікацію увімкнено'),
+          backgroundColor: Colors.green,
+        ),
+      );
+
+      _authenticateWithBiometrics();
     }
   }
 
@@ -108,12 +209,12 @@ class _LockScreenState extends State<LockScreen> {
       if (widget.onUnlocked != null) {
         widget.onUnlocked!(true);
       }
+      _onSuccessfulAuthentication();
     } else if (enteredPin == storedPin) {
       if (widget.onUnlocked != null) {
         widget.onUnlocked!(true);
       }
-
-      Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
+      _onSuccessfulAuthentication();
     } else {
       setState(() {
         _errorMessage = AppLocalizations.of(context)!.incorrect_pin;
@@ -179,7 +280,7 @@ class _LockScreenState extends State<LockScreen> {
                   const SizedBox(height: 24),
                   Text(
                     AppLocalizations.of(context)!.enter_pin,
-                    style: TextStyle(
+                    style: const TextStyle(
                       fontSize: 20,
                       fontWeight: FontWeight.bold,
                       color: Colors.white,
@@ -218,22 +319,6 @@ class _LockScreenState extends State<LockScreen> {
                   // PIN pad
                   _buildPinPad(),
                   const SizedBox(height: 16),
-                  // Biometric button
-                  ElevatedButton.icon(
-                    onPressed: _authenticateWithBiometrics,
-                    icon: const Icon(Icons.fingerprint, color: Colors.black,),
-                    label: Text(AppLocalizations.of(context)!.biometrics, style: TextStyle(color: Colors.black)),
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 12,
-                      ),
-                      shape: RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(30),
-                      ),
-                    ),
-                  ),
                   const Spacer(),
                 ],
               ),
@@ -255,7 +340,7 @@ class _LockScreenState extends State<LockScreen> {
           const SizedBox(height: 16),
           _buildPinRow(['7', '8', '9']),
           const SizedBox(height: 16),
-          _buildPinRow(['del', '0', '']),
+          _buildPinRow(['del', '0', 'bio']),
         ],
       ),
     );
@@ -269,6 +354,8 @@ class _LockScreenState extends State<LockScreen> {
           return const SizedBox(width: 80);
         } else if (digit == 'del') {
           return _buildDeleteButton();
+        } else if (digit == 'bio') {
+          return _buildBiometricButton();
         } else {
           return _buildDigitButton(digit);
         }
@@ -285,7 +372,7 @@ class _LockScreenState extends State<LockScreen> {
         height: 80,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Theme.of(context).brightness == Brightness.light ? AppColors.white.withOpacity(0.5) : AppColors.gray6.withOpacity(0.5),
+          color: Theme.of(context).brightness == Brightness.light ? AppColors.white.withOpacity(0.3) : AppColors.gray6.withOpacity(0.3),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
@@ -316,7 +403,7 @@ class _LockScreenState extends State<LockScreen> {
         height: 80,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Theme.of(context).brightness == Brightness.light ? AppColors.white.withOpacity(0.5) : AppColors.gray6.withOpacity(0.5),
+          color: Theme.of(context).brightness == Brightness.light ? AppColors.white.withOpacity(0.1) : AppColors.gray6.withOpacity(0.1),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.05),
@@ -328,6 +415,40 @@ class _LockScreenState extends State<LockScreen> {
         child: const Center(
           child: Icon(
             Icons.backspace_outlined,
+            size: 28,
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildBiometricButton() {
+    return InkWell(
+      onTap: () async {
+        if (_biometricEnabled) {
+          _authenticateWithBiometrics();
+        } else {
+          _enableBiometrics();
+        }
+      },
+      customBorder: const CircleBorder(),
+      child: Container(
+        width: 80,
+        height: 80,
+        decoration: BoxDecoration(
+          shape: BoxShape.circle,
+          color: Theme.of(context).brightness == Brightness.light ? AppColors.white.withOpacity(0.1) : AppColors.gray6.withOpacity(0.1),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withOpacity(0.05),
+              blurRadius: 5,
+              spreadRadius: 1,
+            ),
+          ],
+        ),
+        child: const Center(
+          child: Icon(
+            Icons.fingerprint,
             size: 28,
           ),
         ),
