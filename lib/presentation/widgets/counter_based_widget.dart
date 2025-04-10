@@ -127,7 +127,7 @@ class _HotpWidgetState extends State<HotpWidget> {
       builder: (BuildContext context) {
         final localizations = AppLocalizations.of(context)!;
         return AlertDialog(
-          backgroundColor: AppColors.white,
+          backgroundColor: Theme.of(context).cardColor,
           title: Text(
             localizations.confirming,
             style: Theme.of(context).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w700),
@@ -138,7 +138,7 @@ class _HotpWidgetState extends State<HotpWidget> {
               onPressed: () => Navigator.of(context).pop(false),
               child: Text(
                   localizations.cancel,
-                  style: TextStyle(color: AppColors.mainBlue)
+                  style: TextStyle(color: AppColors.blue)
               ),
             ),
             TextButton(
@@ -165,24 +165,26 @@ class _HotpWidgetState extends State<HotpWidget> {
       child: Container(
         height: 56,
         decoration: BoxDecoration(
-          border: Border.all(color: Theme.of(context).brightness == Brightness.light ? Color(0xFF1B539A) : AppColors.blue),
+          border: Border.all(color: Theme.of(context).brightness == Brightness.light ? Color(0xFF1B539A) : AppColors.gray4),
           borderRadius: BorderRadius.circular(30),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(
-            mainAxisAlignment: isCenter == true ? MainAxisAlignment.center : MainAxisAlignment.start,
+            //mainAxisAlignment: isCenter == true ? MainAxisAlignment.center : MainAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SvgPicture.asset(
                 icon,
                 width: 18,
                 height: 18,
-                colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? Color(0xFF1B539A) : AppColors.blue, BlendMode.srcIn),
+                colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? Color(0xFF1B539A) : AppColors.gray4, BlendMode.srcIn),
               ),
               SizedBox(width: 12),
               Text(
                 label,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Theme.of(context).brightness == Brightness.light ? Color(0xFF1B539A) : AppColors.blue)
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Theme.of(context).brightness == Brightness.light ? Color(0xFF1B539A) : AppColors.gray4)
               ),
             ],
           ),
@@ -203,7 +205,7 @@ class _HotpWidgetState extends State<HotpWidget> {
         final localizations = AppLocalizations.of(context)!;
         return Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).brightness == Brightness.light ? AppColors.white : AppColors.black,
+            color: Theme.of(context).brightness == Brightness.light ? AppColors.white : Color(0xFF171717),
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Column(
@@ -256,7 +258,7 @@ class _HotpWidgetState extends State<HotpWidget> {
         final localizations = AppLocalizations.of(context)!;
         return Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).brightness == Brightness.light ? AppColors.white : AppColors.black,
+            color: Theme.of(context).brightness == Brightness.light ? AppColors.white : Color(0xFF171717),
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Column(
@@ -303,7 +305,7 @@ class _HotpWidgetState extends State<HotpWidget> {
                   },
                 ),
               ),
-              SizedBox(height: 32),
+              SizedBox(height: 66),
             ],
           ),
         );

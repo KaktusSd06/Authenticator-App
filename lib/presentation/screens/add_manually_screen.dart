@@ -338,7 +338,7 @@ class OtpTypeSelectionModal extends StatelessWidget {
     return Container(
       height: 160,
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : Color(0xFF171717),
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),

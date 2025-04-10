@@ -61,7 +61,7 @@ class _MainScreenState extends State<MainScreen> {
           hintText: AppLocalizations.of(context)!.search,
           hintStyle: Theme.of(context).textTheme.headlineLarge?.copyWith(
             fontWeight: FontWeight.w400,
-            color: Theme.of(context).brightness == Brightness.light ? Color(0xFF707877) : AppColors.gray2,
+            color: Theme.of(context).cardColor,
           ),
           prefixIcon: Icon(Icons.search, color: Theme.of(context).brightness == Brightness.light ? Color(0xFF1B539A) : AppColors.blue),
           border: InputBorder.none,
@@ -166,11 +166,8 @@ class _MainScreenState extends State<MainScreen> {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          gradient: const LinearGradient(
-            begin: Alignment.topCenter,
-            end: Alignment.bottomCenter,
-            colors: [Color(0xFFF0F4FA), Color(0xFFE6EEF8)],
-          ),
+          color: Theme.of(context).brightness == Brightness.light ? AppColors.white : Color(
+              0xFF101010),
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
@@ -195,7 +192,7 @@ class _MainScreenState extends State<MainScreen> {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: Color(0xFF1B539A).withOpacity(0.2),
+                        color: Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue.withOpacity(0.2) : AppColors.mainBlue.withOpacity(0.2),
                         blurRadius: 80,
                         spreadRadius: 5,
                       ),
@@ -214,7 +211,7 @@ class _MainScreenState extends State<MainScreen> {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: Color(0xFF1B539A).withOpacity(0.2),
+                        color: Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue.withOpacity(0.2) : AppColors.mainBlue.withOpacity(0.2),
                         blurRadius: 80,
                         spreadRadius: 5,
                       ),

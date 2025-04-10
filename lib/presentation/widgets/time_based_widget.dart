@@ -91,7 +91,7 @@ class _TimeBasedWidgetState extends State<TimeBasedWidget> {
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          backgroundColor: AppColors.white,
+          backgroundColor: Theme.of(context).cardColor,
           title: Text(AppLocalizations.of(context)!.confirming, style: Theme.of(context).textTheme.displaySmall?.copyWith(fontWeight: FontWeight.w700),),
           content: Text(AppLocalizations.of(context)!.delete_conf),
           actions: <Widget>[
@@ -99,7 +99,7 @@ class _TimeBasedWidgetState extends State<TimeBasedWidget> {
               onPressed: () {
                 Navigator.of(context).pop(false);
               },
-              child: Text(AppLocalizations.of(context)!.cancel, style: TextStyle(color: AppColors.mainBlue)),
+              child: Text(AppLocalizations.of(context)!.cancel, style: TextStyle(color: AppColors.blue)),
             ),
             TextButton(
               onPressed: () {
@@ -124,23 +124,25 @@ class _TimeBasedWidgetState extends State<TimeBasedWidget> {
       child: Container(
         height: 56,
         decoration: BoxDecoration(
-          border: Border.all(color: Theme.of(context).brightness == Brightness.light ? Color(0xFF1B539A) : AppColors.blue),
+          border: Border.all(color: Theme.of(context).brightness == Brightness.light ? Color(0xFF1B539A) : AppColors.gray4),
           borderRadius: BorderRadius.circular(30),
         ),
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               SvgPicture.asset(
                 icon,
                 width: 18,
                 height: 18,
-                colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? Color(0xFF1B539A) : AppColors.blue, BlendMode.srcIn),
+                colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? Color(0xFF1B539A) : AppColors.gray4, BlendMode.srcIn),
               ),
               SizedBox(width: 12),
               Text(
                   label,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Theme.of(context).brightness == Brightness.light ? Color(0xFF1B539A) : AppColors.blue)
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Theme.of(context).brightness == Brightness.light ? Color(0xFF1B539A) : AppColors.gray4)
               ),
             ],
           ),
@@ -159,7 +161,7 @@ class _TimeBasedWidgetState extends State<TimeBasedWidget> {
       builder: (BuildContext context) {
         return Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).brightness == Brightness.light ? AppColors.white : AppColors.black,
+            color: Theme.of(context).brightness == Brightness.light ? AppColors.white : Color(0xFF171717),
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Column(
@@ -186,7 +188,7 @@ class _TimeBasedWidgetState extends State<TimeBasedWidget> {
                   },
                 ),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: _buildOptionButton(
@@ -206,7 +208,7 @@ class _TimeBasedWidgetState extends State<TimeBasedWidget> {
                   },
                 ),
               ),
-              SizedBox(height: 32),
+              SizedBox(height: 66),
             ],
           ),
         );

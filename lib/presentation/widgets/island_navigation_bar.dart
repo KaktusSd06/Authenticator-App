@@ -122,7 +122,7 @@ class IslandNavigationBar extends StatelessWidget {
       builder: (context) {
         return Container(
           decoration: BoxDecoration(
-            color: Theme.of(context).brightness == Brightness.light ? AppColors.white : AppColors.black,
+            color: Theme.of(context).brightness == Brightness.light ? AppColors.white : Color(0xFF171717),
             borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
           ),
           child: Column(
@@ -141,6 +141,7 @@ class IslandNavigationBar extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: _buildOptionButton(
+                  context: context,
                   icon: "assets/icons/qr.svg",
                   label: AppLocalizations.of(context)!.scan_qr,
                   onTap: () {
@@ -152,6 +153,7 @@ class IslandNavigationBar extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: _buildOptionButton(
+                  context: context,
                   icon: "assets/icons/edit.svg",
                   label: "Enter code manually",
                   onTap: () {
@@ -159,7 +161,7 @@ class IslandNavigationBar extends StatelessWidget {
                   },
                 ),
               ),
-              SizedBox(height: 32),
+              SizedBox(height: 66),
             ],
           ),
         );
@@ -168,6 +170,7 @@ class IslandNavigationBar extends StatelessWidget {
   }
 
   Widget _buildOptionButton({
+    required BuildContext context,
     required String icon,
     required String label,
     required VoidCallback onTap,
@@ -177,7 +180,7 @@ class IslandNavigationBar extends StatelessWidget {
       child: Container(
         height: 56,
         decoration: BoxDecoration(
-          border: Border.all(color: Color(0xFF1B539A)),
+          border: Border.all(color: Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : AppColors.gray4),
           borderRadius: BorderRadius.circular(30),
         ),
         child: Padding(
@@ -188,12 +191,12 @@ class IslandNavigationBar extends StatelessWidget {
                 icon,
                 width: 18,
                 height: 18,
-                colorFilter: ColorFilter.mode(AppColors.mainBlue, BlendMode.srcIn),
+                colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : AppColors.gray4, BlendMode.srcIn),
               ),
               SizedBox(width: 12),
               Text(
                   label,
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: AppColors.mainBlue)
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w500, color: Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : AppColors.gray4)
               ),
             ],
           ),
