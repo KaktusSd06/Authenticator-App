@@ -1,6 +1,6 @@
 import 'package:authenticator_app/presentation/screens/home_screen.dart';
 import 'package:authenticator_app/presentation/screens/lock_screen.dart';
-import 'package:authenticator_app/presentation/screens/onboarding/onboarding_screen.dart';
+import 'package:authenticator_app/presentation/screens/wellcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
@@ -127,32 +127,18 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   }
 
   Future<Widget> _getInitialScreen() async {
-    final storage = FlutterSecureStorage();
-    final isFirst = await storage.read(key: 'isFirst');
-    final isPin = await storage.read(key: 'app_pin');
-
-    if (isFirst != null) {
-      if (isPin != null) {
-        return LockScreenWrapper();
-      } else {
-        return HomeScreen();
-      }
-    } else {
-      return OnBoardingScreen();
-    }
+    return WellcomeScreen();
   }
+
 }
 
-// This wrapper will handle the lock screen state properly
 class LockScreenWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return LockScreen(
       onAuthenticated: () {
-        // Mark as authenticated
         AppStateService().setAuthenticated();
 
-        // Navigate to home screen
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (_) => HomeScreen()),
         );

@@ -192,6 +192,7 @@ class MessageLookup extends MessageLookupByLibrary {
     "search": MessageLookupByLibrary.simpleMessage("Пошук"),
     "service": MessageLookupByLibrary.simpleMessage("Сервіс"),
     "services": MessageLookupByLibrary.simpleMessage("Сервіси"),
+    "shield": MessageLookupByLibrary.simpleMessage("щит"),
     "sign_in_with": MessageLookupByLibrary.simpleMessage("Увійти з"),
     "sign_out": MessageLookupByLibrary.simpleMessage("Вийти з акаунту"),
     "signin": MessageLookupByLibrary.simpleMessage("Вхід"),
@@ -226,5 +227,6 @@ class MessageLookup extends MessageLookupByLibrary {
     "year": MessageLookupByLibrary.simpleMessage("1 Рік"),
     "year_subscription": MessageLookupByLibrary.simpleMessage("Річна підписка"),
     "yes": MessageLookupByLibrary.simpleMessage("Так"),
+    "your_digital": MessageLookupByLibrary.simpleMessage("Ваш цифровий"),
   };
 }

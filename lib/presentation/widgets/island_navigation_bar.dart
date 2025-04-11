@@ -149,7 +149,7 @@ class IslandNavigationBar extends StatelessWidget {
                   },
                 ),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: _buildOptionButton(

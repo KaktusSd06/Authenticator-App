@@ -273,14 +273,6 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
     }
   }
 
-
-
-
-  Future<File> _getUserInfoFile() async {
-    final dir = await getApplicationDocumentsDirectory();
-    return File('${dir.path}/user_info.json');
-  }
-
   Widget _textField({required TextEditingController controller, required String hintText, required String icon}) {
     return Container(
       height: 48,
@@ -338,7 +330,7 @@ class OtpTypeSelectionModal extends StatelessWidget {
     return Container(
       height: 160,
       decoration: BoxDecoration(
-        color: Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : Color(0xFF171717),
+        color: Theme.of(context).brightness == Brightness.light ? AppColors.white : Color(0xFF171717),
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
@@ -416,6 +408,15 @@ class ServiceSelectionModal extends StatelessWidget {
               ),
             ),
           ),
+          Container(
+            width: 36,
+            height: 4,
+            decoration: BoxDecoration(
+              color: Colors.grey[300],
+              borderRadius: BorderRadius.circular(2),
+            ),
+          ),
+          SizedBox(height: 12),
           Expanded(
             child: ListView.builder(
               padding: EdgeInsets.symmetric(vertical: 16),

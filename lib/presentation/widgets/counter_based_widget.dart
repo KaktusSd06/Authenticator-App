@@ -46,7 +46,6 @@ class _HotpWidgetState extends State<HotpWidget> {
     setState(() {
       hotpCode = newCode;
     });
-    //_updateCode();
   }
 
   void _initializeHotp() {
@@ -108,17 +107,10 @@ class _HotpWidgetState extends State<HotpWidget> {
   }
 
   void _editService() async {
-    final updated = await Navigator.push(
+    await Navigator.push(
       context,
       MaterialPageRoute(builder: (context) => EditTokenScreen(token: widget.hotpEl)),
     );
-
-    // if (updated == true && mounted) {
-    //   _initializeHotp();
-    //   if (widget.onUpdated != null) {
-    //     widget.onUpdated!();
-    //   }
-    // }
   }
 
   Future<bool> _showDeleteConfirmationDialog() {
@@ -171,7 +163,6 @@ class _HotpWidgetState extends State<HotpWidget> {
         child: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 20),
           child: Row(
-            //mainAxisAlignment: isCenter == true ? MainAxisAlignment.center : MainAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.center,
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
@@ -285,7 +276,7 @@ class _HotpWidgetState extends State<HotpWidget> {
                   },
                 ),
               ),
-              SizedBox(height: 10),
+              SizedBox(height: 16),
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 16),
                 child: _buildOptionButton(

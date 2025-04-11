@@ -61,7 +61,7 @@ class _MainScreenState extends State<MainScreen> {
           hintText: AppLocalizations.of(context)!.search,
           hintStyle: Theme.of(context).textTheme.headlineLarge?.copyWith(
             fontWeight: FontWeight.w400,
-            color: Theme.of(context).cardColor,
+            color: AppColors.gray4
           ),
           prefixIcon: Icon(Icons.search, color: Theme.of(context).brightness == Brightness.light ? Color(0xFF1B539A) : AppColors.blue),
           border: InputBorder.none,
@@ -74,7 +74,7 @@ class _MainScreenState extends State<MainScreen> {
             borderSide: BorderSide.none,
           ),
           filled: true,
-          fillColor: Theme.of(context).brightness == Brightness.light ? AppColors.white : AppColors.gray6,
+          fillColor: Theme.of(context).cardColor,
           contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 0),
         ),
         style: Theme.of(context).textTheme.bodyLarge,

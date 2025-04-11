@@ -111,5 +111,7 @@
   "biometric_error": "Biometric authentication error",
   "biometric_not_available": "Biometrics not available on this device",
   "biometric_enabled": "Biometric authentication enabled",
-  "save_88": "Save 88%"
+  "save_88": "Save 88%",
+  "your_digital": "Your digital",
+  "shield": "shield"
 }

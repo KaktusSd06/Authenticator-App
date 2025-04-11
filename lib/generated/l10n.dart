@@ -994,6 +994,21 @@ class S {
   String get save_88 {
     return Intl.message('Збереже 88%', name: 'save_88', desc: '', args: []);
   }
+
+  /// `Ваш цифровий`
+  String get your_digital {
+    return Intl.message(
+      'Ваш цифровий',
+      name: 'your_digital',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `щит`
+  String get shield {
+    return Intl.message('щит', name: 'shield', desc: '', args: []);
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
