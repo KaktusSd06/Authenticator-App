@@ -5,11 +5,13 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:secure_application/secure_application.dart';
+import 'package:flutter/services.dart';
+
 import 'core/config/theme.dart';
 import 'logic/blocs/locale_cubit.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import 'logic/blocs/tokens/tokens_bloc.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class AppStateService {
   static final AppStateService _instance = AppStateService._internal();
@@ -38,13 +40,26 @@ class AppStateService {
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
+
+  SystemChrome.setEnabledSystemUIMode(SystemUiMode.manual, overlays: [
+    SystemUiOverlay.top,
+    SystemUiOverlay.bottom,
+  ]);
+
+  const MethodChannel('org.flutter/screen_security')
+      .invokeMethod<void>('setSecure', true)
+      .catchError((error) => print('Failed to set secure flag: $error'));
+
   runApp(
-    MultiBlocProvider(
-      providers: [
-        BlocProvider(create: (_) => LocaleCubit()),
-        BlocProvider(create: (_) => TokensBloc()),
-      ],
-      child: MyApp(),
+    SecureApplication(
+      nativeRemoveDelay: 300,
+      child: MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (_) => LocaleCubit()),
+          BlocProvider(create: (_) => TokensBloc()),
+        ],
+        child: MyApp(),
+      ),
     ),
   );
 }
@@ -109,19 +124,30 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
 
         return BlocBuilder<LocaleCubit, Locale>(
           builder: (context, locale) {
-            return MaterialApp(
-              navigatorKey: _navigatorKey,
-              debugShowCheckedModeBanner: false,
-              theme: lightTheme,
-              darkTheme: darkTheme,
-              themeMode: ThemeMode.system,
-              locale: locale,
-              supportedLocales: AppLocalizations.supportedLocales,
-              localizationsDelegates: AppLocalizations.localizationsDelegates,
-              home: snapshot.data!,
+            return Directionality(
+              textDirection: TextDirection.ltr,
+              child: SecureGate(
+                blurr: 100.0,
+                opacity: 0.5,
+                lockedBuilder: (context, secureNotifier) {
+                  return const Center(child: CircularProgressIndicator());
+                },
+                child: MaterialApp(
+                  navigatorKey: _navigatorKey,
+                  debugShowCheckedModeBanner: false,
+                  theme: lightTheme,
+                  darkTheme: darkTheme,
+                  themeMode: ThemeMode.system,
+                  locale: locale,
+                  supportedLocales: AppLocalizations.supportedLocales,
+                  localizationsDelegates: AppLocalizations.localizationsDelegates,
+                  home: snapshot.data!,
+                ),
+              ),
             );
           },
         );
+
       },
     );
   }
@@ -129,12 +155,13 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   Future<Widget> _getInitialScreen() async {
     return WellcomeScreen();
   }
-
 }
 
 class LockScreenWrapper extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
+    SecureApplicationProvider.of(context)?.secure();
+
     return LockScreen(
       onAuthenticated: () {
         AppStateService().setAuthenticated();
