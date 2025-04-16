@@ -1,10 +1,6 @@
 import 'package:authenticator_app/presentation/screens/info_screen.dart';
 import 'package:authenticator_app/presentation/screens/main_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
-import '../../../core/config/theme.dart' as AppColors;
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import '../widgets/island_navigation_bar.dart';
 
 class HomeScreen extends StatefulWidget {
@@ -15,10 +11,9 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
 
-  // Define the list of screens/pages to navigate between
   final List<Widget> _pages = [
-    MainScreen(), // Replace with your actual MainScreen
-    InfoScreen(), // Replace with your actual InfoScreen
+    MainScreen(),
+    InfoScreen(),
   ];
 
   void _onItemTapped(int index) {

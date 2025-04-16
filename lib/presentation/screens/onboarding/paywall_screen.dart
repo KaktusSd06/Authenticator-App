@@ -8,6 +8,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+import '../../../core/config/secure_storage_keys.dart';
 import '../../../core/config/theme.dart' as Colors;
 import '../../../data/repositories/remote/subscription_repository.dart';
 import '../../widgets/continue_btn.dart';
@@ -48,9 +49,9 @@ class _PaywallScreenState extends State<PaywallScreen> {
 
     String formattedDate = DateFormat('dd.MM.yyyy').format(nextBillingDate);
 
-    await storage.write(key: 'subscription', value: plan);
-    await storage.write(key: 'nextBilling', value: formattedDate);
-    await storage.write(key: 'hasFreeTrial', value: isTrialEnabled ? true.toString() : false.toString());
+    await storage.write(key: SecureStorageKeys.subscription, value: plan);
+    await storage.write(key: SecureStorageKeys.nextbilling, value: formattedDate);
+    await storage.write(key: SecureStorageKeys.hasFreeTrial, value: isTrialEnabled ? true.toString() : false.toString());
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
@@ -177,14 +178,14 @@ class _PaywallScreenState extends State<PaywallScreen> {
                               yearPlan = false;
                             });
                           },
-                          activeColor: Colors.white, // Thumb color when active
-                          activeTrackColor: Color(0xFF00CF00), // Track color when active
-                          inactiveThumbColor: Colors.white, // Thumb color when inactive
-                          inactiveTrackColor: Color(0xFFD9D9D9), // Track color when inactive
+                          activeColor: Colors.white,
+                          activeTrackColor: Color(0xFF00CF00),
+                          inactiveThumbColor: Colors.white,
+                          inactiveTrackColor: Color(0xFFD9D9D9),
                           trackOutlineColor: MaterialStateProperty.resolveWith<Color>(
                                 (Set<MaterialState> states) {
                               return states.contains(MaterialState.selected)
-                                  ? Color(0xFF00CF00) // No border when active
+                                  ? Color(0xFF00CF00)
                                   :  Colors.gray2;
                             },
                           ),
@@ -277,7 +278,6 @@ class _PaywallScreenState extends State<PaywallScreen> {
                           ],
                         ),
 
-                        // Save label - positioned at the top-center
                         if (yearPlan)
                           Positioned(
                             top: -20,

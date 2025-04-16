@@ -1,8 +1,7 @@
 import 'dart:io';
-
+import 'package:authenticator_app/core/config/secure_storage_keys.dart';
 import 'package:authenticator_app/presentation/screens/onboarding/onboarding_screen.dart';
 import 'package:authenticator_app/presentation/screens/sign_in_screen.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -41,9 +40,9 @@ class _PremiumFeaturesScreenState extends State<PremiumFeaturesScreen> with Sing
 
     try {
       final storage = FlutterSecureStorage();
-      String? isAuth = await storage.read(key: 'idToken');
-      String? isSynchronize = await storage.read(key: 'usSync');
-      String? isPremium = await storage.read(key: 'subscription');
+      String? isAuth = await storage.read(key: SecureStorageKeys.idToken);
+      String? isSynchronize = await storage.read(key: SecureStorageKeys.usSync);
+      String? isPremium = await storage.read(key: SecureStorageKeys.subscription);
 
       if (mounted) {
         setState(() {
@@ -71,7 +70,7 @@ class _PremiumFeaturesScreenState extends State<PremiumFeaturesScreen> with Sing
     final storage = FlutterSecureStorage();
 
     if (value) {
-      await storage.write(key: 'usSync', value: 'true');
+      await storage.write(key: SecureStorageKeys.usSync, value: 'true');
       final user = FirebaseAuth.instance.currentUser;
 
       if (user != null) {
@@ -88,7 +87,7 @@ class _PremiumFeaturesScreenState extends State<PremiumFeaturesScreen> with Sing
         }
 
         final storage = FlutterSecureStorage();
-        String? idToken = await storage.read(key: 'idToken');
+        String? idToken = await storage.read(key: SecureStorageKeys.idToken);
 
         if (idToken != null) {
           if(await SynchronizeRepository().isSynchronizing(user.uid)) {
@@ -98,7 +97,7 @@ class _PremiumFeaturesScreenState extends State<PremiumFeaturesScreen> with Sing
       }
     }
 else {
-      await storage.delete(key: 'usSync');
+      await storage.delete(key: SecureStorageKeys.usSync);
 
       final user = FirebaseAuth.instance.currentUser;
 
@@ -134,10 +133,10 @@ else {
 
     if (shouldSignOut == true) {
       final storage = FlutterSecureStorage();
-      await storage.delete(key: 'idToken');
-      await storage.delete(key: 'accessToken');
-      await storage.delete(key: 'subscription');
-      await storage.delete(key: 'nextbilling');
+        await storage.delete(key: SecureStorageKeys.idToken);
+      await storage.delete(key: SecureStorageKeys.accessToken);
+      await storage.delete(key: SecureStorageKeys.subscription);
+      await storage.delete(key: SecureStorageKeys.nextbilling);
 
       if (mounted) {
         setState(() {
@@ -146,7 +145,6 @@ else {
       }
     }
   }
-
 
   Future<void> _deleteAccount() async {
     final storage = FlutterSecureStorage();
@@ -329,10 +327,10 @@ else {
                                   _toggleSync(value);
                                 });
                               },
-                              activeColor: Colors.white, // Thumb color when active
-                              activeTrackColor: AppColors.blue, // Track color when active
-                              inactiveThumbColor: Colors.white, // Thumb color when inactive
-                              inactiveTrackColor: Color(0xFFD9D9D9), // Track color when inactive
+                              activeColor: Colors.white,
+                              activeTrackColor: AppColors.blue,
+                              inactiveThumbColor: Colors.white,
+                              inactiveTrackColor: Color(0xFFD9D9D9),
                               trackOutlineColor: MaterialStateProperty.resolveWith<Color>(
                                     (Set<MaterialState> states) {
                                   return states.contains(MaterialState.selected)

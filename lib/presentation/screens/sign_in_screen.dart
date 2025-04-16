@@ -1,7 +1,6 @@
 import 'dart:io';
-
+import 'package:authenticator_app/core/config/secure_storage_keys.dart';
 import 'package:authenticator_app/data/repositories/remote/synchronize_repository.dart';
-import 'package:authenticator_app/generated/l10n.dart';
 import 'package:authenticator_app/presentation/screens/home_screen.dart';
 import 'package:authenticator_app/services/auth_service.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
@@ -111,9 +110,9 @@ class _SignInScreenState extends State<SignInScreen> {
                           var nextBilling = info['nextBilling'];
                           var hasFreeTrial = info['hasFreeTrial'];
 
-                          await storage.write(key: 'hasFreeTrial', value: hasFreeTrial.toString());
-                          await storage.write(key: 'subscription', value: plan);
-                          await storage.write(key: 'nextBilling', value: nextBilling);
+                          await storage.write(key: SecureStorageKeys.hasFreeTrial, value: hasFreeTrial.toString());
+                          await storage.write(key: SecureStorageKeys.subscription, value: plan);
+                          await storage.write(key: SecureStorageKeys.nextbilling, value: nextBilling);
 
                           print('Subscription info: $email, $plan, $nextBilling, Free Trial: $hasFreeTrial');
                         } else {

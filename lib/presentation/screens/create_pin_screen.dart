@@ -5,6 +5,8 @@ import 'dart:async';
 import '../../../core/config/theme.dart' as AppColors;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../../core/config/secure_storage_keys.dart';
+
 class CreatePinScreen extends StatefulWidget {
   final Function(bool)? onPinCreated;
 
@@ -76,7 +78,7 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
     String confirmationPin = _confirmPin.join();
 
     if (initialPin == confirmationPin) {
-      await _secureStorage.write(key: 'app_pin', value: initialPin);
+      await _secureStorage.write(key: SecureStorageKeys.app_pin, value: initialPin);
       setState(() {
         _isPinCreated = true;
       });
@@ -107,7 +109,7 @@ class _CreatePinScreenState extends State<CreatePinScreen> {
   void _setupBiometricAuth() async {
     bool canCheckBiometrics = await _localAuth.canCheckBiometrics;
     if (canCheckBiometrics) {
-      await _secureStorage.write(key: 'biometric_enabled', value: 'true');
+      await _secureStorage.write(key: SecureStorageKeys.biometric_enabled, value: 'true');
     }
   }
 

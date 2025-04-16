@@ -1,21 +1,10 @@
-import 'dart:io';
 import 'dart:ui';
-import 'dart:convert';
-
 import 'package:authenticator_app/presentation/screens/scan_qr_screen.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:path_provider/path_provider.dart';
 import '../../../core/config/theme.dart' as AppColors;
-import '../../data/models/auth_token.dart';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
-import '../../data/repositories/remote/synchronize_repository.dart';
-import '../../data/repositories/remote/token_repository.dart';
 import '../../logic/blocs/tokens/tokens_bloc.dart';
 import '../../logic/blocs/tokens/tokens_event.dart';
 import '../../logic/blocs/tokens/tokens_state.dart';
@@ -28,7 +17,6 @@ class MainScreen extends StatefulWidget {
   _MainScreenState createState() => _MainScreenState();
 }
 
-
 class _MainScreenState extends State<MainScreen> {
   final TextEditingController _searchController = TextEditingController();
   bool isLoading = true;
@@ -40,11 +28,6 @@ class _MainScreenState extends State<MainScreen> {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       BlocProvider.of<TokensBloc>(context).add(LoadTokens());
     });
-  }
-
-  Future<File> _getUserInfoFile() async {
-    final dir = await getApplicationDocumentsDirectory();
-    return File('${dir.path}/user_info.json');
   }
 
   void _filterTokens() {
@@ -285,13 +268,10 @@ class _MainScreenState extends State<MainScreen> {
     );
   }
 
-
   @override
   Widget build(BuildContext context) {
-    // Using BlocBuilder to listen to the state of TokensBloc
     return BlocBuilder<TokensBloc, TokensState>(
       builder: (context, state) {
-        // Check if the state is loading
         if (state is TokensLoading) {
           return Scaffold(
             body: Center(
@@ -300,14 +280,11 @@ class _MainScreenState extends State<MainScreen> {
           );
         }
 
-        // Check if the tokens are loaded
         if (state is TokensLoaded) {
-          // If tokens are empty, show a different UI
           if (state.allTokens.isEmpty) {
             return _buildAdd2FACodes();
           }
 
-          // If tokens are available, show them in a tab-based view
           return DefaultTabController(
             length: 2,
             child: Scaffold(

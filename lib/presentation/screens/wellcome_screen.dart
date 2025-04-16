@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'package:authenticator_app/core/config/secure_storage_keys.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -24,8 +25,8 @@ class _WellcomeScreenState extends State<WellcomeScreen> {
   }
 
   Future<void> _navigateNext() async {
-    final isFirst = await storage.read(key: 'isFirst');
-    final isPin = await storage.read(key: 'app_pin');
+    final isFirst = await storage.read(key: SecureStorageKeys.isFirst);
+    final isPin = await storage.read(key: SecureStorageKeys.app_pin);
 
     Widget nextScreen;
     if (isFirst != null) {

@@ -4,6 +4,7 @@ import 'package:local_auth/local_auth.dart';
 import 'dart:async';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../../core/config/theme.dart' as AppColors;
+import '../../core/config/secure_storage_keys.dart';
 
 
 enum PinChangeStep {
@@ -102,15 +103,13 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
 
   Future<void> _verifyOldPin() async {
     String enteredOldPin = _oldPin.join();
-    String? storedPin = await _secureStorage.read(key: 'app_pin');
+    String? storedPin = await _secureStorage.read(key: SecureStorageKeys.app_pin);
 
     if (storedPin == enteredOldPin) {
-      // Старий PIN вірний, переходимо до введення нового
       setState(() {
         _currentStep = PinChangeStep.enterNewPin;
       });
     } else {
-      // Старий PIN невірний
       setState(() {
         _errorMessage = AppLocalizations.of(context)?.incorrect_pin ?? 'Невірний PIN';
         _oldPin.clear();
@@ -125,18 +124,14 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
     String confirmPin = _confirmPin.join();
 
     if (newPin == confirmPin) {
-      // PIN-коди збігаються, зберігаємо новий PIN
-      await _secureStorage.write(key: 'app_pin', value: newPin);
+      await _secureStorage.write(key: SecureStorageKeys.app_pin, value: newPin);
 
-      // Повідомляємо про успіх через callback
       if (widget.onPinChanged != null) {
         widget.onPinChanged!(true);
       }
 
-      // Закриваємо екран
       Navigator.pop(context);
     } else {
-      // PIN-коди не збігаються
       setState(() {
         _errorMessage = AppLocalizations.of(context)?.pins_do_not_match ?? 'PIN коди не збігаються';
         _confirmPin.clear();
@@ -280,7 +275,6 @@ class _ChangePinScreenState extends State<ChangePinScreen> {
                       ),
                     ),
                   const Spacer(),
-                  // PIN клавіатура
                   _buildPinPad(),
                   const SizedBox(height: 30),
                   const Spacer(),
