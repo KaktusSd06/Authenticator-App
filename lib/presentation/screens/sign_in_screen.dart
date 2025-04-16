@@ -79,7 +79,7 @@ class _SignInScreenState extends State<SignInScreen> {
               height: 54,
               child: SignInButton(
                 buttonType: ButtonType.google,
-                onPressed: () async {
+                onPressed: isAgree ? () async {
 
                   if (isAgree) {
                     ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
@@ -154,7 +154,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       showErrorMessage = true;
                     });
                   }
-                },
+                } : null,
               ),
             ),
 
@@ -164,7 +164,7 @@ class _SignInScreenState extends State<SignInScreen> {
               height: 54,
               child: SignInButton(
                 buttonType: Theme.of(context).brightness == Brightness.light ? ButtonType.appleDark : ButtonType.apple,
-                onPressed: () {
+                onPressed: isAgree ? () {
                   if (isAgree) {
                     //AuthService().signInWithGoogle();
                   } else {
@@ -172,7 +172,7 @@ class _SignInScreenState extends State<SignInScreen> {
                       showErrorMessage = true;
                     });
                   }
-                },
+                } : null,
               ),
             ),
 
