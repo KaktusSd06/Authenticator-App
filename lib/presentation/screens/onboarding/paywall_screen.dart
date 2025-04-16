@@ -1,6 +1,7 @@
 import 'package:authenticator_app/presentation/screens/home_screen.dart';
 import 'package:authenticator_app/presentation/screens/main_screen.dart';
 import 'package:authenticator_app/presentation/screens/onboarding/onboarding_screen.dart';
+import 'package:authenticator_app/presentation/screens/privacy_policy_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,7 @@ import '../../../core/config/theme.dart' as Colors;
 import '../../../data/repositories/remote/subscription_repository.dart';
 import '../../widgets/continue_btn.dart';
 import '../sign_in_screen.dart';
+import '../terms_of_use_screen.dart';
 
 class PaywallScreen extends StatefulWidget{
   final bool isFirst;
@@ -424,30 +426,51 @@ class _PaywallScreenState extends State<PaywallScreen> {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                        "Terms of Use",
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.w500,
-                          color: Colors.gray2,
-                          decoration: TextDecoration.underline,
-                          decorationColor: Colors.gray2,
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => TermsOfUseScreen())
+                          );
+                        },
+                        child: Text(
+                          "Terms of Use",
+                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: Colors.gray2,
+                            decoration: TextDecoration.underline,
+                            decorationColor: Colors.gray2,
+                          ),
                         ),
                       ),
+
                       SizedBox(width: 6),
+
                       SvgPicture.asset(
                         "assets/icons/ellipse.svg",
-                        width: 10,
-                        height: 10,
+                        width: 4,
+                        height: 4,
                         colorFilter: ColorFilter.mode(Colors.gray2, BlendMode.srcIn),
                       ),
                       SizedBox(width: 6),
-                      Text(
-                        "Privacy Policy",
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.w500,
-                          color: Colors.gray2,
-                          decoration: TextDecoration.underline,
-                          decorationColor: Colors.gray2,
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                              builder: (context) => PrivacyPolicyScreen()
+                              )
+                          );
+                        },
+                        child: Text(
+                          "Privacy Policy",
+                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: Colors.gray2,
+                            decoration: TextDecoration.underline,
+                            decorationColor: Colors.gray2,
+                          ),
                         ),
                       ),
                     ],

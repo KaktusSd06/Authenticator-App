@@ -2,10 +2,13 @@ import 'dart:io';
 import 'package:authenticator_app/core/config/secure_storage_keys.dart';
 import 'package:authenticator_app/data/repositories/remote/synchronize_repository.dart';
 import 'package:authenticator_app/presentation/screens/home_screen.dart';
+import 'package:authenticator_app/presentation/screens/privacy_policy_screen.dart';
+import 'package:authenticator_app/presentation/screens/terms_of_use_screen.dart';
 import 'package:authenticator_app/services/auth_service.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -230,19 +233,35 @@ class _SignInScreenState extends State<SignInScreen> {
                   checkColor: Colors.white,
                 ),
                 Expanded(
-                  child: Text.rich(
-                    TextSpan(
+                  child: RichText(
+                    text: TextSpan(
+                      style: Theme.of(context).textTheme.bodyMedium?.copyWith(
+                        color: Theme.of(context).textTheme.bodyMedium?.color,
+                      ),
                       children: [
-                        TextSpan(text: AppLocalizations.of(context)!.terms_of_app),
-                        TextSpan(text: ' '),
+                        TextSpan(text: AppLocalizations.of(context)!.terms_of_app + ' '),
                         TextSpan(
                           text: AppLocalizations.of(context)!.terms_of_service,
                           style: TextStyle(color: Colors.blue),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => TermsOfUseScreen()),
+                              );
+                            },
                         ),
                         TextSpan(text: ' ${AppLocalizations.of(context)!.and} '),
                         TextSpan(
                           text: AppLocalizations.of(context)!.privacy_policy,
                           style: TextStyle(color: Colors.blue),
+                          recognizer: TapGestureRecognizer()
+                            ..onTap = () {
+                              Navigator.push(
+                                context,
+                                MaterialPageRoute(builder: (context) => PrivacyPolicyScreen()),
+                              );
+                            },
                         ),
                       ],
                     ),
