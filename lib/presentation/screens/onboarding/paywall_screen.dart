@@ -107,19 +107,20 @@ class _PaywallScreenState extends State<PaywallScreen> {
                         colorFilter: ColorFilter.mode(Colors.mainBlue, BlendMode.srcIn),
                       ),
                     ),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context) => OnBoardingScreen()));
-                      },
-                      child: Text(
-                        AppLocalizations.of(context)!.restor_l,
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.w500,
-                          color: Colors.mainBlue,
+                    if(widget.isFirst)
+                      GestureDetector(
+                        onTap: () {
+                          Navigator.pushReplacement(context,
+                              MaterialPageRoute(builder: (context) => OnBoardingScreen()));
+                        },
+                        child: Text(
+                          AppLocalizations.of(context)!.restor_l,
+                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: Colors.mainBlue,
+                          ),
                         ),
                       ),
-                    ),
                   ],
                 ),
               ),
