@@ -81,6 +81,9 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "contact_us": MessageLookupByLibrary.simpleMessage("Зв\'язатись з нами"),
     "continue_btn": MessageLookupByLibrary.simpleMessage("Продовжити"),
+    "copy": MessageLookupByLibrary.simpleMessage(
+      "Код скопійовано в буфер обміну",
+    ),
     "counter_based": MessageLookupByLibrary.simpleMessage("Одноразові"),
     "create_pin": MessageLookupByLibrary.simpleMessage("Створіть PIN"),
     "current_plan": MessageLookupByLibrary.simpleMessage(

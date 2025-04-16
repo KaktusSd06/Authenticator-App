@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'package:authenticator_app/data/models/auth_token.dart';
 import 'package:authenticator_app/data/models/service.dart';
+import 'package:authenticator_app/generated/l10n.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -9,7 +10,7 @@ import '../../../core/config/theme.dart' as AppColors;
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:base32/base32.dart';
-import '../../data/repositories/remote/token_repository.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../../data/sources/constants/service_categories.dart';
 import '../screens/edit_element_screen.dart';
 
@@ -271,10 +272,12 @@ class _TimeBasedWidgetState extends State<TimeBasedWidget> {
                         ),
                         GestureDetector(
                           onTap: () {
+                            HapticFeedback.lightImpact();
+
                             Clipboard.setData(ClipboardData(text: totpCode)).then((_) {
-                              // ScaffoldMessenger.of(context).showSnackBar(
-                              //   const SnackBar(content: Text('Код скопійовано в буфер обміну')),
-                              // );
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(AppLocalizations.of(context)!.copy)),
+                              );
                             });
                           },
                           child: SvgPicture.asset(

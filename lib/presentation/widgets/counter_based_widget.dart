@@ -188,7 +188,6 @@ class _HotpWidgetState extends State<HotpWidget> {
   void _showBottomSheetUpdate() {
     showModalBottomSheet(
       context: context,
-      //backgroundColor: AppColors.white,
       shape: const RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(25.0)),
       ),
@@ -362,12 +361,15 @@ class _HotpWidgetState extends State<HotpWidget> {
                         ),
                         GestureDetector(
                           onTap: () {
+                            HapticFeedback.lightImpact();
+
                             Clipboard.setData(ClipboardData(text: hotpCode)).then((_) {
-                              // ScaffoldMessenger.of(context).showSnackBar(
-                              //   SnackBar(content: Text('copy')),
-                              // );
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(content: Text(AppLocalizations.of(context)!.copy)),
+                              );
                             });
                           },
+
                           child: SvgPicture.asset(
                             "assets/icons/copy.svg",
                             width: 24,
