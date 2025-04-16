@@ -1019,6 +1019,196 @@ class S {
       args: [],
     );
   }
+
+  /// `Зворотній зв'язок`
+  String get feedback {
+    return Intl.message(
+      'Зворотній зв\'язок',
+      name: 'feedback',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Поштовий клієнт не знайдено`
+  String get no_email_client_found {
+    return Intl.message(
+      'Поштовий клієнт не знайдено',
+      name: 'no_email_client_found',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Політика конфіденційності`
+  String get privacy_title {
+    return Intl.message(
+      'Політика конфіденційності',
+      name: 'privacy_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ми цінуємо вашу приватність. Цей документ пояснює, як ми працюємо з вашими даними.`
+  String get privacy_intro {
+    return Intl.message(
+      'Ми цінуємо вашу приватність. Цей документ пояснює, як ми працюємо з вашими даними.',
+      name: 'privacy_intro',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Які дані ми збираємо`
+  String get data_collection_title {
+    return Intl.message(
+      'Які дані ми збираємо',
+      name: 'data_collection_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ми не збираємо жодних персональних даних. Усі токени зберігаються локально на вашому пристрої.`
+  String get data_collection_desc {
+    return Intl.message(
+      'Ми не збираємо жодних персональних даних. Усі токени зберігаються локально на вашому пристрої.',
+      name: 'data_collection_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Як ми використовуємо ваші дані`
+  String get data_usage_title {
+    return Intl.message(
+      'Як ми використовуємо ваші дані',
+      name: 'data_usage_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ваші дані не передаються третім сторонам і не виходять за межі вашого пристрою.`
+  String get data_usage_desc {
+    return Intl.message(
+      'Ваші дані не передаються третім сторонам і не виходять за межі вашого пристрою.',
+      name: 'data_usage_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ваші права`
+  String get your_rights_title {
+    return Intl.message(
+      'Ваші права',
+      name: 'your_rights_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Ви маєте повний контроль над своїми даними. Ви можете видалити їх у будь-який момент.`
+  String get your_rights_desc {
+    return Intl.message(
+      'Ви маєте повний контроль над своїми даними. Ви можете видалити їх у будь-який момент.',
+      name: 'your_rights_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Terms of Use`
+  String get terms_title {
+    return Intl.message(
+      'Terms of Use',
+      name: 'terms_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `By using the Authenticator app, you agree to the following terms. Please read them carefully.`
+  String get terms_intro {
+    return Intl.message(
+      'By using the Authenticator app, you agree to the following terms. Please read them carefully.',
+      name: 'terms_intro',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Usage Rules`
+  String get usage_rules_title {
+    return Intl.message(
+      'Usage Rules',
+      name: 'usage_rules_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `This app is intended for personal use only. You are responsible for any activity done through your account.`
+  String get usage_rules_desc {
+    return Intl.message(
+      'This app is intended for personal use only. You are responsible for any activity done through your account.',
+      name: 'usage_rules_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Limitations`
+  String get limitations_title {
+    return Intl.message(
+      'Limitations',
+      name: 'limitations_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `We do not guarantee uninterrupted service and are not liable for any data loss or damages.`
+  String get limitations_desc {
+    return Intl.message(
+      'We do not guarantee uninterrupted service and are not liable for any data loss or damages.',
+      name: 'limitations_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `Modifications`
+  String get modifications_title {
+    return Intl.message(
+      'Modifications',
+      name: 'modifications_title',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `We reserve the right to change these terms at any time without prior notice.`
+  String get modifications_desc {
+    return Intl.message(
+      'We reserve the right to change these terms at any time without prior notice.',
+      name: 'modifications_desc',
+      desc: '',
+      args: [],
+    );
+  }
+
+  /// `For any questions, contact us at stepanukdima524@gmail.com`
+  String get contact_info {
+    return Intl.message(
+      'For any questions, contact us at stepanukdima524@gmail.com',
+      name: 'contact_info',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {

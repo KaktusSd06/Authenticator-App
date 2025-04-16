@@ -114,5 +114,25 @@
   "save_88": "Save 88%",
   "your_digital": "Your digital",
   "shield": "shield",
-  "copy": "Code copied to clipboard"
+  "copy": "Code copied to clipboard",
+  "feedback": "Feedback",
+  "no_email_client_found": "No email client found",
+  "privacy_title": "Privacy Policy",
+  "privacy_intro": "We value your privacy. This document explains how we work with your data.",
+  "data_collection_title": "What data do we collect",
+  "data_collection_desc": "We do not collect any personal data. All tokens are stored locally on your device.",
+  "data_usage_title": "How we use your data",
+  "data_usage_desc": "Your data is not shared with third parties and does not leave your device.",
+  "your_rights_title": "Your rights",
+  "your_rights_desc": "You have full control over your data. You can delete it at any time.",
+  "terms_title": "Terms of Use",
+  "terms_intro": "By using the Authenticator app, you agree to the following terms. Please read them carefully.",
+  "usage_rules_title": "Usage Rules",
+  "usage_rules_desc": "This app is intended for personal use only. You are responsible for any activity done through your account.",
+  "limitations_title": "Limitations",
+  "limitations_desc": "We do not guarantee uninterrupted service and are not liable for any data loss or damages.",
+  "modifications_title": "Modifications",
+  "modifications_desc": "We reserve the right to change these terms at any time without prior notice.",
+  "contact_info": "For any questions, contact us at stepanukdima524@gmail.com"
+
 }

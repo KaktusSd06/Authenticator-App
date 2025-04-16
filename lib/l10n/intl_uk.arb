@@ -112,6 +112,24 @@
   "save_88": "Збереже 88%",
   "your_digital": "Ваш цифровий",
   "shield": "щит",
-  "copy": "Код скопійовано в буфер обміну"
-
+  "copy": "Код скопійовано в буфер обміну",
+  "feedback": "Зворотній зв'язок",
+  "no_email_client_found": "Поштовий клієнт не знайдено",
+  "privacy_title": "Політика конфіденційності",
+  "privacy_intro": "Ми цінуємо вашу приватність. Цей документ пояснює, як ми працюємо з вашими даними.",
+  "data_collection_title": "Які дані ми збираємо",
+  "data_collection_desc": "Ми не збираємо жодних персональних даних. Усі токени зберігаються локально на вашому пристрої.",
+  "data_usage_title": "Як ми використовуємо ваші дані",
+  "data_usage_desc": "Ваші дані не передаються третім сторонам і не виходять за межі вашого пристрою.",
+  "your_rights_title": "Ваші права",
+  "your_rights_desc": "Ви маєте повний контроль над своїми даними. Ви можете видалити їх у будь-який момент.",
+  "terms_title": "Terms of Use",
+  "terms_intro": "By using the Authenticator app, you agree to the following terms. Please read them carefully.",
+  "usage_rules_title": "Usage Rules",
+  "usage_rules_desc": "This app is intended for personal use only. You are responsible for any activity done through your account.",
+  "limitations_title": "Limitations",
+  "limitations_desc": "We do not guarantee uninterrupted service and are not liable for any data loss or damages.",
+  "modifications_title": "Modifications",
+  "modifications_desc": "We reserve the right to change these terms at any time without prior notice.",
+  "contact_info": "For any questions, contact us at stepanukdima524@gmail.com"
 }

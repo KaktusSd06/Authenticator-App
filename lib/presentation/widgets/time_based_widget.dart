@@ -276,7 +276,9 @@ class _TimeBasedWidgetState extends State<TimeBasedWidget> {
 
                             Clipboard.setData(ClipboardData(text: totpCode)).then((_) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(AppLocalizations.of(context)!.copy)),
+                                SnackBar(content: Text(AppLocalizations.of(context)!.copy),
+                                  behavior: SnackBarBehavior.floating,
+                                ),
                               );
                             });
                           },
