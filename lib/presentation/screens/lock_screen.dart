@@ -5,14 +5,24 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:local_auth/local_auth.dart';
 import 'dart:async';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter/services.dart';
 import '../../../core/config/theme.dart' as AppColors;
 
 
 class LockScreen extends StatefulWidget {
   final Function(bool)? onUnlocked;
   final VoidCallback? onAuthenticated;
+  Function()? onAuthStarted;
+  Function()? onAuthFinished;
 
-  const LockScreen({Key? key, this.onUnlocked, this.onAuthenticated}) : super(key: key);
+  LockScreen({
+    Key? key,
+    this.onUnlocked,
+    this.onAuthenticated,
+    required this.onAuthStarted,
+    this.onAuthFinished,
+  }) : super(key: key);
+
 
   @override
   State<LockScreen> createState() => _LockScreenState();
@@ -81,6 +91,7 @@ class _LockScreenState extends State<LockScreen> {
 
     setState(() {
       _isAuthenticating = true;
+      widget.onAuthFinished!();
     });
 
     try {
@@ -98,8 +109,10 @@ class _LockScreenState extends State<LockScreen> {
       if (authenticated && mounted) {
         if (widget.onUnlocked != null) {
           widget.onUnlocked!(true);
+          widget.onAuthFinished!();
         }
         _onSuccessfulAuthentication();
+        widget.onAuthFinished!();
       }
 
     } catch (e) {
@@ -231,98 +244,110 @@ class _LockScreenState extends State<LockScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Container(
-        width: double.infinity,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-          color: Color(0xFFF5F5F5),
-        ),
-        child: Stack(
-          children: [
-            Positioned.fill(
-              child: Image.asset(
-                'assets/images/lock_screen_background.png',
-                fit: BoxFit.cover,
-              ),
+    return WillPopScope(
+        onWillPop: () async {
+          SystemNavigator.pop();
+          return false;
+        },
+        child: Scaffold(
+          body: Container(
+            width: double.infinity,
+            height: double.infinity,
+            decoration: const BoxDecoration(
+              color: Color(0xFFF5F5F5),
             ),
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: Image.asset(
+                    'assets/images/lock_screen_background.png',
+                    fit: BoxFit.cover,
+                  ),
+                ),
 
-            SafeArea(
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Spacer(flex: 2),
-                  Container(
-                    width: 80,
-                    height: 80,
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(20),
-                      boxShadow: [
-                        BoxShadow(
-                          color: Colors.black.withOpacity(0.1),
-                          blurRadius: 10,
-                          offset: const Offset(0, 4),
-                        ),
-                      ],
-                    ),
-                    child: Center(
-                      child: Icon(
-                        Icons.lock_outline,
-                        size: 40,
-                        color: Theme.of(context).primaryColor,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(height: 24),
-                  Text(
-                    AppLocalizations.of(context)!.enter_pin,
-                    style: const TextStyle(
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
-                    ),
-                  ),
-                  const SizedBox(height: 16),
-                  Row(
+                SafeArea(
+                  child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
-                    children: List.generate(
-                      _pinLength,
-                          (index) => Container(
-                        margin: const EdgeInsets.symmetric(horizontal: 8),
-                        width: 16,
-                        height: 16,
+                    children: [
+                      const Spacer(flex: 2),
+                      Container(
+                        width: 80,
+                        height: 80,
                         decoration: BoxDecoration(
-                          shape: BoxShape.circle,
-                          color: index < _enteredPin.length
-                              ? Theme.of(context).primaryColor
-                              : Colors.grey.withOpacity(0.3),
-                        ),
-                      ),
-                    ),
-                  ),
-                  if (_errorMessage.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.only(top: 16),
-                      child: Text(
-                        _errorMessage,
-                        style: const TextStyle(
                           color: Colors.white,
-                          fontSize: 16,
+                          borderRadius: BorderRadius.circular(20),
+                          boxShadow: [
+                            BoxShadow(
+                              color: Colors.black.withOpacity(0.1),
+                              blurRadius: 10,
+                              offset: const Offset(0, 4),
+                            ),
+                          ],
+                        ),
+                        child: Center(
+                          child: Icon(
+                            Icons.lock_outline,
+                            size: 40,
+                            color: Theme
+                                .of(context)
+                                .primaryColor,
+                          ),
                         ),
                       ),
-                    ),
-                  const Spacer(),
-                  // PIN pad
-                  _buildPinPad(),
-                  const SizedBox(height: 16),
-                  const Spacer(),
-                ],
-              ),
+                      const SizedBox(height: 24),
+                      Text(
+                        AppLocalizations.of(context)!.enter_pin,
+                        style: const TextStyle(
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                      const SizedBox(height: 16),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.center,
+                        children: List.generate(
+                          _pinLength,
+                              (index) =>
+                              Container(
+                                margin: const EdgeInsets.symmetric(
+                                    horizontal: 8),
+                                width: 16,
+                                height: 16,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: index < _enteredPin.length
+                                      ? Theme
+                                      .of(context)
+                                      .primaryColor
+                                      : Colors.grey.withOpacity(0.3),
+                                ),
+                              ),
+                        ),
+                      ),
+                      if (_errorMessage.isNotEmpty)
+                        Padding(
+                          padding: const EdgeInsets.only(top: 16),
+                          child: Text(
+                            _errorMessage,
+                            style: const TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      const Spacer(),
+                      // PIN pad
+                      _buildPinPad(),
+                      const SizedBox(height: 16),
+                      const Spacer(),
+                    ],
+                  ),
+                ),
+              ],
             ),
-          ],
-        ),
-      ),
+          ),
+        )
     );
   }
 

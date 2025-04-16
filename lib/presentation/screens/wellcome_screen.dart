@@ -30,11 +30,7 @@ class _WellcomeScreenState extends State<WellcomeScreen> {
 
     Widget nextScreen;
     if (isFirst != null) {
-      if (isPin != null) {
-        nextScreen = LockScreenWrapper();
-      } else {
         nextScreen = HomeScreen();
-      }
     } else {
       nextScreen = OnBoardingScreen();
     }
