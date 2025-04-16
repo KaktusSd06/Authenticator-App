@@ -6,6 +6,7 @@ import '../../../core/config/theme.dart' as Colors;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../sign_in_screen.dart';
+import '../terms_of_use_screen.dart';
 
 class OnBoardingScreen4 extends StatelessWidget {
   final PageController controller;
@@ -100,30 +101,49 @@ class OnBoardingScreen4 extends StatelessWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      Text(
-                       "Terms of Use",
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.w500,
-                          color: Colors.gray2,
-                          decoration: TextDecoration.underline,
-                          decorationColor: Colors.gray2,
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => TermsOfUseScreen())
+                          );
+                        },
+                        child: Text(
+                         "Terms of Use",
+                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: Colors.gray2,
+                            decoration: TextDecoration.underline,
+                            decorationColor: Colors.gray2,
+                          ),
                         ),
                       ),
                       SizedBox(width: 6),
                       SvgPicture.asset(
                         "assets/icons/ellipse.svg",
-                        width: 10,
-                        height: 10,
+                        width: 4,
+                        height: 4,
                         colorFilter: ColorFilter.mode(Colors.gray2, BlendMode.srcIn),
                       ),
                       SizedBox(width: 6),
-                      Text(
-                        "Privacy Policy",
-                        style: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          fontWeight: FontWeight.w500,
-                          color: Colors.gray2,
-                          decoration: TextDecoration.underline,
-                          decorationColor: Colors.gray2,
+                      GestureDetector(
+                        onTap: (){
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => TermsOfUseScreen()
+                              )
+                          );
+                        },
+                        child: Text(
+                          "Privacy Policy",
+                          style: Theme.of(context).textTheme.headlineSmall?.copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: Colors.gray2,
+                            decoration: TextDecoration.underline,
+                            decorationColor: Colors.gray2,
+                          ),
                         ),
                       ),
                     ],
