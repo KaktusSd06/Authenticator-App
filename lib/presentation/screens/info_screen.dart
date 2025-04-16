@@ -159,18 +159,10 @@ class _InfoScreenSate extends State<InfoScreen>{
                       title: AppLocalizations.of(context)!.password_security,
                       trailingIconPath: "assets/icons/ic_24.svg",
                       onTap: () {
-                        if(_isAuthValue){
                           Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => PasswordSecurityScreen())
                           );
-                        }
-                        else{
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => SignInScreen())
-                          );
-                        }
                       },
                       isLast: false,
                     ),
