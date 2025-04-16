@@ -23,3 +23,6 @@ class UpdateToken extends TokensEvent {
   final AuthToken token;
   UpdateToken(this.token);
 }
+
+class DeleteAllTokens extends TokensEvent {}
+

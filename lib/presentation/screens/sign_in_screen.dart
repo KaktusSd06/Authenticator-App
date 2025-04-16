@@ -142,9 +142,10 @@ class _SignInScreenState extends State<SignInScreen> {
                       }
 
 
-                      Navigator.pushReplacement(
+                      Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (context) => HomeScreen()),
+                            (Route<dynamic> route) => false,
                       );
                     } else {
                       ErrorDialog().showErrorDialog(

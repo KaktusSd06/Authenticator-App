@@ -4,6 +4,7 @@ import 'package:authenticator_app/presentation/screens/onboarding/onboarding_scr
 import 'package:authenticator_app/presentation/screens/sign_in_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
@@ -12,6 +13,8 @@ import '../../../core/config/theme.dart' as AppColors;
 import '../../data/models/auth_token.dart';
 import '../../data/repositories/remote/synchronize_repository.dart';
 import '../../data/repositories/remote/token_repository.dart';
+import '../../logic/blocs/tokens/tokens_bloc.dart';
+import '../../logic/blocs/tokens/tokens_event.dart';
 import '../widgets/settings_tile.dart';
 import 'onboarding/paywall_screen.dart';
 
@@ -137,6 +140,11 @@ else {
       await storage.delete(key: SecureStorageKeys.accessToken);
       await storage.delete(key: SecureStorageKeys.subscription);
       await storage.delete(key: SecureStorageKeys.nextbilling);
+
+      String? isSynchronize = await storage.read(key: SecureStorageKeys.usSync);
+      if(isSynchronize == "true") {
+        context.read<TokensBloc>().add(DeleteAllTokens());
+      }
 
       if (mounted) {
         setState(() {

@@ -13,7 +13,27 @@ class TokensBloc extends Bloc<TokensEvent, TokensState> {
     on<DeleteToken>(_onDeleteToken);
     on<AddToken>(_onAddToken);
     on<UpdateToken>(_onUpdateToken);
+    on<DeleteAllTokens>(_onDeleteAllTokens);
   }
+
+  void _onDeleteAllTokens(DeleteAllTokens event, Emitter<TokensState> emit) async {
+    try {
+      final file = await _getUserInfoFile();
+      if (await file.exists()) {
+        await file.delete();
+      }
+
+      emit(TokensLoaded(
+        allTokens: [],
+        filteredTokens: [],
+        timeBasedTokens: [],
+        counterTokens: [],
+      ));
+    } catch (e) {
+      emit(TokensError('Error deleting all tokens: ${e.toString()}'));
+    }
+  }
+
 
   Future<File> _getUserInfoFile() async {
     final dir = await getApplicationDocumentsDirectory();
