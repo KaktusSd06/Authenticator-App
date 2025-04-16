@@ -79,6 +79,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "connection_error_message": MessageLookupByLibrary.simpleMessage(
       "Відсутнє інтернет з\'єднання, спробуйте пізніше",
     ),
+    "contact_info": MessageLookupByLibrary.simpleMessage(
+      "For any questions, contact us at stepanukdima524@gmail.com",
+    ),
     "contact_us": MessageLookupByLibrary.simpleMessage("Зв\'язатись з нами"),
     "continue_btn": MessageLookupByLibrary.simpleMessage("Продовжити"),
     "copy": MessageLookupByLibrary.simpleMessage(
@@ -91,6 +94,18 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "customer_support": MessageLookupByLibrary.simpleMessage(
       "Підтримка клієнтів",
+    ),
+    "data_collection_desc": MessageLookupByLibrary.simpleMessage(
+      "Ми не збираємо жодних персональних даних. Усі токени зберігаються локально на вашому пристрої.",
+    ),
+    "data_collection_title": MessageLookupByLibrary.simpleMessage(
+      "Які дані ми збираємо",
+    ),
+    "data_usage_desc": MessageLookupByLibrary.simpleMessage(
+      "Ваші дані не передаються третім сторонам і не виходять за межі вашого пристрою.",
+    ),
+    "data_usage_title": MessageLookupByLibrary.simpleMessage(
+      "Як ми використовуємо ваші дані",
     ),
     "delete": MessageLookupByLibrary.simpleMessage("Видалити"),
     "delete_account": MessageLookupByLibrary.simpleMessage("Видалити профіль"),
@@ -119,6 +134,7 @@ class MessageLookup extends MessageLookupByLibrary {
       "Error logging in, please try again later",
     ),
     "error_with_signIn": MessageLookupByLibrary.simpleMessage("Sign In Error"),
+    "feedback": MessageLookupByLibrary.simpleMessage("Зворотній зв\'язок"),
     "fill_all_fields": MessageLookupByLibrary.simpleMessage(
       "Заповніть всі поля",
     ),
@@ -138,7 +154,20 @@ class MessageLookup extends MessageLookupByLibrary {
       "Захистіть свої облікові записи, додавши двофакторну автентифікацію.",
     ),
     "key": MessageLookupByLibrary.simpleMessage("Ключ"),
+    "limitations_desc": MessageLookupByLibrary.simpleMessage(
+      "We do not guarantee uninterrupted service and are not liable for any data loss or damages.",
+    ),
+    "limitations_title": MessageLookupByLibrary.simpleMessage("Limitations"),
+    "modifications_desc": MessageLookupByLibrary.simpleMessage(
+      "We reserve the right to change these terms at any time without prior notice.",
+    ),
+    "modifications_title": MessageLookupByLibrary.simpleMessage(
+      "Modifications",
+    ),
     "no": MessageLookupByLibrary.simpleMessage("Ні"),
+    "no_email_client_found": MessageLookupByLibrary.simpleMessage(
+      "Поштовий клієнт не знайдено",
+    ),
     "onBoarding_H1": MessageLookupByLibrary.simpleMessage(
       "Безпечний\nобліковий запис",
     ),
@@ -182,8 +211,14 @@ class MessageLookup extends MessageLookupByLibrary {
     "premium_features": MessageLookupByLibrary.simpleMessage(
       "Преміум переваги",
     ),
+    "privacy_intro": MessageLookupByLibrary.simpleMessage(
+      "Ми цінуємо вашу приватність. Цей документ пояснює, як ми працюємо з вашими даними.",
+    ),
     "privacy_policy": MessageLookupByLibrary.simpleMessage(
       "Політику конфіденційності",
+    ),
+    "privacy_title": MessageLookupByLibrary.simpleMessage(
+      "Політика конфіденційності",
     ),
     "restor_l": MessageLookupByLibrary.simpleMessage("Повернутись"),
     "restore_purchases": MessageLookupByLibrary.simpleMessage(
@@ -207,11 +242,15 @@ class MessageLookup extends MessageLookupByLibrary {
     "term_error": MessageLookupByLibrary.simpleMessage(
       "Ви маєте погодитись з  Умовами використання та Політикою конфеденційності щоб продовжити вхід",
     ),
+    "terms_intro": MessageLookupByLibrary.simpleMessage(
+      "By using the Authenticator app, you agree to the following terms. Please read them carefully.",
+    ),
     "terms_of_app": MessageLookupByLibrary.simpleMessage("Я приймаю"),
     "terms_of_service": MessageLookupByLibrary.simpleMessage(
       "Умови використання",
     ),
     "terms_of_use": MessageLookupByLibrary.simpleMessage("Умови використання"),
+    "terms_title": MessageLookupByLibrary.simpleMessage("Terms of Use"),
     "than_6": MessageLookupByLibrary.simpleMessage("далі 6.99 usd на тиждень"),
     "time_based": MessageLookupByLibrary.simpleMessage("На основі часу"),
     "uSD_Only": MessageLookupByLibrary.simpleMessage(
@@ -219,6 +258,10 @@ class MessageLookup extends MessageLookupByLibrary {
     ),
     "update": MessageLookupByLibrary.simpleMessage("Оновити"),
     "update_code": MessageLookupByLibrary.simpleMessage("Оновити код"),
+    "usage_rules_desc": MessageLookupByLibrary.simpleMessage(
+      "This app is intended for personal use only. You are responsible for any activity done through your account.",
+    ),
+    "usage_rules_title": MessageLookupByLibrary.simpleMessage("Usage Rules"),
     "usefull_info": MessageLookupByLibrary.simpleMessage("Корисна інформація"),
     "weekly_subscription": MessageLookupByLibrary.simpleMessage(
       "Місячна підписка",
@@ -231,5 +274,9 @@ class MessageLookup extends MessageLookupByLibrary {
     "year_subscription": MessageLookupByLibrary.simpleMessage("Річна підписка"),
     "yes": MessageLookupByLibrary.simpleMessage("Так"),
     "your_digital": MessageLookupByLibrary.simpleMessage("Ваш цифровий"),
+    "your_rights_desc": MessageLookupByLibrary.simpleMessage(
+      "Ви маєте повний контроль над своїми даними. Ви можете видалити їх у будь-який момент.",
+    ),
+    "your_rights_title": MessageLookupByLibrary.simpleMessage("Ваші права"),
   };
 }

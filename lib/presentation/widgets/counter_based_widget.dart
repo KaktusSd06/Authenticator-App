@@ -365,7 +365,9 @@ class _HotpWidgetState extends State<HotpWidget> {
 
                             Clipboard.setData(ClipboardData(text: hotpCode)).then((_) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                SnackBar(content: Text(AppLocalizations.of(context)!.copy)),
+                                SnackBar(content: Text(AppLocalizations.of(context)!.copy),
+                                  behavior: SnackBarBehavior.floating,
+                                ),
                               );
                             });
                           },
