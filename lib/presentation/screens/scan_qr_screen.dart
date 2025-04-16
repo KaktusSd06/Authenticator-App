@@ -1,3 +1,4 @@
+import 'package:authenticator_app/core/config/secure_storage_keys.dart';
 import 'package:authenticator_app/data/models/auth_token.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
@@ -230,7 +231,7 @@ class _ScanQrScreenState extends State<ScanQrScreen> {
 
             User? user = FirebaseAuth.instance.currentUser;
             final storage = FlutterSecureStorage();
-            String? idToken = await storage.read(key: 'idToken');
+            String? idToken = await storage.read(key: SecureStorageKeys.idToken);
 
             if (user != null && idToken != null) {
               if (await SynchronizeRepository().isSynchronizing(user.uid)) {
@@ -335,7 +336,7 @@ class _ScanQrScreenState extends State<ScanQrScreen> {
 
         User? user = FirebaseAuth.instance.currentUser;
         final storage = FlutterSecureStorage();
-        String? idToken = await storage.read(key: 'idToken');
+        String? idToken = await storage.read(key: SecureStorageKeys.idToken);
 
         if (user != null && idToken != null) {
           if (await SynchronizeRepository().isSynchronizing(user.uid)) {

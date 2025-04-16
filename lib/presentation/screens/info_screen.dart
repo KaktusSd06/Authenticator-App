@@ -1,3 +1,4 @@
+import 'package:authenticator_app/core/config/secure_storage_keys.dart';
 import 'package:authenticator_app/presentation/screens/about_app.dart';
 import 'package:authenticator_app/presentation/screens/password_security_screen.dart';
 import 'package:authenticator_app/presentation/screens/premium_features.dart';
@@ -6,8 +7,6 @@ import 'package:authenticator_app/presentation/screens/subscription.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import 'package:flutter_svg/svg.dart';
-import '../../../core/config/theme.dart' as AppColors;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../widgets/settings_tile.dart';
@@ -29,7 +28,7 @@ class _InfoScreenSate extends State<InfoScreen>{
 
     try {
       final storage = FlutterSecureStorage();
-      String? isAuth = await storage.read(key: 'idToken');
+      String? isAuth = await storage.read(key: SecureStorageKeys.idToken);
 
       if (mounted) {
         setState(() {
@@ -216,5 +215,4 @@ class _InfoScreenSate extends State<InfoScreen>{
       ),
     );
   }
-
 }

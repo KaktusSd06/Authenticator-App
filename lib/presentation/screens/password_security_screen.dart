@@ -1,7 +1,4 @@
-import 'package:authenticator_app/presentation/screens/about_app.dart';
-import 'package:authenticator_app/presentation/screens/premium_features.dart';
-import 'package:authenticator_app/presentation/screens/sign_in_screen.dart';
-import 'package:authenticator_app/presentation/screens/subscription.dart';
+import 'package:authenticator_app/core/config/secure_storage_keys.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
@@ -9,12 +6,9 @@ import 'package:flutter_svg/svg.dart';
 import 'package:local_auth/local_auth.dart';
 import '../../../core/config/theme.dart' as AppColors;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-
 import '../widgets/settings_tile.dart';
 import 'change_pin.dart';
 import 'create_pin_screen.dart';
-import 'lock_screen.dart';
-
 
 class PasswordSecurityScreen extends StatefulWidget{
   @override
@@ -32,7 +26,6 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
   @override
   void initState() {
     super.initState();
-    //WidgetsBinding.instance.addObserver(this);
     _loadData();
   }
 
@@ -44,8 +37,8 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
     try {
       await _checkBiometricAvailability();
       final storage = FlutterSecureStorage();
-      String? isPassword = await storage.read(key: 'app_pin');
-      String? isBiometrics = await storage.read(key: "biometric_enabled");
+      String? isPassword = await storage.read(key: SecureStorageKeys.app_pin);
+      String? isBiometrics = await storage.read(key: SecureStorageKeys.biometric_enabled);
       if (mounted) {
         setState(() {
           _isPassword = isPassword == null ? false : true;
@@ -60,20 +53,6 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
         });
       }
     }
-  }
-
-  void _togglePassword(bool value) async {
-    final storage = FlutterSecureStorage();
-
-    if (value) {
-      await storage.write(key: 'isBiometrics', value: 'true');
-    } else {
-      await storage.delete(key: 'isBiometrics');
-    }
-
-    setState(() {
-      _isBiometrics = value;
-    });
   }
 
   @override
@@ -162,10 +141,10 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
                                   }
                                 });
                               },
-                              activeColor: Colors.white, // Thumb color when active
-                              activeTrackColor: AppColors.blue, // Track color when active
-                              inactiveThumbColor: Colors.white, // Thumb color when inactive
-                              inactiveTrackColor: Color(0xFFD9D9D9), // Track color when inactive
+                              activeColor: Colors.white,
+                              activeTrackColor: AppColors.blue,
+                              inactiveThumbColor: Colors.white,
+                              inactiveTrackColor: Color(0xFFD9D9D9),
                               trackOutlineColor: MaterialStateProperty.resolveWith<Color>(
                                     (Set<MaterialState> states) {
                                   return states.contains(MaterialState.selected)
@@ -320,10 +299,10 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
                     }
                   });
                 },
-                activeColor: Colors.white, // Thumb color when active
-                activeTrackColor: AppColors.blue, // Track color when active
-                inactiveThumbColor: Colors.white, // Thumb color when inactive
-                inactiveTrackColor: Color(0xFFD9D9D9), // Track color when inactive
+                activeColor: Colors.white,
+                activeTrackColor: AppColors.blue,
+                inactiveThumbColor: Colors.white,
+                inactiveTrackColor: Color(0xFFD9D9D9),
                 trackOutlineColor: MaterialStateProperty.resolveWith<Color>(
                       (Set<MaterialState> states) {
                     return states.contains(MaterialState.selected)
@@ -346,9 +325,8 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
     );
 
     final storage = FlutterSecureStorage();
-    final hasPin = await storage.containsKey(key: 'app_pin');
+    final hasPin = await storage.containsKey(key: SecureStorageKeys.app_pin);
     if (hasPin) {
-      //print('PIN був успішно збережений');
       setState(() {
         _isPassword = true;
       });
@@ -372,33 +350,23 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
       availableBiometrics = await _localAuth.getAvailableBiometrics();
     }
 
-    //String? biometricEnabled = await _secureStorage.read(key: 'biometric_enabled');
-
     if (availableBiometrics.isNotEmpty) {
       _isAvailableBiometrics = true;
     }
   }
 
   Future<void> setBiometrics() async {
-    final _secureStorage = FlutterSecureStorage();
-    await _secureStorage.write(key: 'biometric_enabled', value: 'true');
-
-    // ScaffoldMessenger.of(context).showSnackBar(
-    //   SnackBar(
-    //     content: Text(AppLocalizations.of(context)?.biometric_disabled ??
-    //         'Біометричну автентифікацію вимкнено'),
-    //     backgroundColor: Colors.red,
-    //   ),
-    // );
+    final secureStorage = FlutterSecureStorage();
+    await secureStorage.write(key: SecureStorageKeys.biometric_enabled, value: 'true');
   }
 
   Future<void> deletePassword() async {
     final storage = FlutterSecureStorage();
-    await storage.delete(key: 'app_pin');
+    await storage.delete(key: SecureStorageKeys.app_pin);
   }
 
   Future<void> deleteBiometrics() async {
     final storage = FlutterSecureStorage();
-    await storage.delete(key: 'biometric_enabled');
+    await storage.delete(key: SecureStorageKeys.biometric_enabled);
   }
 }

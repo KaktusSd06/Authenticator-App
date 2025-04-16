@@ -1,3 +1,4 @@
+import 'package:authenticator_app/core/config/secure_storage_keys.dart';
 import 'package:authenticator_app/presentation/screens/sign_in_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -46,9 +47,9 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> with WidgetsBin
   final storage = FlutterSecureStorage();
 
   Future<void> clearSubscriptionData() async {
-    await storage.delete(key: 'subscription');
-    await storage.delete(key: 'nextBilling');
-    await storage.delete(key: 'hasFreeTrial');
+    await storage.delete(key: SecureStorageKeys.subscription);
+    await storage.delete(key: SecureStorageKeys.nextbilling);
+    await storage.delete(key: SecureStorageKeys.hasFreeTrial);
 
     User? user = FirebaseAuth.instance.currentUser;
 
@@ -88,7 +89,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> with WidgetsBin
       }
 
       final storage = FlutterSecureStorage();
-      String? isAuth = await storage.read(key: 'idToken');
+      String? isAuth = await storage.read(key: SecureStorageKeys.idToken);
 
       if (mounted) {
         setState(() {
@@ -337,13 +338,13 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> with WidgetsBin
 
   Future<bool> _isPremium() async {
     final storage = FlutterSecureStorage();
-    String? isPremium = await storage.read(key: 'subscription');
+    String? isPremium = await storage.read(key: SecureStorageKeys.subscription);
     return isPremium != null;
   }
 
   Future<String> _getSubscription() async {
     final storage = FlutterSecureStorage();
-    String? subscription = await storage.read(key: 'subscription');
+    String? subscription = await storage.read(key: SecureStorageKeys.subscription);
     if (subscription != null) {
       if (subscription == "trial") {
         return AppLocalizations.of(context)!.free_trial;
@@ -358,7 +359,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> with WidgetsBin
 
   Future<String> _getBillingDate() async {
     final storage = FlutterSecureStorage();
-    String? billing = await storage.read(key: 'nextBilling');
+    String? billing = await storage.read(key: SecureStorageKeys.nextbilling);
     if (billing != null) {
       DateTime date = DateFormat("dd.MM.yyyy").parse(billing);
       String locale = Intl.getCurrentLocale();

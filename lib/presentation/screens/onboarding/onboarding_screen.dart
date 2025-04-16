@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
+import '../../../core/config/secure_storage_keys.dart';
 import '../../widgets/config_button.dart';
 import '../../widgets/continue_btn.dart';
 import 'onboarding_screen_2.dart';
@@ -28,7 +29,7 @@ void initState() {
   super.initState();
 
   final storage = FlutterSecureStorage();
-  storage.write(key: 'isFirst', value: 'false');
+  storage.write(key: SecureStorageKeys.isFirst, value: 'false');
 
   _controller.addListener(() {
     setState(() {

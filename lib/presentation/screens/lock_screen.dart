@@ -1,6 +1,6 @@
+import 'package:authenticator_app/core/config/secure_storage_keys.dart';
 import 'package:authenticator_app/presentation/screens/home_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:local_auth/local_auth.dart';
 import 'dart:async';
@@ -49,7 +49,7 @@ class _LockScreenState extends State<LockScreen> {
       availableBiometrics = await _localAuth.getAvailableBiometrics();
     }
 
-    String? biometricEnabled = await _secureStorage.read(key: 'biometric_enabled');
+    String? biometricEnabled = await _secureStorage.read(key: SecureStorageKeys.biometric_enabled);
 
     if (mounted) {
       setState(() {
@@ -61,7 +61,6 @@ class _LockScreenState extends State<LockScreen> {
     if (_isBiometrics) {
       Future.delayed(const Duration(milliseconds: 300), () {
         if (mounted) {
-          //_authenticateWithBiometrics();
         }
       });
     }
@@ -104,9 +103,7 @@ class _LockScreenState extends State<LockScreen> {
       }
 
     } catch (e) {
-      // Only show error for actual errors, not for cancellations
       if (e.toString().contains('canceled') || e.toString().contains('cancelled')) {
-        // User cancelled the biometric authentication, no need to show error
       } else {
         print('Помилка біометричної автентифікації: $e');
         if (mounted) {
@@ -159,7 +156,7 @@ class _LockScreenState extends State<LockScreen> {
       return;
     }
 
-    await _secureStorage.write(key: 'biometric_enabled', value: 'true');
+    await _secureStorage.write(key: SecureStorageKeys.biometric_enabled, value: 'true');
     if (mounted) {
       setState(() {
         _biometricEnabled = true;
@@ -202,10 +199,10 @@ class _LockScreenState extends State<LockScreen> {
 
   Future<void> _verifyPin() async {
     String enteredPin = _enteredPin.join();
-    String? storedPin = await _secureStorage.read(key: 'app_pin');
+    String? storedPin = await _secureStorage.read(key: SecureStorageKeys.app_pin);
 
     if (storedPin == null) {
-      await _secureStorage.write(key: 'app_pin', value: enteredPin);
+      await _secureStorage.write(key: SecureStorageKeys.app_pin, value: enteredPin);
       if (widget.onUnlocked != null) {
         widget.onUnlocked!(true);
       }

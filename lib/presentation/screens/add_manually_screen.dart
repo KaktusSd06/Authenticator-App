@@ -18,6 +18,7 @@ import 'package:path_provider/path_provider.dart';
 import '../../logic/blocs/tokens/tokens_bloc.dart';
 import '../../logic/blocs/tokens/tokens_event.dart';
 import '../../logic/blocs/tokens/tokens_state.dart';
+import '../../core/config/secure_storage_keys.dart';
 
 
 
@@ -254,7 +255,7 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
 
         User? user = FirebaseAuth.instance.currentUser;
         final storage = FlutterSecureStorage();
-        String? idToken = await storage.read(key: 'idToken');
+        String? idToken = await storage.read(key: SecureStorageKeys.idToken);
 
         if (user != null && idToken != null) {
           if (await SynchronizeRepository().isSynchronizing(user.uid)) {
