@@ -113,5 +113,6 @@
   "biometric_enabled": "Biometric authentication enabled",
   "save_88": "Save 88%",
   "your_digital": "Your digital",
-  "shield": "shield"
+  "shield": "shield",
+  "copy": "Code copied to clipboard"
 }

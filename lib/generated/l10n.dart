@@ -1009,6 +1009,16 @@ class S {
   String get shield {
     return Intl.message('щит', name: 'shield', desc: '', args: []);
   }
+
+  /// `Код скопійовано в буфер обміну`
+  String get copy {
+    return Intl.message(
+      'Код скопійовано в буфер обміну',
+      name: 'copy',
+      desc: '',
+      args: [],
+    );
+  }
 }
 
 class AppLocalizationDelegate extends LocalizationsDelegate<S> {
