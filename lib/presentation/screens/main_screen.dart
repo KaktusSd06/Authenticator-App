@@ -339,7 +339,7 @@ class _MainScreenState extends State<MainScreen> {
         }
         return Scaffold(
           body: Center(
-            child: Text('Unknown state'),
+            child: Center(child: CircularProgressIndicator()),
           ),
         );
       },

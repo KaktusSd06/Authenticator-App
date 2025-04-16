@@ -1,3 +1,4 @@
+import 'package:authenticator_app/core/config/secure_storage_keys.dart';
 import 'package:authenticator_app/presentation/screens/home_screen.dart';
 import 'package:authenticator_app/presentation/screens/lock_screen.dart';
 import 'package:authenticator_app/presentation/screens/wellcome_screen.dart';
@@ -20,10 +21,12 @@ class AppStateService {
 
   bool isLocked = false;
   bool isAuthenticated = false;
+  bool isBiometricDialogOpen = false;
 
   void setAuthenticated() {
     isAuthenticated = true;
     isLocked = false;
+    isBiometricDialogOpen = false;
   }
 
   void setLocked() {
@@ -34,6 +37,29 @@ class AppStateService {
   void reset() {
     isLocked = false;
     isAuthenticated = false;
+    isBiometricDialogOpen = false;
+  }
+
+  void setBiometricDialogOpen(bool isOpen) {
+    isBiometricDialogOpen = isOpen;
+  }
+
+  Future<bool> hasPinCode() async {
+    final storage = FlutterSecureStorage();
+    final pin = await storage.read(key: SecureStorageKeys.app_pin);
+    return pin != null;
+  }
+
+  Future<bool> hasBiometricEnabled() async {
+    final storage = FlutterSecureStorage();
+    final biometricEnabled = await storage.read(key: SecureStorageKeys.biometric_enabled);
+    return biometricEnabled == 'true';
+  }
+
+  Future<bool> hasAnyAuthMethod() async {
+    final hasPin = await hasPinCode();
+    final hasBiometric = await hasBiometricEnabled();
+    return hasPin || hasBiometric;
   }
 }
 
@@ -51,13 +77,13 @@ Future<void> main() async {
       .catchError((error) => print('Failed to set secure flag: $error'));
 
   runApp(
-    SecureApplication(
-      nativeRemoveDelay: 300,
-      child: MultiBlocProvider(
-        providers: [
-          BlocProvider(create: (_) => LocaleCubit()),
-          BlocProvider(create: (_) => TokensBloc()),
-        ],
+    MultiBlocProvider(
+      providers: [
+        BlocProvider(create: (_) => LocaleCubit()),
+        BlocProvider(create: (_) => TokensBloc()),
+      ],
+      child: SecureApplication(
+        nativeRemoveDelay: 300,
         child: MyApp(),
       ),
     ),
@@ -70,15 +96,14 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
-  late Future<Widget> _initialScreen;
-  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
   final AppStateService _appState = AppStateService();
+  final GlobalKey<NavigatorState> _navigatorKey = GlobalKey<NavigatorState>();
+  DateTime? _lastPausedTime;
 
   @override
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    _initialScreen = _getInitialScreen();
   }
 
   @override
@@ -90,86 +115,112 @@ class _MyAppState extends State<MyApp> with WidgetsBindingObserver {
   @override
   void didChangeAppLifecycleState(AppLifecycleState state) async {
     if (state == AppLifecycleState.resumed) {
-      final storage = FlutterSecureStorage();
-      final isPin = await storage.read(key: 'app_pin');
+      final bool wasBriefPause = (_lastPausedTime != null || _lastPausedTime == null) &&
+          DateTime.now().difference(_lastPausedTime!).inSeconds < 3;
 
-      if (isPin != null && !_appState.isAuthenticated) {
-        _appState.setLocked();
-
-        if (_navigatorKey.currentState != null) {
-          _navigatorKey.currentState!.pushReplacement(
-            MaterialPageRoute(builder: (_) => LockScreenWrapper()),
+      if (!wasBriefPause) {
+        final hasAuthMethod = await _appState.hasAnyAuthMethod();
+        if (hasAuthMethod) {
+          _appState.setLocked();
+          _navigatorKey.currentState?.pushReplacement(
+            MaterialPageRoute(builder: (_) => LockScreen(
+              onAuthStarted: () {
+                _appState.setBiometricDialogOpen(true);
+              },
+              onAuthFinished: () {
+                _appState.setBiometricDialogOpen(false);
+              },
+              onAuthenticated: () {
+                _appState.setAuthenticated();
+                _navigatorKey.currentState?.pushReplacement(
+                  MaterialPageRoute(builder: (_) => HomeScreen()),
+                );
+              },
+            )),
           );
         }
       }
-    } else if (state == AppLifecycleState.paused || state == AppLifecycleState.inactive) {
-      _appState.reset();
+      _lastPausedTime = null;
+    } else if (state == AppLifecycleState.paused) {
+      _lastPausedTime = DateTime.now();
+
+      if (!_appState.isBiometricDialogOpen) {
+        _appState.reset();
+      }
     }
   }
 
   @override
   Widget build(BuildContext context) {
-    return FutureBuilder<Widget>(
-      future: _initialScreen,
-      builder: (context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            theme: lightTheme,
-            darkTheme: darkTheme,
-            themeMode: ThemeMode.system,
-            home: const Center(child: CircularProgressIndicator()),
-          );
-        }
-
-        return BlocBuilder<LocaleCubit, Locale>(
-          builder: (context, locale) {
-            return Directionality(
-              textDirection: TextDirection.ltr,
-              child: SecureGate(
-                blurr: 100.0,
-                opacity: 0.5,
-                lockedBuilder: (context, secureNotifier) {
-                  return const Center(child: CircularProgressIndicator());
-                },
-                child: MaterialApp(
-                  navigatorKey: _navigatorKey,
-                  debugShowCheckedModeBanner: false,
-                  theme: lightTheme,
-                  darkTheme: darkTheme,
-                  themeMode: ThemeMode.system,
-                  locale: locale,
-                  supportedLocales: AppLocalizations.supportedLocales,
-                  localizationsDelegates: AppLocalizations.localizationsDelegates,
-                  home: snapshot.data!,
-                ),
-              ),
-            );
-          },
+    return BlocBuilder<LocaleCubit, Locale>(
+      builder: (context, locale) {
+        return MaterialApp(
+          navigatorKey: _navigatorKey,
+          debugShowCheckedModeBanner: false,
+          theme: lightTheme,
+          darkTheme: darkTheme,
+          themeMode: ThemeMode.system,
+          locale: locale,
+          supportedLocales: AppLocalizations.supportedLocales,
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          home: InitialScreenDecider(),
         );
-
       },
     );
-  }
-
-  Future<Widget> _getInitialScreen() async {
-    return WellcomeScreen();
   }
 }
 
-class LockScreenWrapper extends StatelessWidget {
+class InitialScreenDecider extends StatefulWidget {
+  @override
+  State<InitialScreenDecider> createState() => _InitialScreenDeciderState();
+}
+
+class _InitialScreenDeciderState extends State<InitialScreenDecider> {
+  bool _isLoading = true;
+  late bool _hasAuthMethod;
+
+  @override
+  void initState() {
+    super.initState();
+    _checkAuthStatus();
+  }
+
+  Future<void> _checkAuthStatus() async {
+    final appState = AppStateService();
+    _hasAuthMethod = await appState.hasAnyAuthMethod();
+
+    if (mounted) {
+      setState(() {
+        _isLoading = false;
+      });
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    SecureApplicationProvider.of(context)?.secure();
+    if (_isLoading) {
+      return Scaffold(
+        body: Center(child: CircularProgressIndicator()),
+      );
+    }
 
-    return LockScreen(
-      onAuthenticated: () {
-        AppStateService().setAuthenticated();
-
-        Navigator.of(context).pushReplacement(
-          MaterialPageRoute(builder: (_) => HomeScreen()),
-        );
-      },
-    );
+    if (_hasAuthMethod) {
+      return LockScreen(
+        onAuthStarted: () {
+          AppStateService().setBiometricDialogOpen(true);
+        },
+        onAuthFinished: () {
+          AppStateService().setBiometricDialogOpen(false);
+        },
+        onAuthenticated: () {
+          AppStateService().setAuthenticated();
+          Navigator.of(context).pushReplacement(
+            MaterialPageRoute(builder: (_) => HomeScreen()),
+          );
+        },
+      );
+    } else {
+      return WellcomeScreen();
+    }
   }
 }
