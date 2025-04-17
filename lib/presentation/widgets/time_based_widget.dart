@@ -5,6 +5,7 @@ import 'package:authenticator_app/generated/l10n.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:ntp/ntp.dart';
 import 'package:totp/totp.dart';
 import '../../../core/config/theme.dart' as AppColors;
 import 'package:flutter/services.dart';
@@ -36,6 +37,9 @@ class _TimeBasedWidgetState extends State<TimeBasedWidget> {
   String totpCode = "";
   int countdown = 0;
   Timer? timer;
+  DateTime? accurateTime;
+  Stopwatch stopwatch = Stopwatch();
+
 
   String? iconPath;
 
@@ -48,21 +52,38 @@ class _TimeBasedWidgetState extends State<TimeBasedWidget> {
       digits: 6,
       algorithm: Algorithm.sha1,
     );
-
-    _updateCode();
-    timer = Timer.periodic(const Duration(seconds: 1), (_) => _updateCode());
+    _syncTime();
   }
 
+  Future<void> _syncTime() async {
+    try {
+      final ntpTime = await NTP.now();
+      setState(() {
+        accurateTime = ntpTime;
+      });
+      stopwatch.start();
+      _updateCode();
+      timer = Timer.periodic(const Duration(seconds: 1), (_) => _updateCode());
+    } catch (e) {
+      accurateTime = DateTime.now();
+      stopwatch.start();
+    }
+  }
+
+
   void _updateCode() {
-    final now = DateTime.now();
+    if (accurateTime == null) return;
+    final now = accurateTime!.add(stopwatch.elapsed);
     final secondsElapsed = now.second % 30;
     final remaining = 30 - secondsElapsed;
     final newCode = totp.generate(now);
+
     setState(() {
       totpCode = newCode;
       countdown = remaining;
     });
   }
+
 
 
   @override
@@ -217,6 +238,14 @@ class _TimeBasedWidgetState extends State<TimeBasedWidget> {
     );
   }
 
+  String _formattedCode(String code) {
+    if (code.length == 6) {
+      return '${code.substring(0, 3)} ${code.substring(3)}';
+    } else {
+      return '••• •••';
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     iconPath = null;
@@ -299,7 +328,7 @@ class _TimeBasedWidgetState extends State<TimeBasedWidget> {
                     Row(
                       children: [
                         Text(
-                          '${totpCode.substring(0, 3)} ${totpCode.substring(3)}',
+                          _formattedCode(totpCode),
                           style: Theme.of(context).textTheme.displayMedium,
                         ),
                         const SizedBox(width: 16),

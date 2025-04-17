@@ -39,6 +39,7 @@ dependencies:
   image_picker: ^1.1.2
   secure_application: ^4.1.0
   url_launcher: ^6.3.1
+  ntp: ^2.0.0
 
 # DEV
 dev_dependencies:

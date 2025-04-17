@@ -5,6 +5,7 @@ import 'package:authenticator_app/data/models/auth_token.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:hotp/hotp.dart';
+import 'package:ntp/ntp.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../../core/config/theme.dart' as AppColors;
 import 'package:flutter/services.dart';
@@ -33,19 +34,28 @@ class _HotpWidgetState extends State<HotpWidget> {
   late Hotp hotp;
   String hotpCode = "";
   late int counter;
+  DateTime? accurateTime;
+  Stopwatch stopwatch = Stopwatch();
 
   String? iconPath;
 
   @override
   void initState() {
     super.initState();
-    counter = widget.hotpEl.counter ?? 0;
     _initializeHotp();
+    _syncTime();
+  }
 
-    final newCode = hotp.generate(counter++);
-    setState(() {
-      hotpCode = newCode;
-    });
+  int getCounterFromTime(DateTime now) {
+    return now.millisecondsSinceEpoch ~/ 30000;
+  }
+
+  String _formattedCode(String code) {
+    if (code.length == 6) {
+      return '${code.substring(0, 3)} ${code.substring(3)}';
+    } else {
+      return '••• •••';
+    }
   }
 
   void _initializeHotp() {
@@ -60,6 +70,21 @@ class _HotpWidgetState extends State<HotpWidget> {
   void _updateCode() {
     _updateTokenInFile(widget.hotpEl);
   }
+
+  Future<void> _syncTime() async {
+    try {
+      final ntpTime = await NTP.now();
+      counter = ntpTime.millisecondsSinceEpoch ~/ 30000;
+      final newCode = hotp.generate(counter++);
+      setState(() {
+        hotpCode = newCode;
+      });
+      _updateTokenInFile(widget.hotpEl);
+    } catch (e) {
+      debugPrint('Failed to sync with NTP: $e');
+    }
+  }
+
 
   Future<File> _getUserInfoFile() async {
     final dir = await getApplicationDocumentsDirectory();
@@ -390,7 +415,7 @@ class _HotpWidgetState extends State<HotpWidget> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Text(
-                          '${hotpCode.substring(0, 3)} ${hotpCode.substring(3)}',
+                          _formattedCode(hotpCode),
                           style: Theme.of(context).textTheme.displayMedium,
                         ),
                         const SizedBox(width: 16),
