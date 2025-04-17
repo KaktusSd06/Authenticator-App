@@ -2,6 +2,7 @@ import 'package:authenticator_app/presentation/screens/add_manually_screen.dart'
 import 'package:authenticator_app/presentation/screens/scan_qr_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'dart:ui';
 import '../../../core/config/theme.dart' as AppColors;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -144,9 +145,44 @@ class IslandNavigationBar extends StatelessWidget {
                   context: context,
                   icon: "assets/icons/qr.svg",
                   label: AppLocalizations.of(context)!.scan_qr,
-                  onTap: () {
-                    Navigator.push(context, MaterialPageRoute(builder: (context) => ScanQrScreen()));
+                  onTap: () async {
+                    final status = await Permission.camera.status;
+
+                    if (status.isGranted) {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => ScanQrScreen()),
+                      );
+                    } else if (status.isDenied || status.isLimited || status.isRestricted) {
+                      final result = await Permission.camera.request();
+                      if (result.isGranted) {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(builder: (context) => ScanQrScreen()),
+                        );
+                      } else {
+                        if (context.mounted) {
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text('Доступ до камери відхилено'),
+                              behavior: SnackBarBehavior.floating,
+                            ),
+                          );
+                        }
+                      }
+                    } else if (status.isPermanentlyDenied) {
+                      openAppSettings();
+                      if (context.mounted) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(
+                            content: Text('Камера вимкнена в налаштуваннях. Увімкни дозвіл вручну.'),
+                            behavior: SnackBarBehavior.floating,
+                          ),
+                        );
+                      }
+                    }
                   },
+
                 ),
               ),
               SizedBox(height: 16),
