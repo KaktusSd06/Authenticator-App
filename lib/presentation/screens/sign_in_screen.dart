@@ -141,7 +141,6 @@ class _SignInScreenState extends State<SignInScreen> {
                       } catch (e) {
                       }
 
-
                       Navigator.pushAndRemoveUntil(
                         context,
                         MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -154,24 +153,6 @@ class _SignInScreenState extends State<SignInScreen> {
                         AppLocalizations.of(context)!.error_signIn_message,
                       );
                     }
-                  } else {
-                    setState(() {
-                      showErrorMessage = true;
-                    });
-                  }
-                } : null,
-              ),
-            ),
-
-            SizedBox(height: 24),
-
-            SizedBox(
-              height: 54,
-              child: SignInButton(
-                buttonType: Theme.of(context).brightness == Brightness.light ? ButtonType.appleDark : ButtonType.apple,
-                onPressed: isAgree ? () {
-                  if (isAgree) {
-                    //AuthService().signInWithGoogle();
                   } else {
                     setState(() {
                       showErrorMessage = true;
