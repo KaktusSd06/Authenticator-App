@@ -1,14 +1,13 @@
 import 'dart:async';
+
 import 'package:authenticator_app/core/config/secure_storage_keys.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../../main.dart';
-import 'home_screen.dart';
-import 'onboarding/onboarding_screen.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
-import '../../../core/config/theme.dart' as AppColors;
 
+import '../../../core/config/theme.dart' as AppColors;
+import 'features/home/home_screen.dart';
+import 'onboarding/onboarding_screen.dart';
 
 class WellcomeScreen extends StatefulWidget {
   @override
@@ -30,14 +29,12 @@ class _WellcomeScreenState extends State<WellcomeScreen> {
 
     Widget nextScreen;
     if (isFirst != null) {
-        nextScreen = HomeScreen();
+      nextScreen = HomeScreen();
     } else {
       nextScreen = OnBoardingScreen();
     }
 
-    Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => nextScreen),
-    );
+    Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => nextScreen));
   }
 
   @override
@@ -46,10 +43,7 @@ class _WellcomeScreenState extends State<WellcomeScreen> {
       body: Stack(
         fit: StackFit.expand,
         children: [
-          Image.asset(
-            'assets/images/bg.png',
-            fit: BoxFit.cover,
-          ),
+          Image.asset('assets/images/bg.png', fit: BoxFit.cover),
           Align(
             alignment: Alignment.bottomLeft,
             child: Padding(
@@ -60,15 +54,24 @@ class _WellcomeScreenState extends State<WellcomeScreen> {
                 children: [
                   Text(
                     AppLocalizations.of(context)!.authenticator,
-                    style: Theme.of(context).textTheme.displayLarge?.copyWith(fontWeight: FontWeight.w700, color: AppColors.white),
+                    style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.white,
+                    ),
                   ),
                   Text(
                     AppLocalizations.of(context)!.your_digital,
-                    style: Theme.of(context).textTheme.displayLarge?.copyWith(fontWeight: FontWeight.w400, color: AppColors.white),
+                    style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                      fontWeight: FontWeight.w400,
+                      color: AppColors.white,
+                    ),
                   ),
                   Text(
                     AppLocalizations.of(context)!.shield,
-                    style: Theme.of(context).textTheme.displayLarge?.copyWith(fontWeight: FontWeight.w700, color: AppColors.white),
+                    style: Theme.of(context).textTheme.displayLarge?.copyWith(
+                      fontWeight: FontWeight.w700,
+                      color: AppColors.white,
+                    ),
                   ),
                 ],
               ),

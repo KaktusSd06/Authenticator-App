@@ -1,13 +1,14 @@
+import 'dart:async';
+
 import 'package:authenticator_app/core/config/secure_storage_keys.dart';
-import 'package:authenticator_app/presentation/screens/home_screen.dart';
+import 'package:authenticator_app/presentation/screens/features/home/home_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
+import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:local_auth/local_auth.dart';
-import 'dart:async';
-import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:flutter/services.dart';
-import '../../../core/config/theme.dart' as AppColors;
 
+import '../../../core/config/theme.dart' as AppColors;
 
 class LockScreen extends StatefulWidget {
   final Function(bool)? onUnlocked;
@@ -22,7 +23,6 @@ class LockScreen extends StatefulWidget {
     required this.onAuthStarted,
     this.onAuthFinished,
   }) : super(key: key);
-
 
   @override
   State<LockScreen> createState() => _LockScreenState();
@@ -70,8 +70,7 @@ class _LockScreenState extends State<LockScreen> {
 
     if (_isBiometrics) {
       Future.delayed(const Duration(milliseconds: 300), () {
-        if (mounted) {
-        }
+        if (mounted) {}
       });
     }
   }
@@ -80,9 +79,7 @@ class _LockScreenState extends State<LockScreen> {
     if (widget.onAuthenticated != null) {
       widget.onAuthenticated!();
     } else {
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(builder: (_) => HomeScreen()),
-      );
+      Navigator.of(context).pushReplacement(MaterialPageRoute(builder: (_) => HomeScreen()));
     }
   }
 
@@ -95,15 +92,13 @@ class _LockScreenState extends State<LockScreen> {
     });
 
     try {
-      String biometricPrompt = AppLocalizations.of(context)?.authenticate_with_biometrics ??
+      String biometricPrompt =
+          AppLocalizations.of(context)?.authenticate_with_biometrics ??
           'Авторизуйтесь для входу в додаток';
 
       bool authenticated = await _localAuth.authenticate(
         localizedReason: biometricPrompt,
-        options: const AuthenticationOptions(
-          stickyAuth: true,
-          biometricOnly: false,
-        ),
+        options: const AuthenticationOptions(stickyAuth: true, biometricOnly: false),
       );
 
       if (authenticated && mounted) {
@@ -114,14 +109,15 @@ class _LockScreenState extends State<LockScreen> {
         _onSuccessfulAuthentication();
         widget.onAuthFinished!();
       }
-
     } catch (e) {
       if (e.toString().contains('canceled') || e.toString().contains('cancelled')) {
       } else {
         print('Помилка біометричної автентифікації: $e');
         if (mounted) {
           setState(() {
-            _errorMessage = AppLocalizations.of(context)?.biometric_error ?? 'Помилка біометричної автентифікації';
+            _errorMessage =
+                AppLocalizations.of(context)?.biometric_error ??
+                'Помилка біометричної автентифікації';
           });
 
           _errorTimer?.cancel();
@@ -153,7 +149,8 @@ class _LockScreenState extends State<LockScreen> {
 
     if (availableBiometrics.isEmpty) {
       setState(() {
-        _errorMessage = AppLocalizations.of(context)?.biometric_not_available ??
+        _errorMessage =
+            AppLocalizations.of(context)?.biometric_not_available ??
             'Біометрика недоступна на цьому пристрої';
       });
 
@@ -178,8 +175,10 @@ class _LockScreenState extends State<LockScreen> {
 
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: Text(AppLocalizations.of(context)?.biometric_enabled ??
-              'Біометричну автентифікацію увімкнено'),
+          content: Text(
+            AppLocalizations.of(context)?.biometric_enabled ??
+                'Біометричну автентифікацію увімкнено',
+          ),
           backgroundColor: Colors.green,
         ),
       );
@@ -245,109 +244,96 @@ class _LockScreenState extends State<LockScreen> {
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
-        onWillPop: () async {
-          SystemNavigator.pop();
-          return false;
-        },
-        child: Scaffold(
-          body: Container(
-            width: double.infinity,
-            height: double.infinity,
-            decoration: const BoxDecoration(
-              color: Color(0xFFF5F5F5),
-            ),
-            child: Stack(
-              children: [
-                Positioned.fill(
-                  child: Image.asset(
-                    'assets/images/lock_screen_background.png',
-                    fit: BoxFit.cover,
-                  ),
-                ),
+      onWillPop: () async {
+        SystemNavigator.pop();
+        return false;
+      },
+      child: Scaffold(
+        body: Container(
+          width: double.infinity,
+          height: double.infinity,
+          decoration: const BoxDecoration(color: Color(0xFFF5F5F5)),
+          child: Stack(
+            children: [
+              Positioned.fill(
+                child: Image.asset('assets/images/lock_screen_background.png', fit: BoxFit.cover),
+              ),
 
-                SafeArea(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      const Spacer(flex: 2),
-                      Container(
-                        width: 80,
-                        height: 80,
-                        decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(20),
-                          boxShadow: [
-                            BoxShadow(
-                              color: Colors.black.withOpacity(0.1),
-                              blurRadius: 10,
-                              offset: const Offset(0, 4),
-                            ),
-                          ],
+              SafeArea(
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    const Spacer(flex: 2),
+                    Container(
+                      width: 80,
+                      height: 80,
+                      decoration: BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withOpacity(0.1),
+                            blurRadius: 10,
+                            offset: const Offset(0, 4),
+                          ),
+                        ],
+                      ),
+                      child: Center(
+                        child: Icon(
+                          Icons.lock_outline,
+                          size: 40,
+                          color: Theme.of(context).primaryColor,
                         ),
-                        child: Center(
-                          child: Icon(
-                            Icons.lock_outline,
-                            size: 40,
-                            color: Theme
-                                .of(context)
-                                .primaryColor,
+                      ),
+                    ),
+                    const SizedBox(height: 24),
+                    Text(
+                      AppLocalizations.of(context)!.enter_pin,
+                      style: const TextStyle(
+                        fontSize: 20,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    const SizedBox(height: 16),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: List.generate(
+                        _pinLength,
+                        (index) => Container(
+                          margin: const EdgeInsets.symmetric(horizontal: 8),
+                          width: 16,
+                          height: 16,
+                          decoration: BoxDecoration(
+                            shape: BoxShape.circle,
+                            color:
+                                index < _enteredPin.length
+                                    ? Theme.of(context).primaryColor
+                                    : Colors.grey.withOpacity(0.3),
                           ),
                         ),
                       ),
-                      const SizedBox(height: 24),
-                      Text(
-                        AppLocalizations.of(context)!.enter_pin,
-                        style: const TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
+                    ),
+                    if (_errorMessage.isNotEmpty)
+                      Padding(
+                        padding: const EdgeInsets.only(top: 16),
+                        child: Text(
+                          _errorMessage,
+                          style: const TextStyle(color: Colors.white, fontSize: 16),
                         ),
                       ),
-                      const SizedBox(height: 16),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: List.generate(
-                          _pinLength,
-                              (index) =>
-                              Container(
-                                margin: const EdgeInsets.symmetric(
-                                    horizontal: 8),
-                                width: 16,
-                                height: 16,
-                                decoration: BoxDecoration(
-                                  shape: BoxShape.circle,
-                                  color: index < _enteredPin.length
-                                      ? Theme
-                                      .of(context)
-                                      .primaryColor
-                                      : Colors.grey.withOpacity(0.3),
-                                ),
-                              ),
-                        ),
-                      ),
-                      if (_errorMessage.isNotEmpty)
-                        Padding(
-                          padding: const EdgeInsets.only(top: 16),
-                          child: Text(
-                            _errorMessage,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontSize: 16,
-                            ),
-                          ),
-                        ),
-                      const Spacer(),
-                      // PIN pad
-                      _buildPinPad(),
-                      const SizedBox(height: 16),
-                      const Spacer(),
-                    ],
-                  ),
+                    const Spacer(),
+                    // PIN pad
+                    _buildPinPad(),
+                    const SizedBox(height: 16),
+                    const Spacer(),
+                  ],
                 ),
-              ],
-            ),
+              ),
+            ],
           ),
-        )
+        ),
+      ),
     );
   }
 
@@ -371,17 +357,18 @@ class _LockScreenState extends State<LockScreen> {
   Widget _buildPinRow(List<String> digits) {
     return Row(
       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: digits.map((digit) {
-        if (digit == '') {
-          return const SizedBox(width: 80);
-        } else if (digit == 'del') {
-          return _buildDeleteButton();
-        } else if (digit == 'bio') {
-          return _buildBiometricButton();
-        } else {
-          return _buildDigitButton(digit);
-        }
-      }).toList(),
+      children:
+          digits.map((digit) {
+            if (digit == '') {
+              return const SizedBox(width: 80);
+            } else if (digit == 'del') {
+              return _buildDeleteButton();
+            } else if (digit == 'bio') {
+              return _buildBiometricButton();
+            } else {
+              return _buildDigitButton(digit);
+            }
+          }).toList(),
     );
   }
 
@@ -394,23 +381,16 @@ class _LockScreenState extends State<LockScreen> {
         height: 80,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Theme.of(context).brightness == Brightness.light ? AppColors.white.withOpacity(0.3) : AppColors.gray6.withOpacity(0.3),
+          color:
+              Theme.of(context).brightness == Brightness.light
+                  ? AppColors.white.withOpacity(0.3)
+                  : AppColors.gray6.withOpacity(0.3),
           boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 5,
-              spreadRadius: 1,
-            ),
+            BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 5, spreadRadius: 1),
           ],
         ),
         child: Center(
-          child: Text(
-            digit,
-            style: const TextStyle(
-              fontSize: 28,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
+          child: Text(digit, style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold)),
         ),
       ),
     );
@@ -425,21 +405,15 @@ class _LockScreenState extends State<LockScreen> {
         height: 80,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Theme.of(context).brightness == Brightness.light ? AppColors.white.withOpacity(0.1) : AppColors.gray6.withOpacity(0.1),
+          color:
+              Theme.of(context).brightness == Brightness.light
+                  ? AppColors.white.withOpacity(0.1)
+                  : AppColors.gray6.withOpacity(0.1),
           boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 5,
-              spreadRadius: 1,
-            ),
+            BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 5, spreadRadius: 1),
           ],
         ),
-        child: const Center(
-          child: Icon(
-            Icons.backspace_outlined,
-            size: 28,
-          ),
-        ),
+        child: const Center(child: Icon(Icons.backspace_outlined, size: 28)),
       ),
     );
   }
@@ -459,21 +433,15 @@ class _LockScreenState extends State<LockScreen> {
         height: 80,
         decoration: BoxDecoration(
           shape: BoxShape.circle,
-          color: Theme.of(context).brightness == Brightness.light ? AppColors.white.withOpacity(0.1) : AppColors.gray6.withOpacity(0.1),
+          color:
+              Theme.of(context).brightness == Brightness.light
+                  ? AppColors.white.withOpacity(0.1)
+                  : AppColors.gray6.withOpacity(0.1),
           boxShadow: [
-            BoxShadow(
-              color: Colors.black.withOpacity(0.05),
-              blurRadius: 5,
-              spreadRadius: 1,
-            ),
+            BoxShadow(color: Colors.black.withOpacity(0.05), blurRadius: 5, spreadRadius: 1),
           ],
         ),
-        child: const Center(
-          child: Icon(
-            Icons.fingerprint,
-            size: 28,
-          ),
-        ),
+        child: const Center(child: Icon(Icons.fingerprint, size: 28)),
       ),
     );
   }

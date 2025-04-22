@@ -1,13 +1,13 @@
 import 'dart:io';
+
 import 'package:authenticator_app/core/config/secure_storage_keys.dart';
 import 'package:authenticator_app/data/repositories/remote/synchronize_repository.dart';
-import 'package:authenticator_app/presentation/screens/home_screen.dart';
+import 'package:authenticator_app/presentation/screens/features/home/home_screen.dart';
 import 'package:authenticator_app/presentation/screens/privacy_policy_screen.dart';
 import 'package:authenticator_app/presentation/screens/terms_of_use_screen.dart';
 import 'package:authenticator_app/services/auth_service.dart';
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
@@ -16,14 +16,14 @@ import 'package:flutter_svg/svg.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sign_button/constants.dart';
 import 'package:sign_button/create_button.dart';
+
 import '../../../core/config/theme.dart' as Colors;
 import '../../data/models/auth_token.dart';
 import '../../data/repositories/remote/subscription_repository.dart';
 import '../../data/repositories/remote/token_repository.dart';
 import '../dialogs/error_dialog.dart';
 
-
-class SignInScreen extends StatefulWidget{
+class SignInScreen extends StatefulWidget {
   @override
   _SignInScreenState createState() => _SignInScreenState();
 }
@@ -32,12 +32,10 @@ class _SignInScreenState extends State<SignInScreen> {
   bool isAgree = false;
   bool showErrorMessage = false;
 
-
   Future<File> _getUserInfoFile() async {
     final dir = await getApplicationDocumentsDirectory();
     return File('${dir.path}/user_info.json');
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +43,7 @@ class _SignInScreenState extends State<SignInScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         iconTheme: IconThemeData(
-          color: Theme.of(context).brightness == Brightness.light ? Colors.mainBlue : Colors.blue
+          color: Theme.of(context).brightness == Brightness.light ? Colors.mainBlue : Colors.blue,
         ),
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
@@ -53,14 +51,19 @@ class _SignInScreenState extends State<SignInScreen> {
             "assets/icons/arrow_back.svg",
             width: 6,
             height: 12,
-            colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? Colors.mainBlue : Colors.blue, BlendMode.srcIn),
+            colorFilter: ColorFilter.mode(
+              Theme.of(context).brightness == Brightness.light ? Colors.mainBlue : Colors.blue,
+              BlendMode.srcIn,
+            ),
           ),
         ),
-        backgroundColor: Theme.of(context).brightness == Brightness.light ? Colors.gray1 : Colors.black,
+        backgroundColor:
+            Theme.of(context).brightness == Brightness.light ? Colors.gray1 : Colors.black,
         title: Text(
           AppLocalizations.of(context)!.signin,
           style: Theme.of(context).textTheme.displaySmall!.copyWith(
-            color: Theme.of(context).brightness == Brightness.light ? Color(0xFF171818) : Colors.white,
+            color:
+                Theme.of(context).brightness == Brightness.light ? Color(0xFF171818) : Colors.white,
           ),
         ),
         centerTitle: true,
@@ -74,7 +77,10 @@ class _SignInScreenState extends State<SignInScreen> {
             Text(
               AppLocalizations.of(context)!.wellcome,
               style: Theme.of(context).textTheme.displayLarge!.copyWith(
-                color: Theme.of(context).brightness == Brightness.light ? Colors.mainBlue : Colors.blue,
+                color:
+                    Theme.of(context).brightness == Brightness.light
+                        ? Colors.mainBlue
+                        : Colors.blue,
               ),
             ),
             SizedBox(height: 60),
@@ -83,89 +89,101 @@ class _SignInScreenState extends State<SignInScreen> {
               height: 54,
               child: SignInButton(
                 buttonType: ButtonType.google,
-                onPressed: isAgree ? () async {
+                onPressed:
+                    isAgree
+                        ? () async {
+                          if (isAgree) {
+                            ConnectivityResult connectivityResult =
+                                await Connectivity().checkConnectivity();
 
-                  if (isAgree) {
-                    ConnectivityResult connectivityResult = await Connectivity().checkConnectivity();
+                            if (connectivityResult == ConnectivityResult.none) {
+                              ErrorDialog().showErrorDialog(
+                                context,
+                                AppLocalizations.of(context)!.connection_error,
+                                AppLocalizations.of(context)!.connection_error_message,
+                              );
+                              return;
+                            }
 
-                    if (connectivityResult == ConnectivityResult.none) {
-                      ErrorDialog().showErrorDialog(
-                        context,
-                        AppLocalizations.of(context)!.connection_error,
-                        AppLocalizations.of(context)!.connection_error_message,
-                      );
-                      return;
-                    }
+                            UserCredential? userCredential = await AuthService().signInWithGoogle();
 
-                    UserCredential? userCredential = await AuthService().signInWithGoogle();
+                            if (userCredential != null) {
+                              final user = FirebaseAuth.instance.currentUser;
 
+                              if (user != null) {
+                                final info = await SubscriptionRepository().loadSubscriptionForUser(
+                                  user.uid,
+                                );
 
-                    if (userCredential != null) {
-                      final user = FirebaseAuth.instance.currentUser;
+                                if (info != null) {
+                                  final FlutterSecureStorage storage = FlutterSecureStorage();
 
-                      if (user != null) {
-                        final info = await SubscriptionRepository().loadSubscriptionForUser(user.uid);
+                                  var email = info['email'];
+                                  var plan = info['plan'];
+                                  var nextBilling = info['nextBilling'];
+                                  var hasFreeTrial = info['hasFreeTrial'];
 
-                        if (info != null) {
-                          final FlutterSecureStorage storage = FlutterSecureStorage();
+                                  await storage.write(
+                                    key: SecureStorageKeys.hasFreeTrial,
+                                    value: hasFreeTrial.toString(),
+                                  );
+                                  await storage.write(
+                                    key: SecureStorageKeys.subscription,
+                                    value: plan,
+                                  );
+                                  await storage.write(
+                                    key: SecureStorageKeys.nextbilling,
+                                    value: nextBilling,
+                                  );
 
-                          var email = info['email'];
-                          var plan = info['plan'];
-                          var nextBilling = info['nextBilling'];
-                          var hasFreeTrial = info['hasFreeTrial'];
+                                  print(
+                                    'Subscription info: $email, $plan, $nextBilling, Free Trial: $hasFreeTrial',
+                                  );
+                                } else {
+                                  print('No subscription data found.');
+                                }
+                              } else {
+                                print('User is not logged in.');
+                              }
 
-                          await storage.write(key: SecureStorageKeys.hasFreeTrial, value: hasFreeTrial.toString());
-                          await storage.write(key: SecureStorageKeys.subscription, value: plan);
-                          await storage.write(key: SecureStorageKeys.nextbilling, value: nextBilling);
+                              try {
+                                final user = FirebaseAuth.instance.currentUser;
 
-                          print('Subscription info: $email, $plan, $nextBilling, Free Trial: $hasFreeTrial');
-                        } else {
-                          print('No subscription data found.');
-                        }
-                      } else {
-                        print('User is not logged in.');
-                      }
+                                if (user != null) {
+                                  if (await SynchronizeRepository().isSynchronizing(user.uid)) {
+                                    final tokens = await TokenService().loadTokensForUser(user.uid);
+                                    final jsonString = AuthToken.listToJson(tokens);
+                                    final file = await _getUserInfoFile();
+                                    await file.writeAsString(jsonString);
+                                  }
+                                }
+                              } catch (e) {}
 
-
-                      try {
-                        final user = FirebaseAuth.instance.currentUser;
-
-                        if (user != null) {
-                          if(await SynchronizeRepository().isSynchronizing(user.uid)) {
-                            final tokens = await TokenService().loadTokensForUser(user.uid);
-                            final jsonString = AuthToken.listToJson(tokens);
-                            final file = await _getUserInfoFile();
-                            await file.writeAsString(jsonString);
+                              Navigator.pushAndRemoveUntil(
+                                context,
+                                MaterialPageRoute(builder: (context) => HomeScreen()),
+                                (Route<dynamic> route) => false,
+                              );
+                            } else {
+                              ErrorDialog().showErrorDialog(
+                                context,
+                                AppLocalizations.of(context)!.error_with_signIn,
+                                AppLocalizations.of(context)!.error_signIn_message,
+                              );
+                            }
+                          } else {
+                            setState(() {
+                              showErrorMessage = true;
+                            });
                           }
                         }
-                      } catch (e) {
-                      }
-
-                      Navigator.pushAndRemoveUntil(
-                        context,
-                        MaterialPageRoute(builder: (context) => HomeScreen()),
-                            (Route<dynamic> route) => false,
-                      );
-                    } else {
-                      ErrorDialog().showErrorDialog(
-                        context,
-                        AppLocalizations.of(context)!.error_with_signIn,
-                        AppLocalizations.of(context)!.error_signIn_message,
-                      );
-                    }
-                  } else {
-                    setState(() {
-                      showErrorMessage = true;
-                    });
-                  }
-                } : null,
+                        : null,
               ),
             ),
 
             SizedBox(height: 20),
 
-            if(!showErrorMessage) SizedBox(height: 170,)
-            else SizedBox(height: 80,),
+            if (!showErrorMessage) SizedBox(height: 170) else SizedBox(height: 80),
             Visibility(
               visible: showErrorMessage,
               child: Container(
@@ -197,7 +215,7 @@ class _SignInScreenState extends State<SignInScreen> {
               ),
             ),
 
-            if(showErrorMessage) SizedBox(height: 40,),
+            if (showErrorMessage) SizedBox(height: 40),
 
             SizedBox(height: 10),
 
@@ -225,25 +243,27 @@ class _SignInScreenState extends State<SignInScreen> {
                         TextSpan(
                           text: AppLocalizations.of(context)!.terms_of_service,
                           style: TextStyle(color: Colors.blue),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => TermsOfUseScreen()),
-                              );
-                            },
+                          recognizer:
+                              TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => TermsOfUseScreen()),
+                                  );
+                                },
                         ),
                         TextSpan(text: ' ${AppLocalizations.of(context)!.and} '),
                         TextSpan(
                           text: AppLocalizations.of(context)!.privacy_policy,
                           style: TextStyle(color: Colors.blue),
-                          recognizer: TapGestureRecognizer()
-                            ..onTap = () {
-                              Navigator.push(
-                                context,
-                                MaterialPageRoute(builder: (context) => PrivacyPolicyScreen()),
-                              );
-                            },
+                          recognizer:
+                              TapGestureRecognizer()
+                                ..onTap = () {
+                                  Navigator.push(
+                                    context,
+                                    MaterialPageRoute(builder: (context) => PrivacyPolicyScreen()),
+                                  );
+                                },
                         ),
                       ],
                     ),

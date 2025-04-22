@@ -1,18 +1,17 @@
-import 'package:authenticator_app/presentation/screens/home_screen.dart';
-import 'package:flutter/cupertino.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:authenticator_app/presentation/screens/features/home/home_screen.dart';
 import 'package:flutter/material.dart';
-import '../../../core/config/theme.dart' as Colors;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 
-import '../sign_in_screen.dart';
+import '../../../core/config/theme.dart' as Colors;
 import '../terms_of_use_screen.dart';
 
 class OnBoardingScreen4 extends StatelessWidget {
   final PageController controller;
   final bool isFirst;
 
-  const OnBoardingScreen4({Key? key, required this.controller, required this.isFirst}) : super(key: key);
+  const OnBoardingScreen4({Key? key, required this.controller, required this.isFirst})
+    : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -35,12 +34,12 @@ class OnBoardingScreen4 extends StatelessWidget {
                   GestureDetector(
                     onTap: () {
                       print(isFirst);
-                      if(isFirst) {
-                        Navigator.pushReplacement(context,
-                            MaterialPageRoute(builder: (context) =>
-                                HomeScreen()));
-                      }
-                      else{
+                      if (isFirst) {
+                        Navigator.pushReplacement(
+                          context,
+                          MaterialPageRoute(builder: (context) => HomeScreen()),
+                        );
+                      } else {
                         Navigator.pop(context);
                       }
                     },
@@ -83,7 +82,11 @@ class OnBoardingScreen4 extends StatelessWidget {
                   Text(
                     AppLocalizations.of(context)!.onBoarding_H4,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600, color: Colors.white),
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
                   ),
                   SizedBox(height: 24),
 
@@ -102,15 +105,14 @@ class OnBoardingScreen4 extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => TermsOfUseScreen())
+                            context,
+                            MaterialPageRoute(builder: (context) => TermsOfUseScreen()),
                           );
                         },
                         child: Text(
-                         "Terms of Use",
+                          "Terms of Use",
                           style: Theme.of(context).textTheme.headlineSmall?.copyWith(
                             fontWeight: FontWeight.w500,
                             color: Colors.gray2,
@@ -128,12 +130,10 @@ class OnBoardingScreen4 extends StatelessWidget {
                       ),
                       SizedBox(width: 6),
                       GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => TermsOfUseScreen()
-                              )
+                            context,
+                            MaterialPageRoute(builder: (context) => TermsOfUseScreen()),
                           );
                         },
                         child: Text(

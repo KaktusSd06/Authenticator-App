@@ -1,24 +1,22 @@
-import 'package:authenticator_app/presentation/screens/home_screen.dart';
-import 'package:authenticator_app/presentation/screens/main_screen.dart';
+import 'package:authenticator_app/presentation/screens/features/home/home_screen.dart';
 import 'package:authenticator_app/presentation/screens/onboarding/onboarding_screen.dart';
 import 'package:authenticator_app/presentation/screens/privacy_policy_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:intl/intl.dart';
+
 import '../../../core/config/secure_storage_keys.dart';
 import '../../../core/config/theme.dart' as Colors;
 import '../../../data/repositories/remote/subscription_repository.dart';
 import '../../widgets/continue_btn.dart';
-import '../sign_in_screen.dart';
 import '../terms_of_use_screen.dart';
 
-class PaywallScreen extends StatefulWidget{
+class PaywallScreen extends StatefulWidget {
   final bool isFirst;
-  const PaywallScreen ({Key? key, required this.isFirst}) : super(key: key);
+  const PaywallScreen({Key? key, required this.isFirst}) : super(key: key);
 
   @override
   _PaywallScreenState createState() => _PaywallScreenState();
@@ -53,7 +51,10 @@ class _PaywallScreenState extends State<PaywallScreen> {
 
     await storage.write(key: SecureStorageKeys.subscription, value: plan);
     await storage.write(key: SecureStorageKeys.nextbilling, value: formattedDate);
-    await storage.write(key: SecureStorageKeys.hasFreeTrial, value: isTrialEnabled ? true.toString() : false.toString());
+    await storage.write(
+      key: SecureStorageKeys.hasFreeTrial,
+      value: isTrialEnabled ? true.toString() : false.toString(),
+    );
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
@@ -70,10 +71,16 @@ class _PaywallScreenState extends State<PaywallScreen> {
       print('No user is currently signed in');
     }
 
-
     Navigator.pop(context);
   }
 
+  //FIXME дуже багато всього в одній функції, дуже важко читається. Розділяй на кілька функцій окремо для кожного віджету.
+  //FIXME Наприклад, віджет Title де буде тайтл з описом. Далі віджет для обирання плану з світчом і двома радіобаттонами. Радіобаттон можна винести окремо і перевикористати для річного і тижневого плану
+  //FIXME колір тайтлу на радіобаттон змінюється для обраної опції https://www.figma.com/design/PKNsmhhhbS74HWZZFZTgvn/Authenticator-app?node-id=395-2377&t=wcRy3wRnN0oaANRR-4 https://www.figma.com/design/PKNsmhhhbS74HWZZFZTgvn/Authenticator-app?node-id=395-2545&t=wcRy3wRnN0oaANRR-4
+
+  //FIXME давай робити кнопку неактивною, якщо ніякий план не вибраний
+
+  //FIXME клік повинен відбуватися по всьому блоку і тоді повинен змінюватись стан свіча/радіобаттон
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -95,10 +102,12 @@ class _PaywallScreenState extends State<PaywallScreen> {
                   children: [
                     GestureDetector(
                       onTap: () {
-                        if(widget.isFirst){
-                          Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()));
-                        }
-                        else {
+                        if (widget.isFirst) {
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => HomeScreen()),
+                          );
+                        } else {
                           Navigator.pop(context);
                         }
                       },
@@ -109,11 +118,13 @@ class _PaywallScreenState extends State<PaywallScreen> {
                         colorFilter: ColorFilter.mode(Colors.mainBlue, BlendMode.srcIn),
                       ),
                     ),
-                    if(widget.isFirst)
+                    if (widget.isFirst)
                       GestureDetector(
                         onTap: () {
-                          Navigator.pushReplacement(context,
-                              MaterialPageRoute(builder: (context) => OnBoardingScreen()));
+                          Navigator.pushReplacement(
+                            context,
+                            MaterialPageRoute(builder: (context) => OnBoardingScreen()),
+                          );
                         },
                         child: Text(
                           AppLocalizations.of(context)!.restor_l,
@@ -138,7 +149,11 @@ class _PaywallScreenState extends State<PaywallScreen> {
                   Text(
                     AppLocalizations.of(context)!.paywell_H1,
                     textAlign: TextAlign.center,
-                    style: TextStyle(fontSize: 28, fontWeight: FontWeight.w600, color: Colors.white),
+                    style: TextStyle(
+                      fontSize: 28,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.white,
+                    ),
                   ),
                   SizedBox(height: 8),
                   Text(
@@ -185,20 +200,19 @@ class _PaywallScreenState extends State<PaywallScreen> {
                           activeTrackColor: Color(0xFF00CF00),
                           inactiveThumbColor: Colors.white,
                           inactiveTrackColor: Color(0xFFD9D9D9),
-                          trackOutlineColor: MaterialStateProperty.resolveWith<Color>(
-                                (Set<MaterialState> states) {
-                              return states.contains(MaterialState.selected)
-                                  ? Color(0xFF00CF00)
-                                  :  Colors.gray2;
-                            },
-                          ),
+                          trackOutlineColor: MaterialStateProperty.resolveWith<Color>((
+                            Set<MaterialState> states,
+                          ) {
+                            return states.contains(MaterialState.selected)
+                                ? Color(0xFF00CF00)
+                                : Colors.gray2;
+                          }),
                         ),
                       ],
                     ),
                   ),
 
                   SizedBox(height: 12),
-
 
                   Container(
                     decoration: BoxDecoration(
@@ -238,45 +252,41 @@ class _PaywallScreenState extends State<PaywallScreen> {
                             ),
 
                             GestureDetector(
-                                onTap: (){
-                                  setState(() {
-                                    yearPlan = !yearPlan;
-                                    isTrialEnabled = false;
-                                    weeklyplan = false;
-                                  });
-                                },
-                                child: !yearPlan ?
-                                Container(
-                                  width: 24,
-                                  height: 24,
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          width: 1.5,
-                                          color: Color(0xFF094086)
+                              onTap: () {
+                                setState(() {
+                                  yearPlan = !yearPlan;
+                                  isTrialEnabled = false;
+                                  weeklyplan = false;
+                                });
+                              },
+                              child:
+                                  !yearPlan
+                                      ? Container(
+                                        width: 24,
+                                        height: 24,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(width: 1.5, color: Color(0xFF094086)),
+                                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                                        ),
+                                      )
+                                      : Container(
+                                        width: 24,
+                                        height: 24,
+                                        decoration: BoxDecoration(
+                                          border: Border.all(color: Color(0xFF094086)),
+                                          borderRadius: BorderRadius.all(Radius.circular(12)),
+                                        ),
+                                        child: Center(
+                                          child: Container(
+                                            width: 14,
+                                            height: 14,
+                                            decoration: BoxDecoration(
+                                              color: Color(0xFF094086),
+                                              shape: BoxShape.circle,
+                                            ),
+                                          ),
+                                        ),
                                       ),
-                                      borderRadius: BorderRadius.all(Radius.circular(12))
-                                  ),
-                                ) :
-                                Container(
-                                  width: 24,
-                                  height: 24,
-                                  decoration: BoxDecoration(
-                                    border: Border.all(
-                                      color: Color(0xFF094086),
-                                    ),
-                                    borderRadius: BorderRadius.all(Radius.circular(12)),
-                                  ),
-                                  child: Center(
-                                    child: Container(
-                                      width: 14,
-                                      height: 14,
-                                      decoration: BoxDecoration(
-                                        color: Color(0xFF094086),
-                                        shape: BoxShape.circle,
-                                      ),
-                                    ),
-                                  ),
-                                )
                             ),
                           ],
                         ),
@@ -342,46 +352,42 @@ class _PaywallScreenState extends State<PaywallScreen> {
                         ),
 
                         GestureDetector(
-                            onTap: (){
-                              setState(() {
-                                weeklyplan = !weeklyplan;
-                                isTrialEnabled = true;
-                                yearPlan = false;
-                              });
-                            },
-                            child: !weeklyplan ?
-                            Container(
-                              width: 24,
-                              height: 24,
-                              decoration: BoxDecoration(
-                                  border: Border.all(
-                                      width: 1.5,
-                                      color: Color(0xFF094086)
-                                  ),
+                          onTap: () {
+                            setState(() {
+                              weeklyplan = !weeklyplan;
+                              isTrialEnabled = true;
+                              yearPlan = false;
+                            });
+                          },
+                          child:
+                              !weeklyplan
+                                  ? Container(
+                                    width: 24,
+                                    height: 24,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(width: 1.5, color: Color(0xFF094086)),
 
-                                  borderRadius: BorderRadius.all(Radius.circular(12))
-                              ),
-                            ) :
-                            Container(
-                              width: 24,
-                              height: 24,
-                              decoration: BoxDecoration(
-                                border: Border.all(
-                                  color: Color(0xFF094086),
-                                ),
-                                borderRadius: BorderRadius.all(Radius.circular(12)),
-                              ),
-                              child: Center(
-                                child: Container(
-                                  width: 14,
-                                  height: 14,
-                                  decoration: BoxDecoration(
-                                    color: Color(0xFF094086),
-                                    shape: BoxShape.circle,
+                                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                                    ),
+                                  )
+                                  : Container(
+                                    width: 24,
+                                    height: 24,
+                                    decoration: BoxDecoration(
+                                      border: Border.all(color: Color(0xFF094086)),
+                                      borderRadius: BorderRadius.all(Radius.circular(12)),
+                                    ),
+                                    child: Center(
+                                      child: Container(
+                                        width: 14,
+                                        height: 14,
+                                        decoration: BoxDecoration(
+                                          color: Color(0xFF094086),
+                                          shape: BoxShape.circle,
+                                        ),
+                                      ),
+                                    ),
                                   ),
-                                ),
-                              ),
-                            )
                         ),
                       ],
                     ),
@@ -390,12 +396,7 @@ class _PaywallScreenState extends State<PaywallScreen> {
                   SizedBox(height: 24),
 
                   //Continue btn
-                  SizedBox(
-                    width: double.infinity,
-                    child: ContinueBtn(
-                      onPressed: btnPress,
-                    ),
-                  ),
+                  SizedBox(width: double.infinity, child: ContinueBtn(onPressed: btnPress)),
                   SizedBox(height: 16),
 
                   Row(
@@ -427,11 +428,10 @@ class _PaywallScreenState extends State<PaywallScreen> {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => TermsOfUseScreen())
+                            context,
+                            MaterialPageRoute(builder: (context) => TermsOfUseScreen()),
                           );
                         },
                         child: Text(
@@ -455,12 +455,10 @@ class _PaywallScreenState extends State<PaywallScreen> {
                       ),
                       SizedBox(width: 6),
                       GestureDetector(
-                        onTap: (){
+                        onTap: () {
                           Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                              builder: (context) => PrivacyPolicyScreen()
-                              )
+                            context,
+                            MaterialPageRoute(builder: (context) => PrivacyPolicyScreen()),
                           );
                         },
                         child: Text(
@@ -475,7 +473,6 @@ class _PaywallScreenState extends State<PaywallScreen> {
                       ),
                     ],
                   ),
-
                 ],
               ),
             ),
@@ -484,5 +481,4 @@ class _PaywallScreenState extends State<PaywallScreen> {
       ),
     );
   }
-
 }

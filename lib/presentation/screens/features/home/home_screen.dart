@@ -1,7 +1,8 @@
 import 'package:authenticator_app/presentation/screens/info_screen.dart';
 import 'package:authenticator_app/presentation/screens/main_screen.dart';
 import 'package:flutter/material.dart';
-import '../widgets/island_navigation_bar.dart';
+
+import '../../../widgets/island_navigation_bar.dart';
 
 class HomeScreen extends StatefulWidget {
   @override
@@ -11,10 +12,7 @@ class HomeScreen extends StatefulWidget {
 class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateMixin {
   int _selectedIndex = 0;
 
-  final List<Widget> _pages = [
-    MainScreen(),
-    InfoScreen(),
-  ];
+  final List<Widget> _pages = [MainScreen(), InfoScreen()];
 
   void _onItemTapped(int index) {
     setState(() {
@@ -35,10 +33,7 @@ class _HomeScreenState extends State<HomeScreen> with SingleTickerProviderStateM
       body: _pages[_selectedIndex],
       bottomNavigationBar: Padding(
         padding: const EdgeInsets.only(bottom: 38),
-        child: IslandNavigationBar(
-          selectedIndex: _selectedIndex,
-          onItemTapped: _onItemTapped,
-        ),
+        child: IslandNavigationBar(selectedIndex: _selectedIndex, onItemTapped: _onItemTapped),
       ),
       extendBody: true,
     );

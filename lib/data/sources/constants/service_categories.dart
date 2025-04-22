@@ -1,5 +1,6 @@
 import '../../models/service.dart';
 
+//FIXME я б винесла це в presentation, бо data шар не повинен нічого знати про твою реалізацію на ui. А ти тут вказуєш, що ти зображення береш з асетів.
 final Map<String, List<Service>> serviceCategories = {
   "General": [
     Service(name: "Banking and finance", iconPath: "assets/icons/banking.svg"),
