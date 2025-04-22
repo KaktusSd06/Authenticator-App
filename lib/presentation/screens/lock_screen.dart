@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:authenticator_app/core/config/secure_storage_keys.dart';
-import 'package:authenticator_app/presentation/screens/features/home/home_screen.dart';
+import 'package:authenticator_app/presentation/screens/home_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';

@@ -5,10 +5,10 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 import '../../core/config/theme.dart';
 
-class ContinueBtn extends StatelessWidget {
+class ContinueButton extends StatelessWidget {
   final VoidCallback?  onPressed;
 
-  const ContinueBtn({
+  const ContinueButton({
     required this.onPressed,
   });
 
@@ -17,11 +17,12 @@ class ContinueBtn extends StatelessWidget {
     return ElevatedButton(
       onPressed: onPressed,
       style: ElevatedButton.styleFrom(
-          backgroundColor: lightBlue,
+          backgroundColor: onPressed == null ? gray4 : lightBlue,
           padding: EdgeInsets.symmetric(vertical: 15),
           shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(30)
-          )
+          ),
+          //elevation: onPressed == null ? 1 : 0,
       ),
       child: Text(
         AppLocalizations.of(context)!.continue_btn,

@@ -12,7 +12,7 @@ import 'dart:io';
 import '../../data/models/service.dart';
 import '../../data/repositories/remote/synchronize_repository.dart';
 import '../../data/repositories/remote/token_repository.dart';
-import '../../data/sources/constants/service_categories.dart';
+import '../constants/service_categories.dart';
 import '../dialogs/error_dialog.dart';
 import 'package:path_provider/path_provider.dart';
 import '../../logic/blocs/tokens/tokens_bloc.dart';

@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:authenticator_app/core/config/secure_storage_keys.dart';
 import 'package:authenticator_app/data/repositories/remote/synchronize_repository.dart';
-import 'package:authenticator_app/presentation/screens/features/home/home_screen.dart';
+import 'package:authenticator_app/presentation/screens/home_screen.dart';
 import 'package:authenticator_app/presentation/screens/privacy_policy_screen.dart';
 import 'package:authenticator_app/presentation/screens/terms_of_use_screen.dart';
 import 'package:authenticator_app/services/auth_service.dart';
