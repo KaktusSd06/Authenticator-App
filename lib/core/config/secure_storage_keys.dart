@@ -7,5 +7,5 @@ class SecureStorageKeys {
   static const nextbilling = 'nextbilling';
   static const accessToken = 'accessToken';
   static const hasFreeTrial = 'hasFreeTrial';
-  static const isFirst = 'isFirst';
+  static const isFirst = 'isFirstAppLaunch';
 }

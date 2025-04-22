@@ -12,7 +12,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:base32/base32.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../../data/sources/constants/service_categories.dart';
+import '../constants/service_categories.dart';
 import '../screens/edit_element_screen.dart';
 
 
