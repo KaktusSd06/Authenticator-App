@@ -1,25 +1,22 @@
-import 'package:authenticator_app/core/config/secure_storage_keys.dart';
 import 'package:authenticator_app/presentation/screens/about_app.dart';
-import 'package:authenticator_app/presentation/screens/password_security_screen.dart';
-import 'package:authenticator_app/presentation/screens/premium_features.dart';
 import 'package:authenticator_app/presentation/screens/privacy_policy_screen.dart';
-import 'package:authenticator_app/presentation/screens/sign_in_screen.dart';
-import 'package:authenticator_app/presentation/screens/subscription.dart';
+import 'package:authenticator_app/presentation/screens/features/subscription/subscription_screen.dart';
 import 'package:authenticator_app/presentation/screens/terms_of_use_screen.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
-
 import '../widgets/settings_tile.dart';
+import 'features/auth/password_security_screen.dart';
+import 'features/premium_features/premium_features.dart';
 
 class InfoScreen extends StatefulWidget {
+  const InfoScreen({super.key});
+
   @override
-  _InfoScreenSate createState() => _InfoScreenSate();
+  InfoScreenSate createState() => InfoScreenSate();
 }
 
-class _InfoScreenSate extends State<InfoScreen> {
+class InfoScreenSate extends State<InfoScreen> {
   @override
   void initState() {
     super.initState();
@@ -76,7 +73,7 @@ class _InfoScreenSate extends State<InfoScreen> {
                 color: Theme.of(context).cardColor,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withAlpha((0.1 * 255).round()),
                     blurRadius: 20,
                     spreadRadius: 2,
                     offset: Offset(0, 0),
@@ -141,7 +138,7 @@ class _InfoScreenSate extends State<InfoScreen> {
                 color: Theme.of(context).cardColor,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
+                    color: Colors.black.withAlpha((0.1 * 255).round()),
                     blurRadius: 20,
                     spreadRadius: 2,
                     offset: Offset(0, 0),

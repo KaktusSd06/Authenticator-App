@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:authenticator_app/presentation/screens/info_screen.dart';
-import 'package:authenticator_app/presentation/screens/main_screen.dart';
 import 'package:flutter_svg/svg.dart';
-import '../../../core/config/theme.dart' as AppColors;
+import '../../../core/config/theme.dart' as app_colors;
 
 
 class AboutAppScreen extends StatefulWidget {
+  const AboutAppScreen({super.key});
+
   @override
-  _AboutAppScreenState createState() => _AboutAppScreenState();
+  AboutAppScreenState createState() => AboutAppScreenState();
 }
 
-class _AboutAppScreenState extends State<AboutAppScreen> with SingleTickerProviderStateMixin {
+class AboutAppScreenState extends State<AboutAppScreen> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class _AboutAppScreenState extends State<AboutAppScreen> with SingleTickerProvid
             width: 16,
             height: 16,
             colorFilter: ColorFilter.mode(
-              Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : Colors.blue,
+              Theme.of(context).brightness == Brightness.light ? app_colors.mainBlue : Colors.blue,
               BlendMode.srcIn,
             ),
           ),
@@ -60,20 +60,20 @@ class _AboutAppScreenState extends State<AboutAppScreen> with SingleTickerProvid
                     TextSpan(text: ' '),
                     TextSpan(
                       text: AppLocalizations.of(context)!.about_p1,
-                      style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? AppColors.gray6 : AppColors.gray4),
+                      style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? app_colors.gray6 : app_colors.gray4),
                     ),
                     TextSpan(
                       text: '\n\n${AppLocalizations.of(context)!.about_p2}',
-                      style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? AppColors.gray6 : AppColors.gray4),
+                      style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? app_colors.gray6 : app_colors.gray4),
                     ),
                     TextSpan(text: ' ${AppLocalizations.of(context)!.authenticator} ', style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? Color(0xFF3E3E3E) : Colors.white)),
                     TextSpan(
                       text: AppLocalizations.of(context)!.about_p3,
-                      style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? AppColors.gray6 : AppColors.gray4),
+                      style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? app_colors.gray6 : app_colors.gray4),
                     ),
                     TextSpan(
                       text: AppLocalizations.of(context)!.about_p4,
-                      style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? AppColors.gray6 : AppColors.gray4),
+                      style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? app_colors.gray6 : app_colors.gray4),
                     ),
                   ],
                 ),

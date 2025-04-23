@@ -4,17 +4,18 @@ import 'package:authenticator_app/core/config/secure_storage_keys.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import '../../../core/config/theme.dart' as app_colors;
+import 'features/onboarding/onboarding_screen.dart';
+import 'home_screen.dart';
 
-import '../../../core/config/theme.dart' as AppColors;
-import 'features/home/home_screen.dart';
-import 'onboarding/onboarding_screen.dart';
+class WelcomeScreen extends StatefulWidget {
+  const WelcomeScreen({super.key});
 
-class WellcomeScreen extends StatefulWidget {
   @override
-  _WellcomeScreenState createState() => _WellcomeScreenState();
+  WelcomeScreenState createState() => WelcomeScreenState();
 }
 
-class _WellcomeScreenState extends State<WellcomeScreen> {
+class WelcomeScreenState extends State<WelcomeScreen> {
   final storage = FlutterSecureStorage();
 
   @override
@@ -25,7 +26,6 @@ class _WellcomeScreenState extends State<WellcomeScreen> {
 
   Future<void> _navigateNext() async {
     final isFirst = await storage.read(key: SecureStorageKeys.isFirst);
-    final isPin = await storage.read(key: SecureStorageKeys.app_pin);
 
     Widget nextScreen;
     if (isFirst != null) {
@@ -56,21 +56,21 @@ class _WellcomeScreenState extends State<WellcomeScreen> {
                     AppLocalizations.of(context)!.authenticator,
                     style: Theme.of(context).textTheme.displayLarge?.copyWith(
                       fontWeight: FontWeight.w700,
-                      color: AppColors.white,
+                      color: app_colors.white,
                     ),
                   ),
                   Text(
                     AppLocalizations.of(context)!.your_digital,
                     style: Theme.of(context).textTheme.displayLarge?.copyWith(
                       fontWeight: FontWeight.w400,
-                      color: AppColors.white,
+                      color: app_colors.white,
                     ),
                   ),
                   Text(
                     AppLocalizations.of(context)!.shield,
                     style: Theme.of(context).textTheme.displayLarge?.copyWith(
                       fontWeight: FontWeight.w700,
-                      color: AppColors.white,
+                      color: app_colors.white,
                     ),
                   ),
                 ],

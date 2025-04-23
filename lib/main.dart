@@ -1,6 +1,12 @@
 import 'package:authenticator_app/core/config/secure_storage_keys.dart';
-import 'package:authenticator_app/presentation/screens/features/home/home_screen.dart';
-import 'package:authenticator_app/presentation/screens/lock_screen.dart';
+import 'package:authenticator_app/presentation/screens/features/auth/bloc/auth_bloc.dart';
+import 'package:authenticator_app/presentation/screens/features/auth/lock_screen.dart';
+import 'package:authenticator_app/presentation/screens/features/onboarding/bloc/onboarding_bloc.dart';
+import 'package:authenticator_app/presentation/screens/features/premium_features/bloc/premium_bloc.dart';
+import 'package:authenticator_app/presentation/screens/features/sign_in/bloc/sign_in_bloc.dart';
+import 'package:authenticator_app/presentation/screens/features/subscription/bloc/subscription_bloc.dart';
+import 'package:authenticator_app/presentation/screens/features/tokens/tokens/tokens_bloc.dart';
+import 'package:authenticator_app/presentation/screens/home_screen.dart';
 import 'package:authenticator_app/presentation/screens/wellcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -11,8 +17,8 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:secure_application/secure_application.dart';
 
 import 'core/config/theme.dart';
+import 'data/services/secure_storage_service.dart';
 import 'logic/blocs/locale_cubit.dart';
-import 'logic/blocs/tokens/tokens_bloc.dart';
 
 class AppStateService {
   static final AppStateService _instance = AppStateService._internal();
@@ -81,6 +87,12 @@ Future<void> main() async {
       providers: [
         BlocProvider(create: (_) => LocaleCubit()),
         BlocProvider(create: (_) => TokensBloc()),
+        BlocProvider(create: (_) => OnboardingBloc(SecureStorageService.instance)),
+        BlocProvider(create: (_) => AuthBloc()),
+        BlocProvider(create: (_) => PremiumFeaturesBloc()),
+        BlocProvider(create: (_) => SignInBloc()),
+        BlocProvider(create: (_) => SubscriptionBloc()),
+
       ],
       child: SecureApplication(nativeRemoveDelay: 300, child: MyApp()),
     ),
@@ -217,7 +229,7 @@ class _InitialScreenDeciderState extends State<InitialScreenDecider> {
         },
       );
     } else {
-      return WellcomeScreen();
+      return WelcomeScreen();
     }
   }
 }

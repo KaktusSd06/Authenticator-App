@@ -1,5 +1,4 @@
-import 'package:authenticator_app/presentation/screens/add_manually_screen.dart';
-import 'package:authenticator_app/presentation/screens/scan_qr_screen.dart';
+import 'package:authenticator_app/presentation/screens/features/tokens/scan_qr_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -7,15 +6,17 @@ import 'dart:ui';
 import '../../../core/config/theme.dart' as AppColors;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
+import '../screens/features/tokens/add_manually_screen.dart';
+
 class IslandNavigationBar extends StatelessWidget {
   final int selectedIndex;
   final Function(int) onItemTapped;
 
   const IslandNavigationBar({
-    Key? key,
+    super.key,
     required this.selectedIndex,
     required this.onItemTapped,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
