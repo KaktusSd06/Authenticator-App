@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:authenticator_app/presentation/screens/info_screen.dart';
-import 'package:authenticator_app/presentation/screens/features/tokens/main_screen.dart';
 import 'package:flutter_svg/svg.dart';
-import '../../../core/config/theme.dart' as AppColors;
+import '../../../core/config/theme.dart' as app_colors;
 
 
 class PrivacyPolicyScreen extends StatefulWidget {
+  const PrivacyPolicyScreen({super.key});
+
   @override
-  _PrivacyPolicyScreenState createState() => _PrivacyPolicyScreenState();
+  PrivacyPolicyScreenState createState() => PrivacyPolicyScreenState();
 }
 
-class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> with SingleTickerProviderStateMixin {
+class PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> with SingleTi
             width: 16,
             height: 16,
             colorFilter: ColorFilter.mode(
-              Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : Colors.blue,
+              Theme.of(context).brightness == Brightness.light ? app_colors.mainBlue : Colors.blue,
               BlendMode.srcIn,
             ),
           ),
@@ -51,7 +51,7 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> with SingleTi
 
           Text(
             AppLocalizations.of(context)!.privacy_intro,
-            style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? AppColors.gray6 : AppColors.gray4),
+            style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? app_colors.gray6 : app_colors.gray4),
           ),
 
           SizedBox(height: 24),
@@ -62,7 +62,7 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> with SingleTi
           SizedBox(height: 8),
           Text(
             AppLocalizations.of(context)!.data_collection_desc,
-            style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? AppColors.gray6 : AppColors.gray4),
+            style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? app_colors.gray6 : app_colors.gray4),
           ),
 
           SizedBox(height: 24),
@@ -73,7 +73,7 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> with SingleTi
           SizedBox(height: 8),
           Text(
             AppLocalizations.of(context)!.data_usage_desc,
-            style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? AppColors.gray6 : AppColors.gray4),
+            style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? app_colors.gray6 : app_colors.gray4),
           ),
 
           SizedBox(height: 24),
@@ -84,7 +84,7 @@ class _PrivacyPolicyScreenState extends State<PrivacyPolicyScreen> with SingleTi
           SizedBox(height: 8),
           Text(
             AppLocalizations.of(context)!.your_rights_desc,
-            style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? AppColors.gray6 : AppColors.gray4),
+            style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? app_colors.gray6 : app_colors.gray4),
           ),
         ],
             ),

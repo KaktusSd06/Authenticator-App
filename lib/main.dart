@@ -225,7 +225,7 @@ class _InitialScreenDeciderState extends State<InitialScreenDecider> {
         },
       );
     } else {
-      return WellcomeScreen();
+      return WelcomeScreen();
     }
   }
 }
