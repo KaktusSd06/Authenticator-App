@@ -1,27 +1,27 @@
-import 'package:authenticator_app/core/config/secure_storage_keys.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_secure_storage/flutter_secure_storage.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:local_auth/local_auth.dart';
-import '../../../core/config/theme.dart' as AppColors;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import '../widgets/settings_tile.dart';
-import 'change_pin.dart';
+import '../../../../core/config/theme.dart' as app_colors;
+import '../../../widgets/settings_tile.dart';
+import 'change_pin_screen.dart';
 import 'create_pin_screen.dart';
+import 'bloc/auth_bloc.dart';
+import 'bloc/auth_event.dart';
+import 'bloc/auth_state.dart';
 
-class PasswordSecurityScreen extends StatefulWidget{
+class PasswordSecurityScreen extends StatefulWidget {
+  const PasswordSecurityScreen({super.key});
+
   @override
-  _PasswordSecurityScreenSate createState() => _PasswordSecurityScreenSate();
+  State<PasswordSecurityScreen> createState() => _PasswordSecurityScreenState();
 }
 
-class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
-  late bool _isPassword = false;
+class _PasswordSecurityScreenState extends State<PasswordSecurityScreen> {
+  bool _isPassword = false;
   bool _isLoading = false;
   bool _isBiometrics = false;
   bool _isAvailableBiometrics = false;
-  final LocalAuthentication _localAuth = LocalAuthentication();
-
 
   @override
   void initState() {
@@ -34,25 +34,7 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
       _isLoading = true;
     });
 
-    try {
-      await _checkBiometricAvailability();
-      final storage = FlutterSecureStorage();
-      String? isPassword = await storage.read(key: SecureStorageKeys.app_pin);
-      String? isBiometrics = await storage.read(key: SecureStorageKeys.biometric_enabled);
-      if (mounted) {
-        setState(() {
-          _isPassword = isPassword == null ? false : true;
-          _isLoading = false;
-          _isBiometrics = isBiometrics == null ? false : true;
-        });
-      }
-    } catch (e) {
-      if (mounted) {
-        setState(() {
-          _isLoading = false;
-        });
-      }
-    }
+    context.read<AuthBloc>().add(CheckBiometricAvailabilityEvent());
   }
 
   @override
@@ -62,7 +44,7 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
         backgroundColor: Theme.of(context).scaffoldBackgroundColor,
         automaticallyImplyLeading: false,
         iconTheme: IconThemeData(
-          color: AppColors.mainBlue,
+          color: app_colors.mainBlue,
         ),
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
@@ -70,7 +52,7 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
             "assets/icons/arrow_back.svg",
             width: 6,
             height: 12,
-            colorFilter: ColorFilter.mode(AppColors.mainBlue, BlendMode.srcIn),
+            colorFilter: ColorFilter.mode(app_colors.mainBlue, BlendMode.srcIn),
           ),
         ),
         title: Text(
@@ -79,12 +61,46 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
         ),
         centerTitle: true,
       ),
+      body: BlocConsumer<AuthBloc, AuthState>(
+        listener: (context, state) {
+          if (state is BiometricState) {
+            setState(() {
+              _isAvailableBiometrics = state.isAvailable;
+              _isBiometrics = state.isEnabled;
+              _isLoading = false;
+            });
 
-      body: _isPassword ? _buildBodyWithPassword() : _buildBodyWithOutPassword(),
+            // Check if PIN exists
+            context.read<AuthBloc>().add(CheckPinExistsEvent());
+          } else if (state is PinExistsState) {
+            setState(() {
+              _isPassword = state.exists;
+              _isLoading = false;
+            });
+          } else if (state is NewPinCreated) {
+            setState(() {
+              _isPassword = true;
+            });
+          } else if (state is PinRemoved) {
+            setState(() {
+              _isPassword = false;
+            });
+          }
+        },
+        builder: (context, state) {
+          if (_isLoading) {
+            return Center(child: CircularProgressIndicator());
+          }
+
+          return _isPassword
+              ? _buildBodyWithPassword()
+              : _buildBodyWithOutPassword();
+        },
+      ),
     );
   }
 
-  _buildBodyWithPassword(){
+  Widget _buildBodyWithPassword() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16),
       child: Column(
@@ -95,7 +111,7 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
               color: Theme.of(context).cardColor,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: Colors.black.withAlpha((0.05 * 255).round()),
                   blurRadius: 20,
                   spreadRadius: 2,
                   offset: Offset(0, 0),
@@ -120,7 +136,7 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
                                   "assets/icons/key.svg",
                                   width: 24,
                                   height: 24,
-                                  colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : Colors.blue, BlendMode.srcIn),
+                                  colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? app_colors.mainBlue : app_colors.blue, BlendMode.srcIn),
                                 ),
                                 const SizedBox(width: 8),
                                 Text(
@@ -132,34 +148,30 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
                             Switch(
                               value: _isPassword,
                               onChanged: (value) {
-                                setState(() {
-                                  _isPassword = value;
-                                  if(value){
-                                    setPassword();
-                                  } else{
-                                    deletePassword();
-                                  }
-                                });
+                                if (value) {
+                                  setPassword();
+                                } else {
+                                  deletePassword();
+                                }
                               },
                               activeColor: Colors.white,
-                              activeTrackColor: AppColors.blue,
+                              activeTrackColor: app_colors.blue,
                               inactiveThumbColor: Colors.white,
                               inactiveTrackColor: Color(0xFFD9D9D9),
-                              trackOutlineColor: MaterialStateProperty.resolveWith<Color>(
-                                    (Set<MaterialState> states) {
-                                  return states.contains(MaterialState.selected)
-                                      ?  AppColors.mainBlue
-                                      :  AppColors.gray4;
+                              trackOutlineColor: WidgetStateProperty.resolveWith<Color>(
+                                    (Set<WidgetState> states) {
+                                  return states.contains(WidgetState.selected)
+                                      ? app_colors.mainBlue
+                                      : app_colors.gray4;
                                 },
                               ),
                             ),
                           ],
                         ),
                       ),
-                      Divider(height: 1, thickness: 1, color: Theme.of(context).brightness == Brightness.light ? AppColors.gray2 : AppColors.gray6),
+                      Divider(height: 1, thickness: 1, color: Theme.of(context).brightness == Brightness.light ? app_colors.gray2 : app_colors.gray6),
                     ],
                   ),
-
                   Padding(
                     padding: const EdgeInsets.only(top: 6),
                     child: SettingsTile(
@@ -174,17 +186,15 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
               ),
             ),
           ),
-
-          SizedBox(height: 20,),
-
-          _isAvailableBiometrics ?
-          Container(
+          SizedBox(height: 20),
+          _isAvailableBiometrics
+              ? Container(
             decoration: BoxDecoration(
               borderRadius: BorderRadius.circular(24),
               color: Theme.of(context).cardColor,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.05),
+                  color: app_colors.black.withAlpha((0.05 * 255).round()),
                   blurRadius: 20,
                   spreadRadius: 2,
                   offset: Offset(0, 0),
@@ -207,7 +217,7 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
                               "assets/icons/fingerprint.svg",
                               width: 24,
                               height: 24,
-                              colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : Colors.blue, BlendMode.srcIn),
+                              colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? app_colors.mainBlue : app_colors.blue, BlendMode.srcIn),
                             ),
                             const SizedBox(width: 8),
                             Text(
@@ -219,25 +229,20 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
                         Switch(
                           value: _isBiometrics,
                           onChanged: (value) {
+                            context.read<AuthBloc>().add(ToggleBiometricEvent(value));
                             setState(() {
                               _isBiometrics = value;
-                              if(value){
-                                setBiometrics();
-                              }
-                              else{
-                                deleteBiometrics();
-                              }
                             });
                           },
-                          activeColor: Colors.white,
-                          activeTrackColor: AppColors.blue,
-                          inactiveThumbColor: Colors.white,
+                          activeColor: app_colors.white,
+                          activeTrackColor: app_colors.blue,
+                          inactiveThumbColor: app_colors.white,
                           inactiveTrackColor: Color(0xFFD9D9D9),
-                          trackOutlineColor: MaterialStateProperty.resolveWith<Color>(
-                                (Set<MaterialState> states) {
-                              return states.contains(MaterialState.selected)
-                                  ?  AppColors.mainBlue
-                                  :  AppColors.gray4;
+                          trackOutlineColor: WidgetStateProperty.resolveWith<Color>(
+                                (Set<WidgetState> states) {
+                              return states.contains(WidgetState.selected)
+                                  ? app_colors.mainBlue
+                                  : app_colors.gray4;
                             },
                           ),
                         ),
@@ -247,13 +252,14 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
                 ],
               ),
             ),
-          ) : SizedBox(height: 0,)
+          )
+              : SizedBox(height: 0),
         ],
       ),
     );
   }
 
-  _buildBodyWithOutPassword(){
+  Widget _buildBodyWithOutPassword() {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 16.0, horizontal: 16),
       child: Container(
@@ -262,7 +268,7 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
           color: Theme.of(context).cardColor,
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.05),
+              color: app_colors.black.withAlpha((0.05 * 255).round()),
               blurRadius: 20,
               spreadRadius: 2,
               offset: Offset(0, 0),
@@ -280,7 +286,7 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
                     "assets/icons/key.svg",
                     width: 24,
                     height: 24,
-                    colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : Colors.blue, BlendMode.srcIn),
+                    colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? app_colors.mainBlue : app_colors.blue, BlendMode.srcIn),
                   ),
                   const SizedBox(width: 8),
                   Text(
@@ -292,22 +298,19 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
               Switch(
                 value: _isPassword,
                 onChanged: (value) {
-                  setState(() {
-                    _isPassword = value;
-                    if(value){
-                      setPassword();
-                    }
-                  });
+                  if (value) {
+                    setPassword();
+                  }
                 },
                 activeColor: Colors.white,
-                activeTrackColor: AppColors.blue,
+                activeTrackColor: app_colors.blue,
                 inactiveThumbColor: Colors.white,
                 inactiveTrackColor: Color(0xFFD9D9D9),
-                trackOutlineColor: MaterialStateProperty.resolveWith<Color>(
-                      (Set<MaterialState> states) {
-                    return states.contains(MaterialState.selected)
-                        ?  AppColors.mainBlue
-                        :  AppColors.gray4;
+                trackOutlineColor: WidgetStateProperty.resolveWith<Color>(
+                      (Set<WidgetState> states) {
+                    return states.contains(WidgetState.selected)
+                        ? app_colors.mainBlue
+                        : app_colors.gray4;
                   },
                 ),
               ),
@@ -324,49 +327,14 @@ class _PasswordSecurityScreenSate extends State<PasswordSecurityScreen>{
       MaterialPageRoute(builder: (context) => CreatePinScreen()),
     );
 
-    final storage = FlutterSecureStorage();
-    final hasPin = await storage.containsKey(key: SecureStorageKeys.app_pin);
-    if (hasPin) {
-      setState(() {
-        _isPassword = true;
-      });
-    } else {
-      setState(() {
-        _isPassword = false;
-      });
-    }
+    context.read<AuthBloc>().add(CheckPinExistsEvent());
   }
-
 
   void _changePassword() {
     Navigator.push(context, MaterialPageRoute(builder: (context) => ChangePinScreen()));
   }
 
-  Future<void> _checkBiometricAvailability() async {
-    bool canCheckBiometrics = await _localAuth.canCheckBiometrics;
-    List<BiometricType> availableBiometrics = [];
-
-    if (canCheckBiometrics) {
-      availableBiometrics = await _localAuth.getAvailableBiometrics();
-    }
-
-    if (availableBiometrics.isNotEmpty) {
-      _isAvailableBiometrics = true;
-    }
-  }
-
-  Future<void> setBiometrics() async {
-    final secureStorage = FlutterSecureStorage();
-    await secureStorage.write(key: SecureStorageKeys.biometric_enabled, value: 'true');
-  }
-
-  Future<void> deletePassword() async {
-    final storage = FlutterSecureStorage();
-    await storage.delete(key: SecureStorageKeys.app_pin);
-  }
-
-  Future<void> deleteBiometrics() async {
-    final storage = FlutterSecureStorage();
-    await storage.delete(key: SecureStorageKeys.biometric_enabled);
+  void deletePassword() {
+    context.read<AuthBloc>().add(DeletePinEvent());
   }
 }

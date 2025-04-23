@@ -1,6 +1,5 @@
 import 'dart:io';
 import 'package:authenticator_app/core/config/secure_storage_keys.dart';
-import 'package:authenticator_app/presentation/screens/onboarding/onboarding_screen.dart';
 import 'package:authenticator_app/presentation/screens/sign_in_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -16,8 +15,8 @@ import '../../data/repositories/remote/token_repository.dart';
 import '../../logic/blocs/tokens/tokens_bloc.dart';
 import '../../logic/blocs/tokens/tokens_event.dart';
 import '../widgets/settings_tile.dart';
-import 'onboarding/paywall_screen.dart';
-
+import 'features/onboarding/onboarding_screen.dart';
+import 'features/paywall/paywall_screen.dart';
 
 class PremiumFeaturesScreen extends StatefulWidget {
   @override
@@ -265,7 +264,7 @@ else {
                 onTap: () {
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => PaywallScreen(isFirst: false))
+                      MaterialPageRoute(builder: (context) => PaywallScreen())
                   ).then((_) => _loadData()); // Refresh data when returning from PaywallScreen
                 },
                 isLast: true,
@@ -431,7 +430,7 @@ else {
                     onTap: () {
                       Navigator.push(
                           context,
-                          MaterialPageRoute(builder: (context) => PaywallScreen(isFirst: false))
+                          MaterialPageRoute(builder: (context) => PaywallScreen())
                       ).then((_) => _loadData());
                     },
                     isLast: true,
