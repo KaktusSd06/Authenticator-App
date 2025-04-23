@@ -3,6 +3,7 @@ import 'package:authenticator_app/presentation/screens/features/auth/bloc/auth_b
 import 'package:authenticator_app/presentation/screens/features/auth/lock_screen.dart';
 import 'package:authenticator_app/presentation/screens/features/onboarding/bloc/onboarding_bloc.dart';
 import 'package:authenticator_app/presentation/screens/features/premium_features/bloc/premium_bloc.dart';
+import 'package:authenticator_app/presentation/screens/features/sign_in/bloc/sign_in_bloc.dart';
 import 'package:authenticator_app/presentation/screens/features/tokens/tokens/tokens_bloc.dart';
 import 'package:authenticator_app/presentation/screens/home_screen.dart';
 import 'package:authenticator_app/presentation/screens/wellcome_screen.dart';
@@ -88,6 +89,7 @@ Future<void> main() async {
         BlocProvider(create: (_) => OnboardingBloc(SecureStorageService.instance)),
         BlocProvider(create: (_) => AuthBloc()),
         BlocProvider(create: (_) => PremiumFeaturesBloc()),
+        BlocProvider(create: (_) => SignInBloc()),
 
       ],
       child: SecureApplication(nativeRemoveDelay: 300, child: MyApp()),

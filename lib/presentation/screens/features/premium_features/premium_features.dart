@@ -1,7 +1,7 @@
 import 'package:authenticator_app/presentation/screens/features/premium_features/bloc/premium_bloc.dart';
 import 'package:authenticator_app/presentation/screens/features/premium_features/bloc/premium_event.dart';
 import 'package:authenticator_app/presentation/screens/features/premium_features/bloc/premium_state.dart';
-import 'package:authenticator_app/presentation/screens/sign_in_screen.dart';
+import 'package:authenticator_app/presentation/screens/features/sign_in/sign_in_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
