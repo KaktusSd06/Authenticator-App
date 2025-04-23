@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:authenticator_app/presentation/screens/info_screen.dart';
-import 'package:authenticator_app/presentation/screens/main_screen.dart';
 import 'package:flutter_svg/svg.dart';
-import '../../../core/config/theme.dart' as AppColors;
+import '../../../core/config/theme.dart' as app_colors;
 
 
 class TermsOfUseScreen extends StatefulWidget {
+  const TermsOfUseScreen({super.key});
+
   @override
-  _TermsOfUseScreenState createState() => _TermsOfUseScreenState();
+  TermsOfUseScreenState createState() => TermsOfUseScreenState();
 }
 
-class _TermsOfUseScreenState extends State<TermsOfUseScreen> with SingleTickerProviderStateMixin {
+class TermsOfUseScreenState extends State<TermsOfUseScreen> with SingleTickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
@@ -31,7 +31,7 @@ class _TermsOfUseScreenState extends State<TermsOfUseScreen> with SingleTickerPr
             width: 16,
             height: 16,
             colorFilter: ColorFilter.mode(
-              Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : Colors.blue,
+              Theme.of(context).brightness == Brightness.light ? app_colors.mainBlue : Colors.blue,
               BlendMode.srcIn,
             ),
           ),
@@ -51,7 +51,7 @@ class _TermsOfUseScreenState extends State<TermsOfUseScreen> with SingleTickerPr
 
             Text(
               AppLocalizations.of(context)!.terms_intro,
-              style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? AppColors.gray6 : AppColors.gray4),
+              style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? app_colors.gray6 : app_colors.gray4),
             ),
 
             SizedBox(height: 24),
@@ -62,7 +62,7 @@ class _TermsOfUseScreenState extends State<TermsOfUseScreen> with SingleTickerPr
             SizedBox(height: 8),
             Text(
               AppLocalizations.of(context)!.usage_rules_desc,
-              style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? AppColors.gray6 : AppColors.gray4),
+              style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? app_colors.gray6 : app_colors.gray4),
             ),
 
             SizedBox(height: 24),
@@ -73,7 +73,7 @@ class _TermsOfUseScreenState extends State<TermsOfUseScreen> with SingleTickerPr
             SizedBox(height: 8),
             Text(
               AppLocalizations.of(context)!.limitations_desc,
-              style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? AppColors.gray6 : AppColors.gray4),
+              style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? app_colors.gray6 : app_colors.gray4),
             ),
 
             SizedBox(height: 24),
@@ -84,7 +84,7 @@ class _TermsOfUseScreenState extends State<TermsOfUseScreen> with SingleTickerPr
             SizedBox(height: 8),
             Text(
               AppLocalizations.of(context)!.modifications_desc,
-              style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? AppColors.gray6 : AppColors.gray4),
+              style: TextStyle(color: Theme.of(context).brightness == Brightness.light ? app_colors.gray6 : app_colors.gray4),
             ),
           ],
         ),
