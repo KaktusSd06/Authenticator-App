@@ -1,6 +1,6 @@
 import 'package:authenticator_app/presentation/screens/about_app.dart';
 import 'package:authenticator_app/presentation/screens/privacy_policy_screen.dart';
-import 'package:authenticator_app/presentation/screens/subscription.dart';
+import 'package:authenticator_app/presentation/screens/features/subscription/subscription_screen.dart';
 import 'package:authenticator_app/presentation/screens/terms_of_use_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
