@@ -2,6 +2,7 @@ import 'package:authenticator_app/core/config/secure_storage_keys.dart';
 import 'package:authenticator_app/presentation/screens/features/auth/bloc/auth_bloc.dart';
 import 'package:authenticator_app/presentation/screens/features/auth/lock_screen.dart';
 import 'package:authenticator_app/presentation/screens/features/onboarding/bloc/onboarding_bloc.dart';
+import 'package:authenticator_app/presentation/screens/features/tokens/tokens/tokens_bloc.dart';
 import 'package:authenticator_app/presentation/screens/home_screen.dart';
 import 'package:authenticator_app/presentation/screens/wellcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -15,7 +16,6 @@ import 'package:secure_application/secure_application.dart';
 import 'core/config/theme.dart';
 import 'data/services/secure_storage_service.dart';
 import 'logic/blocs/locale_cubit.dart';
-import 'logic/blocs/tokens/tokens_bloc.dart';
 
 class AppStateService {
   static final AppStateService _instance = AppStateService._internal();

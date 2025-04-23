@@ -1,38 +1,32 @@
 import 'package:authenticator_app/data/models/auth_token.dart';
+import 'package:authenticator_app/presentation/screens/features/tokens/tokens/tokens_bloc.dart';
+import 'package:authenticator_app/presentation/screens/features/tokens/tokens/tokens_event.dart';
+import 'package:authenticator_app/presentation/screens/features/tokens/tokens/tokens_state.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:flutter_svg/svg.dart';
-import '../../../core/config/theme.dart' as AppColors;
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'dart:convert';
-import 'dart:io';
-import '../../data/models/service.dart';
-import '../../data/repositories/remote/synchronize_repository.dart';
-import '../../data/repositories/remote/token_repository.dart';
-import '../constants/service_categories.dart';
-import '../dialogs/error_dialog.dart';
-import 'package:path_provider/path_provider.dart';
-import '../../logic/blocs/tokens/tokens_bloc.dart';
-import '../../logic/blocs/tokens/tokens_event.dart';
-import '../../logic/blocs/tokens/tokens_state.dart';
-import '../../core/config/secure_storage_keys.dart';
-
-
+import '../../../../core/config/secure_storage_keys.dart';
+import '../../../../core/config/theme.dart' as app_colors;
+import '../../../../data/models/service.dart';
+import '../../../../data/repositories/remote/synchronize_repository.dart';
+import '../../../../data/repositories/remote/token_repository.dart';
+import '../../../constants/service_categories.dart';
+import '../../../dialogs/error_dialog.dart';
 
 class AddManuallyScreen extends StatefulWidget {
 
   const AddManuallyScreen({super.key});
 
   @override
-  _AddManuallyScreenSate createState() => _AddManuallyScreenSate();
+  AddManuallyScreenSate createState() => AddManuallyScreenSate();
 }
 
-class _AddManuallyScreenSate extends State<AddManuallyScreen> {
-  TextEditingController _account = TextEditingController();
-  TextEditingController _key = TextEditingController();
+class AddManuallyScreenSate extends State<AddManuallyScreen> {
+  final TextEditingController _account = TextEditingController();
+  final TextEditingController _key = TextEditingController();
   String _selectedServiceName = "";
   String _selectedOtpType = "Time-based";
 
@@ -75,7 +69,7 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
       appBar: AppBar(
         automaticallyImplyLeading: false,
         iconTheme: IconThemeData(
-          color: AppColors.mainBlue,
+          color: app_colors.mainBlue,
         ),
         leading: IconButton(
           onPressed: () => Navigator.of(context).pop(),
@@ -85,7 +79,7 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
             height: 12,
             fit: BoxFit.contain,
             colorFilter: ColorFilter.mode(
-              Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : Colors.blue,
+              Theme.of(context).brightness == Brightness.light ? app_colors.mainBlue : Colors.blue,
               BlendMode.srcIn,
             ),
           ),
@@ -105,7 +99,7 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
               width: double.infinity,
               height: 48,
               decoration: BoxDecoration(
-                color: Theme.of(context).brightness == Brightness.light ? AppColors.white : AppColors.gray6,
+                color: Theme.of(context).brightness == Brightness.light ? app_colors.white : app_colors.gray6,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: InkWell(
@@ -121,7 +115,7 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
                               ? AppLocalizations.of(context)!.service
                               : _selectedServiceName,
                           style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                            color: _selectedServiceName.isEmpty ? AppColors.gray4 : Theme.of(context).brightness == Brightness.light ? Colors.black : Colors.white,
+                            color: _selectedServiceName.isEmpty ? app_colors.gray4 : Theme.of(context).brightness == Brightness.light ? app_colors.black : Colors.white,
                           )
                       ),
                       SvgPicture.asset(
@@ -129,7 +123,7 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
                         width: 24,
                         height: 24,
                         fit: BoxFit.scaleDown,
-                        colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : AppColors.blue, BlendMode.srcIn),
+                        colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? app_colors.mainBlue : app_colors.blue, BlendMode.srcIn),
                       ),
                     ],
                   ),
@@ -145,7 +139,7 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
               width: double.infinity,
               height: 48,
               decoration: BoxDecoration(
-                color: Theme.of(context).brightness == Brightness.light ? AppColors.white : AppColors.gray6,
+                color: Theme.of(context).brightness == Brightness.light ? app_colors.white : app_colors.gray6,
                 borderRadius: BorderRadius.circular(20),
               ),
               child: InkWell(
@@ -159,7 +153,7 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
                       Text(
                         _selectedOtpType,
                         style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                          color: Theme.of(context).brightness == Brightness.light ? AppColors.black : AppColors.white,
+                          color: Theme.of(context).brightness == Brightness.light ? app_colors.black : app_colors.white,
                         ),
                       ),
                       SvgPicture.asset(
@@ -167,7 +161,7 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
                         width: 24,
                         height: 24,
                         fit: BoxFit.scaleDown,
-                        colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : AppColors.blue, BlendMode.srcIn),
+                        colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? app_colors.mainBlue : app_colors.blue, BlendMode.srcIn),
                       ),
                     ],
                   ),
@@ -181,7 +175,7 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
               },
               style: ElevatedButton.styleFrom(
                 minimumSize: Size(double.infinity, 50),
-                backgroundColor: AppColors.mainBlue,
+                backgroundColor: app_colors.mainBlue,
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(30),
                 ),
@@ -195,12 +189,12 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
                     width: 24,
                     height: 24,
                     fit: BoxFit.scaleDown,
-                    colorFilter: ColorFilter.mode(AppColors.white, BlendMode.srcIn),
+                    colorFilter: ColorFilter.mode(app_colors.white, BlendMode.srcIn),
                   ),
                   SizedBox(width: 8),
                   Text(
                     AppLocalizations.of(context)!.add,
-                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: AppColors.white),
+                    style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: app_colors.white),
                   ),
                 ],
               ),
@@ -278,7 +272,7 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
     return Container(
       height: 48,
       decoration: BoxDecoration(
-        color: Theme.of(context).brightness == Brightness.light ? AppColors.white : AppColors.gray6,
+        color: Theme.of(context).brightness == Brightness.light ? app_colors.white : app_colors.gray6,
         borderRadius: BorderRadius.circular(20),
       ),
       child: TextField(
@@ -287,7 +281,7 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
           hintText: hintText,
           hintStyle: Theme.of(context).textTheme.headlineLarge?.copyWith(
             fontWeight: FontWeight.w400,
-            color: Theme.of(context).brightness == Brightness.light ? AppColors.gray4 : AppColors.gray2,
+            color: Theme.of(context).brightness == Brightness.light ? app_colors.gray4 : app_colors.gray2,
           ),
           prefixIconConstraints: BoxConstraints(minWidth: 48, minHeight: 24),
           prefixIcon: Padding(
@@ -297,7 +291,7 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
               width: 24,
               height: 24,
               fit: BoxFit.scaleDown,
-              colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : AppColors.blue, BlendMode.srcIn),
+              colorFilter: ColorFilter.mode(Theme.of(context).brightness == Brightness.light ? app_colors.mainBlue : app_colors.blue, BlendMode.srcIn),
             ),
           ),
           border: InputBorder.none,
@@ -310,7 +304,7 @@ class _AddManuallyScreenSate extends State<AddManuallyScreen> {
             borderSide: BorderSide.none,
           ),
           filled: true,
-          fillColor: Theme.of(context).brightness == Brightness.light ? AppColors.white : AppColors.gray6,
+          fillColor: Theme.of(context).brightness == Brightness.light ? app_colors.white : app_colors.gray6,
           contentPadding: EdgeInsets.symmetric(horizontal: 12, vertical: 14),
         ),
       ),
@@ -322,16 +316,16 @@ class OtpTypeSelectionModal extends StatelessWidget {
   final Function(String) onOtpTypeSelected;
 
   const OtpTypeSelectionModal({
-    Key? key,
+    super.key,
     required this.onOtpTypeSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
     return Container(
       height: 160,
       decoration: BoxDecoration(
-        color: Theme.of(context).brightness == Brightness.light ? AppColors.white : Color(0xFF171717),
+        color: Theme.of(context).brightness == Brightness.light ? app_colors.white : Color(0xFF171717),
         borderRadius: BorderRadius.only(
           topLeft: Radius.circular(20),
           topRight: Radius.circular(20),
@@ -376,10 +370,10 @@ class ServiceSelectionModal extends StatelessWidget {
   final Function(String) onServiceSelected;
 
   const ServiceSelectionModal({
-    Key? key,
+    super.key,
     required this.serviceCategories,
     required this.onServiceSelected,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -453,11 +447,11 @@ class ServiceSelectionModal extends StatelessWidget {
                               width: 32,
                               height: 32,
                             )
-                                : Icon(Icons.apps, color: AppColors.mainBlue),
+                                : Icon(Icons.apps, color: app_colors.mainBlue),
                           ),
                           title: Text(service.name),
                           onTap: () => onServiceSelected(service.name),
-                        )).toList(),
+                        )),
                     if (categoryIndex < serviceCategories.length - 1)
                       SizedBox(height: 8),
                   ],

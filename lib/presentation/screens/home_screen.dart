@@ -1,5 +1,5 @@
 import 'package:authenticator_app/presentation/screens/info_screen.dart';
-import 'package:authenticator_app/presentation/screens/main_screen.dart';
+import 'package:authenticator_app/presentation/screens/features/tokens/main_screen.dart';
 import 'package:flutter/material.dart';
 
 import '../widgets/island_navigation_bar.dart';

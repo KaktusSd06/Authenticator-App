@@ -1,4 +1,4 @@
-import '../../../data/models/auth_token.dart';
+import '../../../../../data/models/auth_token.dart';
 
 abstract class TokensEvent {}
 

@@ -13,7 +13,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:base32/base32.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import '../constants/service_categories.dart';
-import '../screens/edit_element_screen.dart';
+import '../screens/features/tokens/edit_element_screen.dart';
 
 
 class TimeBasedWidget extends StatefulWidget {

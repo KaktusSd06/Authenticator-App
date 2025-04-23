@@ -2,7 +2,7 @@ import 'dart:convert';
 import 'dart:io';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:path_provider/path_provider.dart';
-import '../../../data/models/auth_token.dart';
+import '../../../../../data/models/auth_token.dart';
 import 'tokens_event.dart';
 import 'tokens_state.dart';
 

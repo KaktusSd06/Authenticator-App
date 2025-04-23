@@ -1,5 +1,7 @@
 import 'package:authenticator_app/core/config/secure_storage_keys.dart';
 import 'package:authenticator_app/data/models/auth_token.dart';
+import 'package:authenticator_app/presentation/screens/features/tokens/tokens/tokens_bloc.dart';
+import 'package:authenticator_app/presentation/screens/features/tokens/tokens/tokens_event.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
@@ -9,11 +11,9 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:permission_handler/permission_handler.dart';
 import 'package:mobile_scanner/mobile_scanner.dart';
-import '../../data/repositories/remote/synchronize_repository.dart';
-import '../../data/repositories/remote/token_repository.dart';
-import '../../logic/blocs/tokens/tokens_bloc.dart';
-import '../../logic/blocs/tokens/tokens_event.dart';
-import '../dialogs/error_dialog.dart';
+import '../../../../data/repositories/remote/synchronize_repository.dart';
+import '../../../../data/repositories/remote/token_repository.dart';
+import '../../../dialogs/error_dialog.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 
 class ScanQrScreen extends StatefulWidget {

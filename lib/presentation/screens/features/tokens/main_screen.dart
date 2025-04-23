@@ -1,23 +1,23 @@
-import 'dart:ui';
-import 'package:authenticator_app/presentation/screens/scan_qr_screen.dart';
+import 'package:authenticator_app/presentation/screens/features/tokens/scan_qr_screen.dart';
+import 'package:authenticator_app/presentation/screens/features/tokens/tokens/tokens_bloc.dart';
+import 'package:authenticator_app/presentation/screens/features/tokens/tokens/tokens_event.dart';
+import 'package:authenticator_app/presentation/screens/features/tokens/tokens/tokens_state.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_svg/svg.dart';
-import '../../../core/config/theme.dart' as AppColors;
-import '../../logic/blocs/tokens/tokens_bloc.dart';
-import '../../logic/blocs/tokens/tokens_event.dart';
-import '../../logic/blocs/tokens/tokens_state.dart';
-import '../widgets/counter_based_widget.dart';
-import '../widgets/time_based_widget.dart';
-
+import '../../../widgets/counter_based_widget.dart';
+import '../../../widgets/time_based_widget.dart';
+import '../../../../core/config/theme.dart' as app_colors;
 
 class MainScreen extends StatefulWidget {
+  const MainScreen({super.key});
+
   @override
-  _MainScreenState createState() => _MainScreenState();
+  MainScreenState createState() => MainScreenState();
 }
 
-class _MainScreenState extends State<MainScreen> {
+class MainScreenState extends State<MainScreen> {
   final TextEditingController _searchController = TextEditingController();
   bool isLoading = true;
 
@@ -44,9 +44,9 @@ class _MainScreenState extends State<MainScreen> {
           hintText: AppLocalizations.of(context)!.search,
           hintStyle: Theme.of(context).textTheme.headlineLarge?.copyWith(
             fontWeight: FontWeight.w400,
-            color: AppColors.gray4
+            color: app_colors.gray4
           ),
-          prefixIcon: Icon(Icons.search, color: Theme.of(context).brightness == Brightness.light ? Color(0xFF1B539A) : AppColors.blue),
+          prefixIcon: Icon(Icons.search, color: Theme.of(context).brightness == Brightness.light ? Color(0xFF1B539A) : app_colors.blue),
           border: InputBorder.none,
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
@@ -149,12 +149,12 @@ class _MainScreenState extends State<MainScreen> {
       child: Container(
         width: double.infinity,
         decoration: BoxDecoration(
-          color: Theme.of(context).brightness == Brightness.light ? AppColors.white : Color(
+          color: Theme.of(context).brightness == Brightness.light ? app_colors.white : Color(
               0xFF101010),
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withOpacity(0.1),
+              color: Colors.black.withAlpha((0.1 * 255).round()),
               blurRadius: 20,
               spreadRadius: 0,
               offset: const Offset(0, 0),
@@ -175,7 +175,7 @@ class _MainScreenState extends State<MainScreen> {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue.withOpacity(0.2) : AppColors.mainBlue.withOpacity(0.2),
+                        color: Theme.of(context).brightness == Brightness.light ? app_colors.mainBlue.withAlpha((0.2 * 255).round()) : app_colors.mainBlue.withAlpha((0.2 * 255).round()),
                         blurRadius: 80,
                         spreadRadius: 5,
                       ),
@@ -194,7 +194,7 @@ class _MainScreenState extends State<MainScreen> {
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue.withOpacity(0.2) : AppColors.mainBlue.withOpacity(0.2),
+                        color: Theme.of(context).brightness == Brightness.light ? app_colors.mainBlue.withAlpha((0.2 * 255).round()) : app_colors.mainBlue.withAlpha((0.2 * 255).round()),
                         blurRadius: 80,
                         spreadRadius: 5,
                       ),
@@ -208,7 +208,7 @@ class _MainScreenState extends State<MainScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    Container(
+                    SizedBox(
                       width: 120,
                       height: 120,
                       child: Center(
@@ -236,7 +236,7 @@ class _MainScreenState extends State<MainScreen> {
                         Navigator.push(context, MaterialPageRoute(builder: (context) => ScanQrScreen()));
                       },
                       style: ElevatedButton.styleFrom(
-                        backgroundColor: AppColors.mainBlue,
+                        backgroundColor: app_colors.mainBlue,
                         minimumSize: const Size(double.infinity, 50),
                         shape: RoundedRectangleBorder(
                           borderRadius: BorderRadius.circular(30),
@@ -253,7 +253,7 @@ class _MainScreenState extends State<MainScreen> {
                           SizedBox(width: 68),
                           Text(
                             AppLocalizations.of(context)!.scan_qr,
-                            style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: AppColors.white),
+                            style: Theme.of(context).textTheme.headlineLarge?.copyWith(color: app_colors.white),
                           ),
                         ],
                       ),
@@ -300,13 +300,13 @@ class _MainScreenState extends State<MainScreen> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: TabBar(
-                        indicatorColor: AppColors.mainBlue,
+                        indicatorColor: app_colors.mainBlue,
                         labelStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          color:  Theme.of(context).brightness == Brightness.light ? AppColors.mainBlue : AppColors.blue,
+                          color:  Theme.of(context).brightness == Brightness.light ? app_colors.mainBlue : app_colors.blue,
                           fontWeight: FontWeight.w500,
                         ),
                         unselectedLabelStyle: Theme.of(context).textTheme.headlineSmall?.copyWith(
-                          color: Theme.of(context).brightness == Brightness.light ? AppColors.gray6 : AppColors.gray2,
+                          color: Theme.of(context).brightness == Brightness.light ? app_colors.gray6 : app_colors.gray2,
                           fontWeight: FontWeight.w500,
                         ),
                         tabs: [

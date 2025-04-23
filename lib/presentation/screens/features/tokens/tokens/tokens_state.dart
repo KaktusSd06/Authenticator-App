@@ -1,5 +1,6 @@
-import '../../../data/models/auth_token.dart';
 import 'package:equatable/equatable.dart';
+
+import '../../../../../data/models/auth_token.dart';
 
 abstract class TokensState extends Equatable {
   final List<AuthToken> allTokens;

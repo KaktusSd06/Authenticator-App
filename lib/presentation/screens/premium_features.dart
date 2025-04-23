@@ -12,11 +12,11 @@ import '../../../core/config/theme.dart' as AppColors;
 import '../../data/models/auth_token.dart';
 import '../../data/repositories/remote/synchronize_repository.dart';
 import '../../data/repositories/remote/token_repository.dart';
-import '../../logic/blocs/tokens/tokens_bloc.dart';
-import '../../logic/blocs/tokens/tokens_event.dart';
 import '../widgets/settings_tile.dart';
 import 'features/onboarding/onboarding_screen.dart';
 import 'features/paywall/paywall_screen.dart';
+import 'features/tokens/tokens/tokens_bloc.dart';
+import 'features/tokens/tokens/tokens_event.dart';
 
 class PremiumFeaturesScreen extends StatefulWidget {
   @override
