@@ -11,8 +11,8 @@ import '../../../core/config/theme.dart' as AppColors;
 import 'package:flutter/services.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:base32/base32.dart';
-import '../../data/sources/constants/service_categories.dart';
-import '../screens/edit_element_screen.dart';
+import '../constants/service_categories.dart';
+import '../screens/features/tokens/edit_element_screen.dart';
 
 class HotpWidget extends StatefulWidget {
   final AuthToken hotpEl;
@@ -330,7 +330,6 @@ class _HotpWidgetState extends State<HotpWidget> {
 
   @override
   Widget build(BuildContext context) {
-    // Find icon for the service
     iconPath = null;
     for (var category in serviceCategories.values) {
       for (var service in category) {

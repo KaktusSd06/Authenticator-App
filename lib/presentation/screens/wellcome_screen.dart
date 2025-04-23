@@ -6,8 +6,8 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 
 import '../../../core/config/theme.dart' as AppColors;
-import 'features/home/home_screen.dart';
-import 'onboarding/onboarding_screen.dart';
+import 'features/onboarding/onboarding_screen.dart';
+import 'home_screen.dart';
 
 class WellcomeScreen extends StatefulWidget {
   @override

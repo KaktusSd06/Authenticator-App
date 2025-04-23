@@ -10,7 +10,7 @@ import '../../../core/config/theme.dart' as AppColors;
 import '../../data/repositories/remote/subscription_repository.dart';
 import '../widgets/btn_with_stoke.dart';
 import '../widgets/settings_tile.dart';
-import 'onboarding/paywall_screen.dart';
+import 'features/paywall/paywall_screen.dart';
 
 class MyRouteObserver extends NavigatorObserver {
   final Function onRoutePop;
@@ -202,7 +202,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> with WidgetsBin
                 onTap: () {
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => PaywallScreen(isFirst: false))
+                      MaterialPageRoute(builder: (context) => PaywallScreen())
                   ).then((_) => _loadData()); // Refresh data when returning from PaywallScreen
                 },
                 isLast: true,
@@ -298,7 +298,7 @@ class _SubscriptionScreenState extends State<SubscriptionScreen> with WidgetsBin
                 onPressed: () {
                   Navigator.push(
                       context,
-                      MaterialPageRoute(builder: (context) => PaywallScreen(isFirst: false))
+                      MaterialPageRoute(builder: (context) => PaywallScreen())
                   ).then((_) => _loadData());
                 },
                 text: AppLocalizations.of(context)!.change_plan,
