@@ -1,7 +1,8 @@
 import 'package:authenticator_app/core/config/secure_storage_keys.dart';
+import 'package:authenticator_app/presentation/screens/features/auth/bloc/auth_bloc.dart';
+import 'package:authenticator_app/presentation/screens/features/auth/lock_screen.dart';
 import 'package:authenticator_app/presentation/screens/features/onboarding/bloc/onboarding_bloc.dart';
 import 'package:authenticator_app/presentation/screens/home_screen.dart';
-import 'package:authenticator_app/presentation/screens/lock_screen.dart';
 import 'package:authenticator_app/presentation/screens/wellcome_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
@@ -84,6 +85,7 @@ Future<void> main() async {
         BlocProvider(create: (_) => LocaleCubit()),
         BlocProvider(create: (_) => TokensBloc()),
         BlocProvider(create: (_) => OnboardingBloc(SecureStorageService.instance)),
+        BlocProvider(create: (_) => AuthBloc())
       ],
       child: SecureApplication(nativeRemoveDelay: 300, child: MyApp()),
     ),

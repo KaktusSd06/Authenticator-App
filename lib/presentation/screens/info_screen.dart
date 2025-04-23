@@ -1,6 +1,5 @@
 import 'package:authenticator_app/core/config/secure_storage_keys.dart';
 import 'package:authenticator_app/presentation/screens/about_app.dart';
-import 'package:authenticator_app/presentation/screens/password_security_screen.dart';
 import 'package:authenticator_app/presentation/screens/premium_features.dart';
 import 'package:authenticator_app/presentation/screens/privacy_policy_screen.dart';
 import 'package:authenticator_app/presentation/screens/sign_in_screen.dart';
@@ -13,6 +12,7 @@ import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:url_launcher/url_launcher.dart';
 
 import '../widgets/settings_tile.dart';
+import 'features/auth/password_security_screen.dart';
 
 class InfoScreen extends StatefulWidget {
   @override
